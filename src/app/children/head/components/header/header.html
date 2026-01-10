@@ -1,0 +1,40 @@
+<tui-tabs-with-more>
+    <ng-container *ngFor="let tab of tabs; let i = index">
+        <a
+            *tuiItem
+            [routerLink]="tab.route"
+            routerLinkActive="active"
+            tuiTab
+            type="button"
+        >
+            {{ tab.label }}
+        </a>
+    </ng-container>
+
+    <button
+        (tui-tab-activate.stop)="(0)"
+        [(tuiDropdownOpen)]="open"
+        [tuiDropdown]="content"
+        class="user-button"
+        iconStart="@tui.user"
+        tuiChevron
+        tuiTab
+        type="button"
+    >
+        {{ userName }}
+        <ng-template #content>
+            <tui-data-list
+                (click)="onClick()"
+                size="s">
+                <button
+                    (click)="logout()"
+                    tuiAppearance="flat-destructive"
+                    tuiOption
+                    type="button"
+                >
+                    Выйти
+                </button>
+            </tui-data-list>
+        </ng-template>
+    </button>
+</tui-tabs-with-more>

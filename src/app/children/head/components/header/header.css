@@ -1,0 +1,22 @@
+tui-tabs-with-more {
+    padding: 0 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--day-text-icons-text-01-inverse) !important;
+    box-shadow: 0 2px 4px 0 rgba(27, 31, 59, 0.04) !important;
+    border-bottom: 1px solid var(--day-base-base-02) !important;
+
+    margin-bottom: 48px;
+}
+
+/* Tab контейнер слева */
+tui-tabs-with-more > ng-container {
+    display: flex;
+}
+
+/* User button справа */
+.user-button {
+    margin-left: auto !important;
+    padding-right: 0 !important;
+}

@@ -44,6 +44,20 @@ export class AuthManagerService {
         return null;
     }
 
+    public getUserName(): string | null {
+        const token: string | null = this.getAccessToken();
+
+        if (token) {
+            const decoded: any = jwtDecode(token);
+            const givenName = decoded?.given_name || '';
+            const familyName = decoded?.family_name || '';
+
+            return `${familyName} ${givenName}`.trim() || null;
+        }
+
+        return null;
+    }
+
     public getAccessToken(): string | null {
         const accessToken: string = this._cookie.get(environment.tokenName);
         if (accessToken && this.isTokenExpired(accessToken)) {
