@@ -1,0 +1,194 @@
+<app-back-header (backClicked)="goBack()"/>
+
+<div class="type-1-container">
+    <p class="tui-text_h4">
+        Почасовой несколько номенклатур
+    </p>
+
+    <div class="type-1-grid">
+        <div class="first-container">
+            <p class="tui-text_h6">
+                Общая информация
+            </p>
+
+            <div class="operators">
+                <p class="tui-text_body-s">
+                    Исполнитель
+                </p>
+
+                <tui-combo-box
+                    [formControl]="controlOperators"
+                    [stringify]="stringify"
+                    [tuiTextfieldLabelOutside]="true"
+                    tuiTextfieldSize="m"
+                >
+                    Выберите
+
+                    <tui-data-list-wrapper
+                        *tuiDataList
+                        [itemContent]="stringify | tuiStringifyContent"
+                        [items]="operators | tuiFilterByInput"
+                    />
+                </tui-combo-box>
+            </div>
+
+            <div class="date-shifts">
+                <div class="date-input-wrapper">
+                    <p class="tui-text_body-s date">
+                        Дата
+                    </p>
+
+                    <tui-textfield [content]="controlDate.value?.daySame(today) ? this.today : ''"
+                                   tuiTextfieldSize="m">
+                        <input
+                            [formControl]="controlDate"
+                            placeholder="ДД.ММ.ГГГГ"
+                            tuiInputDate
+                        />
+                        <ng-template
+                            let-close
+                            tuiTextfieldDropdown
+                        >
+                            <tui-calendar/>
+                            <button
+                                (click)="controlDate.setValue(today); close()"
+                                appearance="action"
+                                class="button"
+                                size="m"
+                                tuiButton
+                                type="button"
+                            >
+                                Сегодня
+                            </button>
+                        </ng-template>
+                    </tui-textfield>
+                </div>
+
+                <div class="shift-input-wrapper">
+                    <p class="tui-text_body-s shifts">
+                        Смена
+                    </p>
+
+                    <tui-combo-box
+                        [formControl]="controlShifts"
+                        [stringify]="stringifyShift"
+                        [tuiTextfieldLabelOutside]="true"
+                        tuiTextfieldSize="m"
+                    >
+                        Выберите
+
+                        <tui-data-list-wrapper
+                            *tuiDataList
+                            [itemContent]="stringifyShift | tuiStringifyContent"
+                            [items]="shifts | tuiFilterByInput"
+                        />
+                    </tui-combo-box>
+                </div>
+            </div>
+        </div>
+
+        <div class="second-container">
+            <p class="tui-text_h6 second">
+                Информация о производстве
+            </p>
+
+            <!-- Таблица -->
+            <div class="products-table">
+                <div class="table-header">
+                    <div class="table-cell header-cell tui-text_body-s">№</div>
+                    <div class="table-cell header-cell tui-text_body-s">Наименование продукции</div>
+                    <div class="table-cell header-cell tui-text_body-s">Время такта, сек</div>
+                    <div class="table-cell header-cell tui-text_body-s">Суточный темп, шт</div>
+                </div>
+
+                <!-- Строка таблицы -->
+                <div *ngFor="let item of tableItems; let i = index" class="table-row">
+                    <div class="table-cell">{{ i + 1 }}</div>
+                    <div class="table-cell">
+                        <tui-combo-box
+                            [formControl]="item.product"
+                            [stringify]="stringifyProduct"
+                            [tuiTextfieldLabelOutside]="true"
+                            tuiTextfieldSize="m"
+                        >
+                            Выберите
+
+                            <tui-data-list-wrapper
+                                *tuiDataList
+                                [itemContent]="stringifyProduct | tuiStringifyContent"
+                                [items]="product | tuiFilterByInput"
+                            />
+                        </tui-combo-box>
+                    </div>
+                    <div class="table-cell">
+                        <tui-textfield tuiTextfieldSize="m">
+                            <input
+                                [formControl]="item.cyclTime"
+                                placeholder=""
+                                tuiTextfield
+                                type="number"
+                            />
+                        </tui-textfield>
+                    </div>
+                    <div class="table-cell">
+                        <tui-textfield tuiTextfieldSize="m">
+                            <input
+                                [formControl]="item.dailyPace"
+                                placeholder=""
+                                tuiTextfield
+                                type="number"
+                            />
+                        </tui-textfield>
+                    </div>
+                    <div class="table-cell delete-cell">
+                        <button
+                            (click)="deleteTableRow(i)"
+                            *ngIf="i > 0"
+                            appearance="flat-grayscale"
+                            class="delete-btn"
+                            iconStart="@tui.minus"
+                            size="s"
+                            tuiButton
+                            type="button"
+                        ></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Кнопка добавить -->
+            <button
+                (click)="addTableRow()"
+                appearance="flat"
+                class="add-row-btn"
+                iconStart="@tui.plus"
+                size="m"
+                tuiButton
+                type="button"
+            >
+                Добавить
+            </button>
+        </div>
+
+        <div class="button-final">
+            <button
+                appearance="primary"
+                size="m"
+                tuiButton
+                type="button"
+            >
+                Создать
+            </button>
+
+            <button
+                (click)="goBack()"
+                appearance="outline"
+                class="outline-b"
+                size="m"
+                tuiButton
+                type="button"
+            >
+                Отменить
+            </button>
+        </div>
+    </div>
+</div>
