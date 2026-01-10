@@ -14,6 +14,8 @@ import {provideClientHydration, withEventReplay} from '@angular/platform-browser
 import {provideServiceWorker} from '@angular/service-worker';
 import {provideHttpClient, withInterceptors} from '@angular/common/http';
 import {JwtTokenInterceptor} from './interceptors/jwt-token-interceptor';
+import {TUI_LANGUAGE, TUI_RUSSIAN_LANGUAGE} from '@taiga-ui/i18n';
+import {of} from 'rxjs';
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -27,6 +29,10 @@ export const appConfig: ApplicationConfig = {
         {
             provide: LOCALE_ID,
             useValue: 'ru'
+        },
+        {
+            provide: TUI_LANGUAGE,
+            useValue: of(TUI_RUSSIAN_LANGUAGE),
         },
         provideServiceWorker('ngsw-worker.js', {
             enabled: !isDevMode(),

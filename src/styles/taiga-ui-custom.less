@@ -1,0 +1,71 @@
+// ============================================
+// Типографика (Typography)
+// ============================================
+// Body тексты
+@tui-font-body-l: 16px/1.5 var(--tui-font-text); // Body M → 16px
+@tui-font-body-m: 14px/1.5 var(--tui-font-text); // Body S → 14px
+@tui-font-body-s: 12px/1.5 var(--tui-font-text); // Body XS → 12px
+
+// Использование шрифтов из дизайн-системы
+@tui-font-text: var(--font-family);
+@tui-font-heading: var(--font-family);
+
+// ============================================
+// Кнопки (Buttons)
+// ============================================
+// Скругления 8px
+@tui-radius-m: 8px;
+@tui-radius-l: 8px;
+
+// Font-weight для кнопок: ExtraBold → Bold
+@tui-font-button: bold 14px/1.2 var(--tui-font-text);
+
+// Padding для кнопок
+@tui-padding-button-large: 12px 20px; // 20px горизонтально
+@tui-padding-button-medium: 10px 20px;
+@tui-padding-button-small: 8px 16px;
+
+// Padding для secondary кнопок с иконкой: 16px слева от иконки, 20px справа от текста
+.tui-button_secondary {
+    padding-left: 16px;
+    padding-right: 20px;
+
+    .t-icon {
+        margin-right: 4px; // Отступ между иконкой и текстом
+    }
+}
+
+// ============================================
+// Инпуты (Inputs)
+// ============================================
+// Скругления 8px
+@tui-radius-s: 8px;
+
+// Нет теней в обычном состоянии
+@tui-shadow: none;
+
+// Переопределение стилей инпутов
+.tui-input {
+    border-radius: 8px;
+}
+
+.tui-textfield {
+    .t-input {
+        border-radius: 8px;
+    }
+}
+
+// Убираем тени для всех элементов в обычном состоянии
+* {
+    &:not(:focus):not(:hover) {
+        box-shadow: none;
+    }
+}
+
+// Применяем border-radius 8px к элементам форм
+.tui-group,
+.tui-input-group,
+.tui-select,
+.tui-textarea {
+    border-radius: 8px;
+}

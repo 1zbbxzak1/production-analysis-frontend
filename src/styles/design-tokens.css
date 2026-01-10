@@ -1,0 +1,226 @@
+:root {
+    /* ============================================
+       Текст и иконки (Text & Icons) - Day Theme
+       ============================================ */
+    --day-text-icons-text-01: #1b1f3b;
+    --day-text-icons-text-02: #6b6d7f;
+    --day-text-icons-text-03: #a4a5b1;
+    --day-text-icons-text-01-inverse: #fff;
+    --day-text-icons-text-02-inverse: rgba(255, 255, 255, 0.72);
+    --day-text-icons-text-03-inverse: rgba(255, 255, 255, 0.6);
+    --day-text-icons-link: #526ed3;
+    --day-text-icons-link-hover: #6c86e2;
+    --day-text-icons-text-positive: #3aa981;
+    --day-text-icons-text-positive-hover: #7ac5aa;
+    --day-text-icons-text-negative: #dd4c1e;
+    --day-text-icons-text-negative-hover: #e38163;
+
+    /* ============================================
+       Базовые цвета (Base) - Day Theme
+       ============================================ */
+    --day-base-background: #f7f8fa;
+    --day-base-base-01: #fff;
+    --day-base-base-02: #f6f6f6;
+    --day-base-base-03: #ededed;
+    --day-base-base-04: #e5e5e5;
+    --day-base-base-05: #b0b0b0;
+    --day-base-base-06: #959595;
+    --day-base-base-07: #808080;
+    --day-base-base-08: #333;
+    --day-base-base-09: #000;
+    --day-base-primary: #526ed3;
+    --day-base-primary-hover: #6c86e2;
+    --day-base-primary-active: #314692;
+    --day-base-secondary: #ebefff;
+    --day-base-secondary-hover: #dfe3f3;
+    --day-base-secondary-active: #d8ddf2;
+    --day-base-accent: #ff8078;
+    --day-base-accent-hover: #ff9a94;
+    --day-base-accent-active: #e7716a;
+    --day-base-clear: rgba(0, 0, 0, 0.08);
+    --day-base-clear-hover: rgba(0, 0, 0, 0.16);
+    --day-base-clear-active: rgba(0, 0, 0, 0.2);
+
+    /* ============================================
+       Статусы (Status) - Day Theme
+       ============================================ */
+    --day-status-success-fill: #4ac99b;
+    --day-status-success-bg-hover: rgba(74, 201, 155, 0.24);
+    --day-status-success-bg: rgba(74, 201, 155, 0.12);
+    --day-status-error-fill: #f45725;
+    --day-status-error-bg-hover: rgba(244, 87, 37, 0.24);
+    --day-status-error-bg: rgba(244, 87, 37, 0.12);
+    --day-status-info-fill: #70b6f6;
+    --day-status-info-bg-hover: rgba(112, 182, 246, 0.24);
+    --day-status-info-bg: rgba(112, 182, 246, 0.12);
+    --day-status-warning-fill: #ffc700;
+    --day-status-warning-bg-hover: rgba(255, 199, 0, 0.24);
+    --day-status-warning-bg: rgba(255, 199, 0, 0.12);
+    --day-status-neutral-fill: #79818c;
+    --day-status-neutral-bg-hover: rgba(121, 129, 140, 0.24);
+    --day-status-neutral-bg: rgba(121, 129, 140, 0.12);
+
+    /* ============================================
+       Системные цвета (System) - Day Theme
+       ============================================ */
+    --day-system-selection: rgba(112, 182, 246, 0.12);
+    --day-system-focus: rgba(51, 51, 51, 0.64);
+
+    /* ============================================
+       Поддержка (Support) - Дополнительные цвета
+       ============================================ */
+    --support-01: #a8cef1;
+    --support-02: #3682db;
+    --support-03: #8dda71;
+    --support-04: #34b41f;
+    --support-05: #e29398;
+    --support-06: #b8474e;
+    --support-07: #fcc068;
+    --support-08: #ff8a00;
+    --support-09: #dab3f9;
+    --support-10: #7b439e;
+    --support-11: #fee797;
+    --support-12: #fcbb14;
+    --support-13: #ea97c4;
+    --support-14: #bd65a4;
+    --support-15: #7fd7cc;
+    --support-16: #2fad96;
+    --support-17: #d4aca2;
+    --support-18: #9d6f64;
+    --support-19: #d2e9a2;
+    --support-20: #aadc42;
+    --support-21: #a0c5df;
+
+    /* ============================================
+       Текст и иконки (Text & Icons) - Night Theme
+       ============================================ */
+    --night-text-text-01: #fff;
+    --night-text-text-02: rgba(255, 255, 255, 0.72);
+    --night-text-text-03: rgba(255, 255, 255, 0.6);
+    --night-text-text-01-inverse: #1b1f3b;
+    --night-text-text-02-inverse: rgba(27, 31, 59, 0.65);
+    --night-text-text-03-inverse: rgba(27, 31, 59, 0.4);
+    --night-text-link: #6788ff;
+    --night-text-link-hover: #526ed3;
+    --night-text-text-positive: #44c596;
+    --night-text-positive-hover: #3aa981;
+    --night-text-text-negative: #ff8c67;
+    --night-text-text-negative-hover: #bb593a;
+
+    /* ============================================
+       Базовые цвета (Base) - Night Theme
+       ============================================ */
+    --night-base-base-01: #000;
+    --night-base-base-02: #333;
+    --night-base-base-03: #5c636b;
+    --night-base-base-04: #9299a2;
+    --night-base-base-05: #c7c9cc;
+    --night-base-base-06: #dddfe0;
+    --night-base-base-07: #eaecee;
+    --night-base-base-08: #f6f7f8;
+    --night-base-base-09: #fff;
+    --night-base-primary: #526ed3;
+    --night-base-primary-hover: #6c86e2;
+    --night-base-primary-active: #314692;
+    --night-base-secondary: rgba(100, 136, 180, 0.2);
+    --night-base-secondary-hover: rgba(100, 136, 180, 0.32);
+    --night-base-secondary-active: rgba(100, 136, 180, 0.4);
+    --night-base-accent: #ff8078;
+    --night-base-accent-hover: #ff9a94;
+    --night-base-accent-active: #e7716a;
+    --night-base-clear: rgba(255, 255, 255, 0.16);
+    --night-base-clear-hover: rgba(255, 255, 255, 0.24);
+    --night-base-clear-active: rgba(255, 255, 255, 0.4);
+
+    /* ============================================
+       Статусы (Status) - Night Theme
+       ============================================ */
+    --night-status-error-fill: #ff8c67;
+    --night-status-error-bg-hover: rgba(244, 87, 37, 0.4);
+    --night-status-error-bg: rgba(244, 87, 37, 0.32);
+    --night-status-success-fill: #4ac99b;
+    --night-status-success-bg-hover: rgba(74, 201, 155, 0.4);
+    --night-status-success-bg: rgba(74, 201, 155, 0.32);
+    --night-status-warning-fill: #ffc700;
+    --night-status-warning-bg-hover: rgba(255, 199, 0, 0.4);
+    --night-status-warning-bg: rgba(255, 199, 0, 0.32);
+    --night-status-info-fill: #70b6f6;
+    --night-status-info-bg-hover: rgba(112, 182, 246, 0.4);
+    --night-status-info-bg: rgba(112, 182, 246, 0.32);
+    --night-status-neutral-fill: #959ba4;
+    --night-status-neutral-bg-hover: rgba(149, 155, 164, 0.4);
+    --night-status-neutral-bg: rgba(149, 155, 164, 0.32);
+
+    /* ============================================
+       Шрифты (Fonts)
+       ============================================ */
+    --font-family: "Manrope", sans-serif;
+    --second-family: "Neue Haas Unica W1G", sans-serif;
+    --third-family: "NeueHaasUnicaW1G-Medium", sans-serif;
+    --font3: "Montserrat", sans-serif;
+}
+
+/* ============================================
+   Маппинг на Taiga UI переменные (Day Theme)
+   ============================================ */
+:root {
+    /* Основные цвета текста */
+    --tui-text-01: var(--day-text-icons-text-01);
+    --tui-text-02: var(--day-text-icons-text-02);
+    --tui-text-03: var(--day-text-icons-text-03);
+
+    /* Основной цвет (Primary) */
+    --tui-primary: var(--day-base-primary);
+    --tui-primary-hover: var(--day-base-primary-hover);
+    --tui-primary-active: var(--day-base-primary-active);
+
+    /* Вторичный цвет (Secondary) */
+    --tui-secondary: var(--day-base-secondary);
+    --tui-secondary-hover: var(--day-base-secondary-hover);
+    --tui-secondary-active: var(--day-base-secondary-active);
+
+    /* Акцентный цвет */
+    --tui-accent: var(--day-base-accent);
+    --tui-accent-hover: var(--day-base-accent-hover);
+    --tui-accent-active: var(--day-base-accent-active);
+
+    /* Фон */
+    --tui-base-01: var(--day-base-base-01);
+    --tui-base-02: var(--day-base-base-02);
+    --tui-base-03: var(--day-base-base-03);
+    --tui-base-04: var(--day-base-base-04);
+    --tui-base-05: var(--day-base-base-05);
+    --tui-base-06: var(--day-base-base-06);
+    --tui-base-07: var(--day-base-base-07);
+    --tui-base-08: var(--day-base-base-08);
+    --tui-base-09: var(--day-base-base-09);
+
+    /* Статусы */
+    --tui-success-fill: var(--day-status-success-fill);
+    --tui-success-bg: var(--day-status-success-bg);
+    --tui-success-bg-hover: var(--day-status-success-bg-hover);
+
+    --tui-error-fill: var(--day-status-error-fill);
+    --tui-error-bg: var(--day-status-error-bg);
+    --tui-error-bg-hover: var(--day-status-error-bg-hover);
+
+    --tui-warning-fill: var(--day-status-warning-fill);
+    --tui-warning-bg: var(--day-status-warning-bg);
+    --tui-warning-bg-hover: var(--day-status-warning-bg-hover);
+
+    --tui-info-fill: var(--day-status-info-fill);
+    --tui-info-bg: var(--day-status-info-bg);
+    --tui-info-bg-hover: var(--day-status-info-bg-hover);
+
+    /* Ссылки */
+    --tui-link: var(--day-text-icons-link);
+    --tui-link-hover: var(--day-text-icons-link-hover);
+
+    /* Системные */
+    --tui-selection: var(--day-system-selection);
+    --tui-focus: var(--day-system-focus);
+
+    /* Шрифты */
+    --tui-font-text: var(--font-family);
+    --tui-font-heading: var(--font-family);
+}

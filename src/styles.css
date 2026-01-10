@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap');
+
+:root {
+    background: var(--day-base-background);
+}
+
+html {
+    background: var(--day-base-background);
+    height: 100%;
+}
+
+body {
+    background: var(--day-base-background);
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+tui-root {
+    background: var(--day-base-background) !important;
+    display: block;
+    flex-direction: column;
+}
+
+/* Базовый фон для контейнера роутера */
+router-outlet + * {
+    background: var(--day-base-background);
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    height: 100%;
+}
+
+.main-container {
+    margin: 0 auto !important;
+    padding: 0 48px !important;
+
+    display: flex;
+    flex-direction: column;
+
+    max-width: 1248px !important;
+    width: 100%;
+    flex: 1;
+    box-sizing: border-box;
+
+    background: var(--day-base-background);
+    min-height: 100% !important;
+}
+
+/* ============================================
+   Типографика (Typography)
+   ============================================ */
+/* Body тексты */
+.tui-text_body-l {
+    font-size: 16px !important; /* Body M → 16px */
+    line-height: 1.5;
+}
+
+.tui-text_body-m {
+    font-size: 14px !important; /* Body S → 14px */
+    line-height: 1.5;
+}
+
+.tui-text_body-s {
+    font-size: 12px !important; /* Body XS → 12px */
+    line-height: 1.5;
+}
+
+/* ============================================
+   Кнопки (Buttons)
+   ============================================ */
+/* Скругления 8px для всех кнопок */
+button,
+.tui-button,
+.tui-button_large,
+.tui-button_medium,
+.tui-button_small {
+    border-radius: 8px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+}
+
+/* Padding для primary кнопок: 20px горизонтально */
+.tui-button_primary {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+}
+
+/* Padding для secondary кнопок с иконкой: 16px слева от иконки, 20px справа от текста */
+.tui-button_secondary {
+    padding-left: 16px !important;
+    padding-right: 20px !important;
+}
+
+.tui-button_secondary .t-icon {
+    margin-right: 4px; /* Отступ между иконкой и текстом */
+}
+
+/* ============================================
+   Инпуты (Inputs)
+   ============================================ */
+/* Скругления 8px для всех инпутов */
+input,
+textarea,
+select,
+.tui-input,
+.tui-textfield .t-input,
+.tui-select,
+.tui-textarea {
+    border-radius: 8px !important;
+}
+
+input:not(:hover),
+textarea:not(:hover),
+select:not(:hover),
+.tui-input:not(:hover),
+.tui-textfield .t-input:not(:hover),
+.tui-select:not(:hover),
+.tui-textarea:not(:hover) {
+    box-shadow: none !important;
+}
+
+/* ============================================
+   Дополнительные элементы форм
+   ============================================ */
+.tui-group,
+.tui-input-group {
+    border-radius: 8px !important;
+}
+
+/* Убираем тени для всех элементов в обычном состоянии */
+tui-input:not(:focus):not(:hover) {
+    box-shadow: none !important;
+}
