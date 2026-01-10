@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap');
-
 :root {
     background: var(--day-base-background);
 }
@@ -51,17 +49,17 @@ router-outlet + * {
    Типографика (Typography)
    ============================================ */
 /* Body тексты */
-.tui-text_body-l {
+.tui-text_body-m {
     font-size: 16px !important; /* Body M → 16px */
     line-height: 1.5;
 }
 
-.tui-text_body-m {
+.tui-text_body-s {
     font-size: 14px !important; /* Body S → 14px */
     line-height: 1.5;
 }
 
-.tui-text_body-s {
+.tui-text_body-xs {
     font-size: 12px !important; /* Body XS → 12px */
     line-height: 1.5;
 }

@@ -150,14 +150,6 @@
     --night-status-neutral-fill: #959ba4;
     --night-status-neutral-bg-hover: rgba(149, 155, 164, 0.4);
     --night-status-neutral-bg: rgba(149, 155, 164, 0.32);
-
-    /* ============================================
-       Шрифты (Fonts)
-       ============================================ */
-    --font-family: "Manrope", sans-serif;
-    --second-family: "Neue Haas Unica W1G", sans-serif;
-    --third-family: "NeueHaasUnicaW1G-Medium", sans-serif;
-    --font3: "Montserrat", sans-serif;
 }
 
 /* ============================================
@@ -219,8 +211,4 @@
     /* Системные */
     --tui-selection: var(--day-system-selection);
     --tui-focus: var(--day-system-focus);
-
-    /* Шрифты */
-    --tui-font-text: var(--font-family);
-    --tui-font-heading: var(--font-family);
 }
