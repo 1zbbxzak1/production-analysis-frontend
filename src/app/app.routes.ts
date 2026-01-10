@@ -6,6 +6,7 @@ import {Forms} from './children/head/forms/forms';
 import {Reports} from './children/head/reports/reports';
 import {Archive} from './children/head/archive/archive';
 import {Dashboard} from './children/head/dashboard/dashboard';
+import {FirstType} from './children/head/forms/children/first-type/first-type';
 
 export const routes: Routes = [
     {
@@ -26,6 +27,12 @@ export const routes: Routes = [
             {
                 path: 'forms',
                 component: Forms,
+                children: [
+                    {
+                        path: 'type-1',
+                        component: FirstType,
+                    },
+                ]
             },
             {
                 path: 'archive',
