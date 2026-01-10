@@ -1,0 +1,41 @@
+.auth-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    height: 100vh;
+}
+
+.auth {
+    border: 1px solid var(--day-base-base-02);
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 2px 4px 0 rgba(27, 31, 59, 0.04) !important;
+    background: var(--day-text-icons-text-01-inverse) !important;
+
+    max-width: 400px;
+    max-height: 352px;
+}
+
+.auth-form {
+    width: 336px;
+}
+
+.tui-text_h5 {
+    margin-top: 0;
+    margin-bottom: 32px;
+}
+
+.tui-text_body-s {
+    margin-top: 0;
+    margin-bottom: 4px;
+}
+
+.email-container {
+    margin-bottom: 16px;
+}
+
+.password-container {
+    margin-bottom: 32px;
+}
