@@ -17,17 +17,17 @@
                 </p>
 
                 <tui-combo-box
-                    [formControl]="controlOperators"
-                    [stringify]="stringify"
-                    [tuiTextfieldLabelOutside]="true"
-                    tuiTextfieldSize="m"
+                        [formControl]="controlOperators"
+                        [stringify]="stringify"
+                        [tuiTextfieldLabelOutside]="true"
+                        tuiTextfieldSize="m"
                 >
                     Выберите
 
                     <tui-data-list-wrapper
-                        *tuiDataList
-                        [itemContent]="stringify | tuiStringifyContent"
-                        [items]="operators | tuiFilterByInput"
+                            *tuiDataList
+                            [itemContent]="stringify | tuiStringifyContent"
+                            [items]="operators | tuiFilterByInput"
                     />
                 </tui-combo-box>
             </div>
@@ -41,9 +41,9 @@
                     <tui-textfield [content]="controlDate.value?.daySame(today) ? this.today : ''"
                                    tuiTextfieldSize="m">
                         <input
-                            [formControl]="controlDate"
-                            placeholder="ДД.ММ.ГГГГ"
-                            tuiInputDate
+                                [formControl]="controlDate"
+                                placeholder="ДД.ММ.ГГГГ"
+                                tuiInputDate
                         />
                         <ng-template
                             let-close
@@ -51,12 +51,12 @@
                         >
                             <tui-calendar/>
                             <button
-                                (click)="controlDate.setValue(today); close()"
-                                appearance="action"
-                                class="button"
-                                size="m"
-                                tuiButton
-                                type="button"
+                                    (click)="controlDate.setValue(today); close()"
+                                    appearance="action"
+                                    class="button"
+                                    size="m"
+                                    tuiButton
+                                    type="button"
                             >
                                 Сегодня
                             </button>
@@ -70,17 +70,17 @@
                     </p>
 
                     <tui-combo-box
-                        [formControl]="controlShifts"
-                        [stringify]="stringifyShift"
-                        [tuiTextfieldLabelOutside]="true"
-                        tuiTextfieldSize="m"
+                            [formControl]="controlShifts"
+                            [stringify]="stringifyShift"
+                            [tuiTextfieldLabelOutside]="true"
+                            tuiTextfieldSize="m"
                     >
                         Выберите
 
                         <tui-data-list-wrapper
-                            *tuiDataList
-                            [itemContent]="stringifyShift | tuiStringifyContent"
-                            [items]="shifts | tuiFilterByInput"
+                                *tuiDataList
+                                [itemContent]="stringifyShift | tuiStringifyContent"
+                                [items]="shifts | tuiFilterByInput"
                         />
                     </tui-combo-box>
                 </div>
@@ -106,86 +106,87 @@
                     <div class="table-cell">{{ i + 1 }}</div>
                     <div class="table-cell">
                         <tui-combo-box
-                            [formControl]="item.product"
-                            [stringify]="stringifyProduct"
-                            [tuiTextfieldLabelOutside]="true"
-                            tuiTextfieldSize="m"
+                                [formControl]="item.product"
+                                [stringify]="stringifyProduct"
+                                [tuiTextfieldLabelOutside]="true"
+                                tuiTextfieldSize="m"
                         >
                             Выберите
 
                             <tui-data-list-wrapper
-                                *tuiDataList
-                                [itemContent]="stringifyProduct | tuiStringifyContent"
-                                [items]="product | tuiFilterByInput"
+                                    *tuiDataList
+                                    [itemContent]="stringifyProduct | tuiStringifyContent"
+                                    [items]="product | tuiFilterByInput"
                             />
                         </tui-combo-box>
                     </div>
                     <div class="table-cell">
                         <tui-textfield tuiTextfieldSize="m">
                             <input
-                                [formControl]="item.cyclTime"
-                                placeholder=""
-                                tuiTextfield
-                                type="number"
+                                    [formControl]="item.cyclTime"
+                                    placeholder=""
+                                    tuiTextfield
+                                    type="number"
                             />
                         </tui-textfield>
                     </div>
                     <div class="table-cell">
                         <tui-textfield tuiTextfieldSize="m">
                             <input
-                                [formControl]="item.dailyPace"
-                                placeholder=""
-                                tuiTextfield
-                                type="number"
+                                    [formControl]="item.dailyPace"
+                                    placeholder=""
+                                    tuiTextfield
+                                    type="number"
                             />
                         </tui-textfield>
                     </div>
+
                     <div class="table-cell delete-cell">
                         <button
-                            (click)="deleteTableRow(i)"
-                            *ngIf="i > 0"
-                            appearance="flat-grayscale"
-                            class="delete-btn"
-                            iconStart="@tui.minus"
-                            size="s"
-                            tuiButton
-                            type="button"
+                                (click)="deleteTableRow(i)"
+                                *ngIf="i > 0"
+                                appearance="flat-grayscale"
+                                class="delete-btn"
+                                iconStart="@tui.minus"
+                                size="s"
+                                tuiButton
+                                type="button"
                         ></button>
                     </div>
                 </div>
-            </div>
 
-            <!-- Кнопка добавить -->
-            <button
-                (click)="addTableRow()"
-                appearance="flat"
-                class="add-row-btn"
-                iconStart="@tui.plus"
-                size="m"
-                tuiButton
-                type="button"
-            >
-                Добавить
-            </button>
+                <!-- Кнопка добавить -->
+                <button
+                        (click)="addTableRow()"
+                        appearance="flat"
+                        class="add-row-btn"
+                        iconStart="@tui.plus"
+                        size="m"
+                        tuiButton
+                        type="button"
+                >
+                    Добавить
+                </button>
+            </div>
         </div>
 
         <div class="button-final">
             <button
-                appearance="primary"
-                size="m"
-                tuiButton
-                type="button"
+                    appearance="primary"
+                    size="m"
+                    tuiButton
+                    type="button"
             >
                 Создать
             </button>
 
             <button
-                (click)="goBack()"
-                appearance="outline"
-                class="outline-b"
-                size="m"
-                tuiButton
-                type="button"
+                    (click)="goBack()"
+                    appearance="outline"
+                    class="outline-b"
+                    size="m"
+                    tuiButton
+                    type="button"
             >
                 Отменить
             </button>

@@ -73,7 +73,7 @@
 .products-table {
     border: 1px solid var(--day-base-base-04);
     border-radius: 8px;
-    padding: 0 0 12px;
+    padding: 0;
 }
 
 .table-header {
@@ -160,8 +160,18 @@
 }
 
 .add-row-btn {
-    margin-top: 16px;
-    margin-bottom: 24px;
+    margin-left: 12px;
+    margin-bottom: 12px;
+
+    padding: 0 20px 0 16px !important;
+}
+
+.add-row-btn:hover {
+    background: var(--day-base-secondary);
+}
+
+.add-row-btn:active {
+    background: var(--day-base-secondary-hover);
 }
 
 .button-final {
