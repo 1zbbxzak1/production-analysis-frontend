@@ -1,0 +1,31 @@
+<app-header/>
+
+<div class="main-container">
+    <tui-tabs-with-more *ngIf="!isFormTypeActive">
+        <button
+            *tuiItem
+            [routerLink]="'/department-head/forms'"
+            class="tab-link"
+            routerLinkActive="active"
+            tuiTab
+            type="button"
+        >
+            Формы
+        </button>
+
+        <button
+            *tuiItem
+            [routerLink]="'/department-head/archive'"
+            class="tab-link"
+            routerLinkActive="active"
+            tuiTab
+            type="button"
+        >
+            Архив
+        </button>
+    </tui-tabs-with-more>
+
+    <router-outlet></router-outlet>
+</div>
+
+<app-footer/>
