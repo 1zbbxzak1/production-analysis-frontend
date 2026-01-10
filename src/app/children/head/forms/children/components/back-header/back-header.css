@@ -1,0 +1,21 @@
+.back-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+
+    gap: 12px;
+
+    cursor: pointer;
+
+    color: var(--day-text-icons-text-02);
+}
+
+.back-container:hover {
+    color: var(--day-text-icons-text-01) !important;
+}
+
+.back-container img {
+    width: 24px;
+    height: 24px;
+}

@@ -1,0 +1,13 @@
+<div (click)="onBackClick()"
+     (mouseenter)="isHovered = true"
+     (mouseleave)="isHovered = false"
+     class="back-container">
+    <img
+        [src]="isHovered ? 'assets/circle-chevron-left-hover.svg' : 'assets/circle-chevron-left.svg'"
+        alt="back"
+    >
+
+    <p class="tui-text_body-s">
+        Назад
+    </p>
+</div>
