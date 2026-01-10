@@ -9,6 +9,7 @@ import {Dashboard} from './children/head/dashboard/dashboard';
 import {FirstType} from './children/head/forms/children/first-type/first-type';
 import {SecondType} from './children/head/forms/children/second-type/second-type';
 import {ThirdType} from './children/head/forms/children/third-type/third-type';
+import {FourthType} from './children/head/forms/children/fourth-type/fourth-type';
 
 export const routes: Routes = [
     {
@@ -41,6 +42,10 @@ export const routes: Routes = [
                     {
                         path: 'type-3',
                         component: ThirdType,
+                    },
+                    {
+                        path: 'type-4',
+                        component: FourthType,
                     },
                 ]
             },
