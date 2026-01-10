@@ -1,0 +1,48 @@
+<div class="auth-container">
+    <div class="auth">
+        <form [formGroup]="formAuth" class="auth-form">
+            <p class="tui-text_h5">
+                Вход
+            </p>
+
+            <div class="email-container">
+                <p class="tui-text_body-s">Электронная почта</p>
+                <tui-textfield
+                    tuiTextfieldSize="m">
+                    <input
+                        formControlName="email"
+                        placeholder=""
+                        tuiTextfield
+                        type="email"
+                    />
+                </tui-textfield>
+            </div>
+
+            <div class="password-container">
+                <p class="tui-text_body-s">Пароль</p>
+                <tui-textfield
+                    tuiTextfieldSize="m">
+                    <input
+                        formControlName="password"
+                        placeholder=""
+                        tuiTextfield
+                        type="password"
+                    />
+                    <tui-icon tuiPassword/>
+                </tui-textfield>
+            </div>
+
+            <button (click)="loginUser()"
+                    appearance="primary"
+                    size="m"
+                    tuiButton
+                    type="button">
+                Войти
+            </button>
+
+            <div *ngIf="loginError" class="error-message">
+                {{ loginError }}
+            </div>
+        </form>
+    </div>
+</div>
