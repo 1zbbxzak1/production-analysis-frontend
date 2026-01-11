@@ -9,9 +9,9 @@ import {LoginResponse} from '../../models/auth/LoginResponse';
 export class AuthService {
 
     private readonly _http: HttpClient = inject(HttpClient);
-    private readonly api: string = `${environment.api}/auth/login`;
+    private readonly _api: string = `${environment.api}/auth/login`;
 
     public login(loginReq: LoginRequest): Observable<LoginResponse> {
-        return this._http.post<LoginResponse>(`${this.api}`, loginReq)
+        return this._http.post<LoginResponse>(`${this._api}`, loginReq)
     }
 }
