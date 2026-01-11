@@ -1,4 +1,8 @@
 <tui-tabs-with-more>
+    <div class="header-cont">
+        <p class="header-title">ИБП</p>
+    </div>
+
     <ng-container *ngFor="let tab of tabs; let i = index">
         <a
             *tuiItem
@@ -11,30 +15,35 @@
         </a>
     </ng-container>
 
-    <button
-        (tui-tab-activate.stop)="(0)"
-        [(tuiDropdownOpen)]="open"
-        [tuiDropdown]="content"
-        class="user-button"
-        iconStart="@tui.user"
-        tuiChevron
-        tuiTab
-        type="button"
-    >
-        {{ userName }}
-        <ng-template #content>
-            <tui-data-list
-                (click)="onClick()"
-                size="s">
-                <button
-                    (click)="logout()"
-                    tuiAppearance="flat-destructive"
-                    tuiOption
-                    type="button"
-                >
-                    Выйти
-                </button>
-            </tui-data-list>
-        </ng-template>
-    </button>
+    <div class="user-button">
+        <div class="user-button-icon">
+            <img height="24" src="assets/user-round.svg" width="24"/>
+        </div>
+
+        <button
+            (tui-tab-activate.stop)="(0)"
+            [(tuiDropdownOpen)]="open"
+            [tuiDropdown]="content"
+            class="user-button-btn"
+            tuiChevron
+            tuiTab
+            type="button"
+        >
+            {{ userName }}
+            <ng-template #content>
+                <tui-data-list
+                    (click)="onClick()"
+                    size="s">
+                    <button
+                        (click)="logout()"
+                        tuiAppearance="flat-destructive"
+                        tuiOption
+                        type="button"
+                    >
+                        Выйти
+                    </button>
+                </tui-data-list>
+            </ng-template>
+        </button>
+    </div>
 </tui-tabs-with-more>

@@ -21,6 +21,7 @@ tui-tabs-with-more {
 
 .tab-link {
     border-radius: 0 !important;
+    padding: 0 !important;
 }
 
 app-footer {
