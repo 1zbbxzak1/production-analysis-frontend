@@ -19,6 +19,7 @@
                 <tui-combo-box
                     [formControl]="controlOperators"
                     [stringify]="stringify"
+                    [tuiDropdownMaxHeight]="150"
                     [tuiTextfieldLabelOutside]="true"
                     tuiTextfieldSize="m"
                 >
@@ -72,6 +73,7 @@
                     <tui-combo-box
                         [formControl]="controlShifts"
                         [stringify]="stringifyShift"
+                        [tuiDropdownMaxHeight]="150"
                         [tuiTextfieldLabelOutside]="true"
                         tuiTextfieldSize="m"
                     >
@@ -100,6 +102,7 @@
                 <tui-combo-box
                     [formControl]="controlProduct"
                     [stringify]="stringifyProduct"
+                    [tuiDropdownMaxHeight]="150"
                     [tuiTextfieldLabelOutside]="true"
                     tuiTextfieldSize="m"
                 >
@@ -121,6 +124,7 @@
 
                     <tui-textfield tuiTextfieldSize="m">
                         <input
+                            [formControl]="controlWorkCapacity"
                             placeholder=""
                             tuiTextfield
                             type="number"
@@ -135,6 +139,7 @@
 
                     <tui-textfield tuiTextfieldSize="m">
                         <input
+                            [formControl]="controlDailyRate"
                             placeholder=""
                             tuiTextfield
                             type="number"
@@ -146,6 +151,7 @@
 
         <div class="button-final">
             <button
+                (click)="createForm()"
                 appearance="primary"
                 size="m"
                 tuiButton

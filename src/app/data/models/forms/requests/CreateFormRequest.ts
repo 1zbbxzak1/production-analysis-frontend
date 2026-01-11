@@ -6,7 +6,7 @@ export interface CreateFormRequest {
     paType: PaTypeDto;
     shiftId: number;
     assigneeId: number;
-    product: ProductContextDto;
+    product: ProductContextDto | null;
     products: ProductContextDto[] | null;
-    operationOrProduct: OperationOrProductContextDto;
+    operationOrProduct: OperationOrProductContextDto | null;
 }

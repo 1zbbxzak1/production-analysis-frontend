@@ -98,7 +98,7 @@
                 </p>
 
                 <tui-combo-box
-                    [formControl]="controlProduct"
+                    [formControl]="controlProducts"
                     [stringify]="stringifyProduct"
                     [tuiTextfieldLabelOutside]="true"
                     tuiTextfieldSize="m"
@@ -108,7 +108,7 @@
                     <tui-data-list-wrapper
                         *tuiDataList
                         [itemContent]="stringifyProduct | tuiStringifyContent"
-                        [items]="product | tuiFilterByInput"
+                        [items]="products | tuiFilterByInput"
                     />
                 </tui-combo-box>
             </div>
@@ -116,6 +116,7 @@
 
         <div class="button-final">
             <button
+                (click)="createForm()"
                 appearance="primary"
                 size="m"
                 tuiButton
