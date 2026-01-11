@@ -20,6 +20,8 @@ import {TUI_LANGUAGE, TUI_RUSSIAN_LANGUAGE} from '@taiga-ui/i18n';
 import {of} from 'rxjs';
 import {DictService} from './data/service/dictionaries/dict.service';
 import {DictManagerService} from './data/service/dictionaries/dict.manager.service';
+import {FormsService} from './data/service/forms/forms.service';
+import {FormsManagerService} from './data/service/forms/forms.manager.service';
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -48,5 +50,8 @@ export const appConfig: ApplicationConfig = {
 
         DictService,
         DictManagerService,
+
+        FormsService,
+        FormsManagerService,
     ]
 };
