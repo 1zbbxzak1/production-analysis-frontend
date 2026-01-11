@@ -1,6 +1,6 @@
 import {Component, DestroyRef, inject, OnInit} from '@angular/core';
 import {Footer} from "../../components/footer/footer";
-import {Header} from "../components/header/header";
+import {HeaderHead} from "../components/header-head/header-head";
 import {NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet} from "@angular/router";
 import {TuiTabs} from "@taiga-ui/kit";
 import {FormsModule} from '@angular/forms';
@@ -12,7 +12,7 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
     selector: 'app-dashboard',
     imports: [
         Footer,
-        Header,
+        HeaderHead,
         TuiTabs,
         FormsModule,
         RouterLinkActive,

@@ -19,11 +19,11 @@ import {NgForOf} from '@angular/common';
         RouterLinkActive,
         TuiAppearance,
     ],
-    templateUrl: './header.html',
-    styleUrl: './header.css',
+    templateUrl: './header-head.html',
+    styleUrl: './header-head.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class Header implements OnInit {
+export class HeaderHead implements OnInit {
 
     protected readonly tabs = [
         {label: 'Производственный анализ', route: '/department-head/forms'},

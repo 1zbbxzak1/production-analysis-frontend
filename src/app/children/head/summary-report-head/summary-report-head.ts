@@ -1,12 +1,12 @@
 import {Component} from '@angular/core';
 import {Footer} from "../../components/footer/footer";
-import {Header} from "../components/header/header";
+import {HeaderHead} from "../components/header-head/header-head";
 
 @Component({
     selector: 'app-reports',
     imports: [
         Footer,
-        Header
+        HeaderHead
     ],
     templateUrl: './summary-report-head.html',
     styleUrl: './summary-report-head.css',
