@@ -1,20 +1,20 @@
 import {ChangeDetectorRef, Component, DestroyRef, inject, OnInit} from '@angular/core';
-import {BackHeader} from '../../../../components/back-header/back-header';
+import {BackHeader} from '../../../../../../components/back-header/back-header';
 import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {TuiButton, TuiTextfield} from '@taiga-ui/core';
 import {TuiComboBoxModule, TuiTextfieldControllerModule} from '@taiga-ui/legacy';
 import {TuiDataListWrapper, TuiFilterByInputPipe, TuiInputDate, TuiStringifyContentPipe} from '@taiga-ui/kit';
 import {TuiDay} from '@taiga-ui/cdk';
 import {Router} from '@angular/router';
-import {EmployeeDto} from '../../../../../data/models/dictionaries/responses/EmployeeDto';
-import {ShiftDto} from '../../../../../data/models/dictionaries/responses/ShiftDto';
-import {ProductDto} from '../../../../../data/models/dictionaries/responses/ProductDto';
-import {DictManagerService} from '../../../../../data/service/dictionaries/dict.manager.service';
-import {FormsManagerService} from '../../../../../data/service/forms/forms.manager.service';
-import {CreateFormRequest} from '../../../../../data/models/forms/requests/CreateFormRequest';
-import {PaTypeDto} from '../../../../../data/models/forms/enums/PaTypeDto';
+import {EmployeeDto} from '../../../../../../../data/models/dictionaries/responses/EmployeeDto';
+import {ShiftDto} from '../../../../../../../data/models/dictionaries/responses/ShiftDto';
+import {ProductDto} from '../../../../../../../data/models/dictionaries/responses/ProductDto';
+import {DictManagerService} from '../../../../../../../data/service/dictionaries/dict.manager.service';
+import {FormsManagerService} from '../../../../../../../data/service/forms/forms.manager.service';
+import {CreateFormRequest} from '../../../../../../../data/models/forms/requests/CreateFormRequest';
+import {PaTypeDto} from '../../../../../../../data/models/forms/enums/PaTypeDto';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import {FormShortDto} from '../../../../../data/models/forms/responses/FormShortDto';
+import {FormShortDto} from '../../../../../../../data/models/forms/responses/FormShortDto';
 
 @Component({
     selector: 'app-fifth-type',
