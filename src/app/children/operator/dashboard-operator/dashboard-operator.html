@@ -1,0 +1,55 @@
+<app-header-operator/>
+
+<div class="main-container">
+    <div class="dashboard-operator">
+        <p class="tui-text_h4">
+            Мои формы
+        </p>
+
+        <div class="second-container">
+            <tui-tabs *ngIf="!isFormTypeActive">
+
+                <button
+                    [routerLink]="'/operator/progress-list'"
+                    class="tab-link"
+                    routerLinkActive="active"
+                    tuiTab
+                    type="button"
+                >
+                    В работе
+
+                    <tui-badge
+                        *ngIf="progressFormsCount > 0"
+                        appearance="accent"
+                        class="badge"
+                        size="m"
+                    >
+                        {{ progressFormsCount }}
+                    </tui-badge>
+                </button>
+
+                <button
+                    [routerLink]="'/operator/completed-list'"
+                    class="tab-link"
+                    routerLinkActive="active"
+                    tuiTab
+                    type="button"
+                >
+                    Завершенные
+
+                    <tui-badge
+                        *ngIf="completedFormsCount > 0"
+                        class="badge"
+                        size="m"
+                    >
+                        {{ completedFormsCount }}
+                    </tui-badge>
+                </button>
+            </tui-tabs>
+        </div>
+
+        <router-outlet></router-outlet>
+    </div>
+</div>
+
+<app-footer/>

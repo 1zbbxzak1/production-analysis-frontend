@@ -1,0 +1,55 @@
+<app-loader [isLoading]="isLoading" class="spinner" spinnerClass="progress-spinner"></app-loader>
+
+<div class="progress-container">
+    <div *ngIf="!isLoading" class="table-header">
+        <div class="table-cell header-cell tui-text_body-s">Дата создания</div>
+        <div class="table-cell header-cell tui-text_body-s">Смена</div>
+        <div class="table-cell header-cell tui-text_body-s">Наименование продукции</div>
+        <div class="table-cell header-cell tui-text_body-s">Тип введения производственного анализа</div>
+    </div>
+
+    <div *ngIf="safeFormItems.length > 0 && !isLoading" class="progress-table">
+        <div
+            (click)="goToFormById(form.id)"
+            *ngFor="let form of safeFormItems; let i = index"
+            class="table-row"
+        >
+            <div class="table-cell tui-text_body-m">
+                {{ formatDate(form.creationDate) }}
+            </div>
+            <div class="table-cell tui-text_body-m">
+                <!--                {{ form.shift || 'N/A' }}-->
+                1
+            </div>
+            <div class="table-cell tui-text_body-m">
+                <!--                {{ form.productName || 'N/A' }}-->
+                Втулка
+            </div>
+            <div class="table-cell tui-text_body-m">
+                {{ getPaTypeDescription(form.paType) }}
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="safeFormItems.length === 0 && !isLoading" class="not-found-container">
+        <img
+            alt="Not found"
+            class="image"
+            height="64"
+            src="assets/not-found-forms.svg"
+            tuiSlot="top"
+            width="64"
+        />
+
+        <p class="not-title tui-text_body-m">
+            Нет форм в работе
+        </p>
+
+        <p class="not-desc">
+            Начальник цеха пока не назначил вам формы для заполнения.
+            Как только появятся новые задания, они отобразятся здесь автоматически.
+        </p>
+    </div>
+</div>
+
+

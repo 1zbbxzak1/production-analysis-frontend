@@ -11,6 +11,10 @@ import {SecondType} from './children/head/dashboard-head/children/new-forms-head
 import {ThirdType} from './children/head/dashboard-head/children/new-forms-head/children/third-type/third-type';
 import {FourthType} from './children/head/dashboard-head/children/new-forms-head/children/fourth-type/fourth-type';
 import {FifthType} from './children/head/dashboard-head/children/new-forms-head/children/fifth-type/fifth-type';
+import {DashboardOperator} from './children/operator/dashboard-operator/dashboard-operator';
+import {operatorGuard} from './data/guard/operator-guard';
+import {ProgressOperator} from './children/operator/dashboard-operator/children/progress-operator/progress-operator';
+import {CompleteOperator} from './children/operator/dashboard-operator/children/complete-operator/complete-operator';
 
 export const routes: Routes = [
     {
@@ -61,6 +65,26 @@ export const routes: Routes = [
             {
                 path: '',
                 redirectTo: 'forms',
+                pathMatch: 'full',
+            }
+        ]
+    },
+    {
+        path: 'operator',
+        component: DashboardOperator,
+        canActivate: [operatorGuard],
+        children: [
+            {
+                path: 'progress-list',
+                component: ProgressOperator
+            },
+            {
+                path: 'completed-list',
+                component: CompleteOperator
+            },
+            {
+                path: '',
+                redirectTo: 'progress-list',
                 pathMatch: 'full',
             }
         ]

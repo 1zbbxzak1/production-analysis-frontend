@@ -2,7 +2,7 @@ import {inject, Injectable} from '@angular/core';
 import {AuthService} from './auth.service';
 import {CookieService} from 'ngx-cookie-service';
 import {LoginRequest} from '../../models/auth/LoginRequest';
-import {catchError, map, Observable, of, switchMap, tap, throwError} from 'rxjs';
+import {catchError, forkJoin, map, Observable, of, switchMap, tap, throwError} from 'rxjs';
 import {LoginResponse} from '../../models/auth/LoginResponse';
 import {HttpErrorResponse} from '@angular/common/http';
 import {jwtDecode} from 'jwt-decode';
@@ -34,6 +34,7 @@ export class AuthManagerService {
     public logout(): void {
         this.removeAccessToken();
         this.removeUserName();
+        this.removeDepartmentId();
         this._router.navigate(['/']);
     }
 
@@ -74,6 +75,12 @@ export class AuthManagerService {
 
         const userName: string = this.decrypt(encryptedUserName);
         return userName || null;
+    }
+
+    public getDepartmentId(): string | null {
+        const encryptedDepartmentId: string = this._cookie.get('department_id');
+        if (!encryptedDepartmentId) return null;
+        return this.decrypt(encryptedDepartmentId) || null;
     }
 
     private isTokenExpired(token: string): boolean {
@@ -122,6 +129,15 @@ export class AuthManagerService {
         this._cookie.delete(environment.userName, '/');
     }
 
+    private setDepartmentId(departmentId: string): void {
+        const encryptedDepartmentId = this.encrypt(departmentId);
+        this._cookie.set(environment.departmentId, encryptedDepartmentId, {expires: 1, path: '/'});
+    }
+
+    private removeDepartmentId(): void {
+        this._cookie.delete(environment.departmentId, '/');
+    }
+
     private compareIds(id: any, sid: string): boolean {
         if (typeof id === 'number') {
             const sidAsNumber: number = parseInt(sid, 10);
@@ -156,12 +172,35 @@ export class AuthManagerService {
         });
     }
 
+    private getDepartmentFromServer(): Observable<string | null> {
+        const token: string | null = this.getAccessToken();
+
+        if (token) {
+            const decoded: any = jwtDecode(token);
+            const sid: string = decoded?.sid;
+
+            return this._dictManager.getEmployees().pipe(
+                map((employees: EmployeeDto[]): string | null => {
+                    const employee = employees.find((emp: EmployeeDto): boolean => this.compareIds(emp.userId, sid));
+                    return employee?.departmentId.toString() || null;
+                })
+            );
+        }
+
+        return new Observable(observer => {
+            observer.next(null);
+            observer.complete();
+        });
+    }
+
     private loadAndSaveUserNameAsObservable(): Observable<void> {
-        return this.getUserNameFromServer().pipe(
-            tap((fullName: string | null): void => {
-                if (fullName) {
-                    this.setUserName(fullName);
-                }
+        return forkJoin([
+            this.getUserNameFromServer(),
+            this.getDepartmentFromServer()
+        ]).pipe(
+            tap(([fullName, departmentId]: [string | null, string | null]): void => {
+                if (fullName) this.setUserName(fullName);
+                if (departmentId) this.setDepartmentId(departmentId);
             }),
             map(() => void 0),
             catchError(() => of(void 0))

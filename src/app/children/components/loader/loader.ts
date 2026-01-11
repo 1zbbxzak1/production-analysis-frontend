@@ -12,6 +12,8 @@ import {NgIf} from '@angular/common';
 export class Loader {
     @Input()
     public isLoading: boolean | (() => boolean) = false;
+    @Input()
+    public spinnerClass: string = '';
 
     public get loading(): boolean {
         if (typeof this.isLoading === 'function') {

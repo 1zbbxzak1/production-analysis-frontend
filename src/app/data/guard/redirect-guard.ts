@@ -17,7 +17,7 @@ export const redirectGuard: CanActivateFn = (): Observable<boolean> => {
         } else if (roles?.includes('DepartmentHead')) {
             redirectPath = '/department-head/forms';
         } else if (roles?.includes('Operator')) {
-            redirectPath = '/operator';
+            redirectPath = '/operator/progress-list';
         }
         router.navigate([redirectPath]);
         return of(false);
