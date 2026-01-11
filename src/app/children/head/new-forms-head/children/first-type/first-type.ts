@@ -1,32 +1,23 @@
 import {ChangeDetectorRef, Component, DestroyRef, inject, OnInit} from '@angular/core';
-import {BackHeader} from "../components/back-header/back-header";
-import {FormControl, FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {TuiButton, TuiTextfield} from "@taiga-ui/core";
-import {TuiComboBoxModule, TuiTextfieldControllerModule} from "@taiga-ui/legacy";
-import {TuiDataListWrapper, TuiFilterByInputPipe, TuiInputDate, TuiStringifyContentPipe} from "@taiga-ui/kit";
+import {BackHeader} from '../../../../components/back-header/back-header';
+import {TuiDataListWrapper, TuiFilterByInputPipe, TuiInputDate, TuiStringifyContentPipe} from '@taiga-ui/kit';
+import {TuiComboBoxModule, TuiTextfieldControllerModule} from '@taiga-ui/legacy';
+import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {TuiButton, TuiTextfield} from '@taiga-ui/core';
 import {TuiDay} from '@taiga-ui/cdk';
 import {Router} from '@angular/router';
-import {NgForOf, NgIf} from '@angular/common';
-import {ProductDto} from '../../../../../data/models/dictionaries/responses/ProductDto';
+import {DictManagerService} from '../../../../../data/service/dictionaries/dict.manager.service';
 import {EmployeeDto} from '../../../../../data/models/dictionaries/responses/EmployeeDto';
 import {ShiftDto} from '../../../../../data/models/dictionaries/responses/ShiftDto';
-import {DictManagerService} from '../../../../../data/service/dictionaries/dict.manager.service';
-import {FormsManagerService} from '../../../../../data/service/forms/forms.manager.service';
+import {ProductDto} from '../../../../../data/models/dictionaries/responses/ProductDto';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {FormsManagerService} from '../../../../../data/service/forms/forms.manager.service';
 import {CreateFormRequest} from '../../../../../data/models/forms/requests/CreateFormRequest';
 import {PaTypeDto} from '../../../../../data/models/forms/enums/PaTypeDto';
 import {FormShortDto} from '../../../../../data/models/forms/responses/FormShortDto';
-import {ProductContextDto} from '../../../../../data/models/forms/ProductContextDto';
-
-
-interface TableItem {
-    product: FormControl<ProductDto | null>;
-    cycleTime: FormControl<number | null>;
-    dailyPace: FormControl<number | null>;
-}
 
 @Component({
-    selector: 'app-third-type',
+    selector: 'app-first-type',
     imports: [
         BackHeader,
         TuiDataListWrapper,
@@ -39,13 +30,11 @@ interface TableItem {
         TuiInputDate,
         FormsModule,
         TuiButton,
-        NgForOf,
-        NgIf,
     ],
-    templateUrl: './third-type.html',
-    styleUrl: './third-type.css',
+    templateUrl: './first-type.html',
+    styleUrl: './first-type.css',
 })
-export class ThirdType implements OnInit {
+export class FirstType implements OnInit {
 
     protected operators: EmployeeDto[] = [];
     protected shifts: ShiftDto[] = [];
@@ -55,14 +44,10 @@ export class ThirdType implements OnInit {
 
     protected readonly controlOperators = new FormControl<EmployeeDto | null>(null);
     protected readonly controlShifts = new FormControl<ShiftDto | null>(null);
+    protected readonly controlProduct = new FormControl<ProductDto | null>(null);
     protected readonly controlDate = new FormControl<TuiDay | null>(null);
-    protected tableItems: TableItem[] = [
-        {
-            product: new FormControl<ProductDto | null>(null),
-            cycleTime: new FormControl<number | null>(null),
-            dailyPace: new FormControl<number | null>(null),
-        }
-    ];
+    protected readonly controlTactTime = new FormControl<number | null>(null);
+    protected readonly controlDailyRate = new FormControl<number | null>(null);
 
     private readonly _dictManager: DictManagerService = inject(DictManagerService);
     private readonly _formsManager: FormsManagerService = inject(FormsManagerService);
@@ -85,54 +70,27 @@ export class ThirdType implements OnInit {
     protected readonly stringifyProduct = (product: ProductDto): string =>
         product.name || 'Неизвестно';
 
-    protected goBack(): void {
-        this._router.navigate(['department-head']);
-    }
-
-    protected addTableRow(): void {
-        this.tableItems.push({
-            product: new FormControl<ProductDto | null>(null),
-            cycleTime: new FormControl<number | null>(null),
-            dailyPace: new FormControl<number | null>(null),
-        });
-    }
-
-    protected deleteTableRow(index: number): void {
-        if (this.tableItems.length > 1) {
-            this.tableItems.splice(index, 1);
-        }
-    }
-
     protected createForm(): void {
         if (!this.controlOperators.value ||
             !this.controlShifts.value ||
-            !this.controlDate.value
-        ) {
+            !this.controlProduct.value ||
+            !this.controlDate.value ||
+            !this.controlTactTime.value ||
+            !this.controlDailyRate.value) {
             return;
         }
 
-        const isTableValid: boolean = this.tableItems.every((item: TableItem): boolean => {
-            const hasProduct: boolean = item.product.value !== null;
-            const hasCycleTime: boolean = item.cycleTime.value !== null && item.cycleTime.value > 0;
-            const hasDailyPace: boolean = item.dailyPace.value !== null && item.dailyPace.value > 0;
-            return hasProduct && hasCycleTime && hasDailyPace;
-        });
-
-        if (!isTableValid) return;
-
-        const products: ProductContextDto[] = this.tableItems.map((item: TableItem) => ({
-            productId: item.product.value!.id,
-            cycleTime: item.cycleTime.value!,
-            workstationCapacity: null,
-            dailyRate: item.dailyPace.value!
-        }));
-
         const req: CreateFormRequest = {
-            paType: PaTypeDto.MultipleProductsWithCycleTime,
+            paType: PaTypeDto.SingleProductWithCycleTime,
             shiftId: this.controlShifts.value!.id,
             assigneeId: this.controlOperators.value!.id,
-            product: null,
-            products: products,
+            product: {
+                productId: this.controlProduct.value!.id,
+                cycleTime: this.controlTactTime.value!,
+                workstationCapacity: null,
+                dailyRate: this.controlDailyRate.value!
+            },
+            products: null,
             operationOrProduct: null
         };
 
@@ -143,6 +101,10 @@ export class ThirdType implements OnInit {
                 this._router.navigate(['department-head']);
             }
         });
+    }
+
+    protected goBack(): void {
+        this._router.navigate(['department-head']);
     }
 
     private loadEmployees(): void {

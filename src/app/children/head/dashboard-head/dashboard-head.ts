@@ -1,21 +1,29 @@
 import {Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {Footer} from "../../components/footer/footer";
+import {Header} from "../components/header/header";
+import {NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet} from "@angular/router";
+import {TuiTabs} from "@taiga-ui/kit";
 import {FormsModule} from '@angular/forms';
-import {NavigationEnd, Router, RouterOutlet} from '@angular/router';
 import {NgIf} from '@angular/common';
 import {filter} from 'rxjs';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
-    selector: 'app-forms',
+    selector: 'app-dashboard',
     imports: [
+        Footer,
+        Header,
+        TuiTabs,
         FormsModule,
+        RouterLinkActive,
+        RouterLink,
         RouterOutlet,
-        NgIf,
+        NgIf
     ],
-    templateUrl: './forms.html',
-    styleUrl: './forms.css',
+    templateUrl: './dashboard-head.html',
+    styleUrl: './dashboard-head.css',
 })
-export class Forms implements OnInit {
+export class DashboardHead implements OnInit {
     protected isFormTypeActive: boolean = false;
     private readonly _router: Router = inject(Router);
     private readonly _destroyRef: DestroyRef = inject(DestroyRef);
@@ -26,13 +34,9 @@ export class Forms implements OnInit {
         this._router.events.pipe(
             filter((event) => event instanceof NavigationEnd),
             takeUntilDestroyed(this._destroyRef)
-        ).subscribe((event: NavigationEnd): void => {
+        ).subscribe((event: NavigationEnd) => {
             this.checkIfFormTypeActive(event.url);
         });
-    }
-
-    protected navigateToFormType(type: string): void {
-        this._router.navigate(['/department-head/forms', type]);
     }
 
     private checkIfFormTypeActive(url: string): void {

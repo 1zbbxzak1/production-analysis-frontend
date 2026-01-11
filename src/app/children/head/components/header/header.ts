@@ -34,7 +34,8 @@ export class Header implements OnInit {
     private readonly _auth: AuthManagerService = inject(AuthManagerService);
 
     public ngOnInit(): void {
-        this.userName = this._auth.getUserName() || 'Пользователь';
+        const fullName: string = this._auth.getUserName() || 'Пользователь';
+        this.userName = this.removePatronymic(fullName);
     }
 
     protected logout(): void {
@@ -44,5 +45,15 @@ export class Header implements OnInit {
 
     protected onClick(): void {
         this.open = false;
+    }
+
+    private removePatronymic(fullName: string): string {
+        const nameParts: string[] = fullName.trim().split(/\s+/);
+
+        if (nameParts.length >= 3) {
+            return nameParts.slice(0, 2).join(' ');
+        }
+
+        return fullName;
     }
 }

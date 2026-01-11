@@ -1,23 +1,23 @@
 import {ChangeDetectorRef, Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {BackHeader} from '../../../../components/back-header/back-header';
 import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {TuiDay} from '@taiga-ui/cdk';
-import {Router} from '@angular/router';
-import {BackHeader} from '../components/back-header/back-header';
 import {TuiButton, TuiTextfield} from '@taiga-ui/core';
 import {TuiComboBoxModule, TuiTextfieldControllerModule} from '@taiga-ui/legacy';
 import {TuiDataListWrapper, TuiFilterByInputPipe, TuiInputDate, TuiStringifyContentPipe} from '@taiga-ui/kit';
+import {TuiDay} from '@taiga-ui/cdk';
+import {Router} from '@angular/router';
 import {EmployeeDto} from '../../../../../data/models/dictionaries/responses/EmployeeDto';
 import {ShiftDto} from '../../../../../data/models/dictionaries/responses/ShiftDto';
 import {ProductDto} from '../../../../../data/models/dictionaries/responses/ProductDto';
 import {DictManagerService} from '../../../../../data/service/dictionaries/dict.manager.service';
 import {FormsManagerService} from '../../../../../data/service/forms/forms.manager.service';
+import {CreateFormRequest} from '../../../../../data/models/forms/requests/CreateFormRequest';
+import {PaTypeDto} from '../../../../../data/models/forms/enums/PaTypeDto';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {FormShortDto} from '../../../../../data/models/forms/responses/FormShortDto';
-import {PaTypeDto} from '../../../../../data/models/forms/enums/PaTypeDto';
-import {CreateFormRequest} from '../../../../../data/models/forms/requests/CreateFormRequest';
 
 @Component({
-    selector: 'app-second-type',
+    selector: 'app-fifth-type',
     imports: [
         BackHeader,
         TuiDataListWrapper,
@@ -31,23 +31,21 @@ import {CreateFormRequest} from '../../../../../data/models/forms/requests/Creat
         FormsModule,
         TuiButton,
     ],
-    templateUrl: './second-type.html',
-    styleUrl: './second-type.css',
+    templateUrl: './fifth-type.html',
+    styleUrl: './fifth-type.css',
 })
-export class SecondType implements OnInit {
+export class FifthType implements OnInit {
 
     protected operators: EmployeeDto[] = [];
     protected shifts: ShiftDto[] = [];
-    protected product: ProductDto[] = [];
+    protected products: ProductDto[] = [];
 
     protected readonly today = TuiDay.currentLocal();
 
     protected readonly controlOperators = new FormControl<EmployeeDto | null>(null);
     protected readonly controlShifts = new FormControl<ShiftDto | null>(null);
-    protected readonly controlProduct = new FormControl<ProductDto | null>(null);
+    protected readonly controlProducts = new FormControl<ProductDto | null>(null);
     protected readonly controlDate = new FormControl<TuiDay | null>(null);
-    protected readonly controlWorkCapacity = new FormControl<number | null>(null);
-    protected readonly controlDailyRate = new FormControl<number | null>(null);
 
     private readonly _dictManager: DictManagerService = inject(DictManagerService);
     private readonly _formsManager: FormsManagerService = inject(FormsManagerService);
@@ -73,25 +71,21 @@ export class SecondType implements OnInit {
     protected createForm(): void {
         if (!this.controlOperators.value ||
             !this.controlShifts.value ||
-            !this.controlProduct.value ||
-            !this.controlDate.value ||
-            !this.controlWorkCapacity.value ||
-            !this.controlDailyRate.value) {
+            !this.controlProducts.value ||
+            !this.controlDate.value) {
             return;
         }
 
         const req: CreateFormRequest = {
-            paType: PaTypeDto.SingleProductWithWorkstationCapacity,
+            paType: PaTypeDto.LessThanOnePerShift,
             shiftId: this.controlShifts.value!.id,
             assigneeId: this.controlOperators.value!.id,
-            product: {
-                productId: this.controlProduct.value!.id,
-                cycleTime: null,
-                workstationCapacity: this.controlWorkCapacity.value!,
-                dailyRate: this.controlDailyRate.value!
-            },
+            product: null,
             products: null,
-            operationOrProduct: null
+            operationOrProduct: {
+                operationId: null,
+                productId: this.controlProducts.value!.id
+            }
         };
 
         this._formsManager.createNewForm(req).pipe(
@@ -131,7 +125,7 @@ export class SecondType implements OnInit {
         this._dictManager.getProducts().pipe(
             takeUntilDestroyed(this._destroyRef)
         ).subscribe((products: ProductDto[]): void => {
-            this.product = products;
+            this.products = products;
 
             this._cdr.detectChanges();
         });

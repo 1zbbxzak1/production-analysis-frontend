@@ -5,6 +5,8 @@
 ```ts
 export const environment = {
     api: 'https://api.example.com',
-    tokenName: 'your_secret_key_name',
+    tokenName: 'access_token',
+    userName: 'full_name_user',
+    encryptionKey: 'prod-secret-key-min-32-characters-long-1234',
 };
 ```

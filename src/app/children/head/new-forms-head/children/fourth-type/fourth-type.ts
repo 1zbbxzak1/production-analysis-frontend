@@ -1,9 +1,9 @@
 import {ChangeDetectorRef, Component, DestroyRef, inject, OnInit} from '@angular/core';
-import {BackHeader} from '../components/back-header/back-header';
-import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {TuiButton, TuiTextfield} from '@taiga-ui/core';
-import {TuiComboBoxModule, TuiTextfieldControllerModule} from '@taiga-ui/legacy';
-import {TuiDataListWrapper, TuiFilterByInputPipe, TuiInputDate, TuiStringifyContentPipe} from '@taiga-ui/kit';
+import {BackHeader} from "../../../../components/back-header/back-header";
+import {FormControl, FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {TuiButton, TuiTextfield} from "@taiga-ui/core";
+import {TuiComboBoxModule, TuiTextfieldControllerModule} from "@taiga-ui/legacy";
+import {TuiDataListWrapper, TuiFilterByInputPipe, TuiInputDate, TuiStringifyContentPipe} from "@taiga-ui/kit";
 import {TuiDay} from '@taiga-ui/cdk';
 import {Router} from '@angular/router';
 import {EmployeeDto} from '../../../../../data/models/dictionaries/responses/EmployeeDto';
@@ -15,9 +15,11 @@ import {CreateFormRequest} from '../../../../../data/models/forms/requests/Creat
 import {PaTypeDto} from '../../../../../data/models/forms/enums/PaTypeDto';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {FormShortDto} from '../../../../../data/models/forms/responses/FormShortDto';
+import {OperationDto} from '../../../../../data/models/dictionaries/responses/OperationDto';
+import {forkJoin} from 'rxjs';
 
 @Component({
-    selector: 'app-fifth-type',
+    selector: 'app-fourth-type',
     imports: [
         BackHeader,
         TuiDataListWrapper,
@@ -31,20 +33,20 @@ import {FormShortDto} from '../../../../../data/models/forms/responses/FormShort
         FormsModule,
         TuiButton,
     ],
-    templateUrl: './fifth-type.html',
-    styleUrl: './fifth-type.css',
+    templateUrl: './fourth-type.html',
+    styleUrl: './fourth-type.css',
 })
-export class FifthType implements OnInit {
+export class FourthType implements OnInit {
 
     protected operators: EmployeeDto[] = [];
     protected shifts: ShiftDto[] = [];
-    protected products: ProductDto[] = [];
+    protected productsAndOperations: (ProductDto | OperationDto)[] = [];
 
     protected readonly today = TuiDay.currentLocal();
 
     protected readonly controlOperators = new FormControl<EmployeeDto | null>(null);
     protected readonly controlShifts = new FormControl<ShiftDto | null>(null);
-    protected readonly controlProducts = new FormControl<ProductDto | null>(null);
+    protected readonly controlProductOrOperation = new FormControl<ProductDto | OperationDto | null>(null);
     protected readonly controlDate = new FormControl<TuiDay | null>(null);
 
     private readonly _dictManager: DictManagerService = inject(DictManagerService);
@@ -56,7 +58,7 @@ export class FifthType implements OnInit {
     public ngOnInit(): void {
         this.loadEmployees();
         this.loadShifts();
-        this.loadProducts();
+        this.loadProductsAndOperations();
     }
 
     protected readonly stringify = (item: EmployeeDto): string =>
@@ -65,26 +67,41 @@ export class FifthType implements OnInit {
     protected readonly stringifyShift = (shift: ShiftDto): string =>
         `№${shift.name}: ${this.formatTime(shift.startTime)}` || 'Неизвестно';
 
-    protected readonly stringifyProduct = (product: ProductDto): string =>
-        product.name || 'Неизвестно';
+    protected readonly stringifyProduct = (item: ProductDto | OperationDto): string => {
+        if (this.isOperation(item)) {
+            return `[ОП] ${item.name || 'Неизвестно'}`;
+        } else {
+            return `[ПР] ${item.name || 'Неизвестно'}`;
+        }
+    };
+
+    protected isOperation(item: any): item is OperationDto {
+        return 'duration' in item && 'basedOnType' in item;
+    }
+
+    protected isProduct(item: any): item is ProductDto {
+        return 'tactTime' in item && 'enterpriseId' in item;
+    }
 
     protected createForm(): void {
         if (!this.controlOperators.value ||
             !this.controlShifts.value ||
-            !this.controlProducts.value ||
+            !this.controlProductOrOperation.value ||
             !this.controlDate.value) {
             return;
         }
 
+        const selectedItem: ProductDto | OperationDto = this.controlProductOrOperation.value;
+
         const req: CreateFormRequest = {
-            paType: PaTypeDto.LessThanOnePerShift,
+            paType: PaTypeDto.LessThanOnePerHour,
             shiftId: this.controlShifts.value!.id,
             assigneeId: this.controlOperators.value!.id,
             product: null,
             products: null,
             operationOrProduct: {
-                operationId: null,
-                productId: this.controlProducts.value!.id
+                operationId: this.isOperation(selectedItem) ? selectedItem.id : null,
+                productId: this.isProduct(selectedItem) ? selectedItem.id : null
             }
         };
 
@@ -121,13 +138,21 @@ export class FifthType implements OnInit {
         });
     }
 
-    private loadProducts(): void {
-        this._dictManager.getProducts().pipe(
+    private loadProductsAndOperations(): void {
+        forkJoin({
+            products: this._dictManager.getProducts(),
+            operations: this._dictManager.getOperations()
+        }).pipe(
             takeUntilDestroyed(this._destroyRef)
-        ).subscribe((products: ProductDto[]): void => {
-            this.products = products;
+        ).subscribe({
+            next: (result): void => {
+                this.productsAndOperations = [
+                    ...result.products,
+                    ...result.operations
+                ];
 
-            this._cdr.detectChanges();
+                this._cdr.detectChanges();
+            }
         });
     }
 

@@ -2,15 +2,15 @@ import {Routes} from '@angular/router';
 import {redirectGuard} from './data/guard/redirect-guard';
 import {Auth} from './children/auth/auth';
 import {departmentHeadGuard} from './data/guard/department-head-guard';
-import {Forms} from './children/head/forms/forms';
-import {Reports} from './children/head/reports/reports';
-import {Archive} from './children/head/archive/archive';
-import {Dashboard} from './children/head/dashboard/dashboard';
-import {FirstType} from './children/head/forms/children/first-type/first-type';
-import {SecondType} from './children/head/forms/children/second-type/second-type';
-import {ThirdType} from './children/head/forms/children/third-type/third-type';
-import {FourthType} from './children/head/forms/children/fourth-type/fourth-type';
-import {FifthType} from './children/head/forms/children/fifth-type/fifth-type';
+import {NewFormsHead} from './children/head/new-forms-head/new-forms-head';
+import {SummaryReportHead} from './children/head/summary-report-head/summary-report-head';
+import {JournalFormsHead} from './children/head/journal-forms-head/journal-forms-head';
+import {DashboardHead} from './children/head/dashboard-head/dashboard-head';
+import {FirstType} from './children/head/new-forms-head/children/first-type/first-type';
+import {SecondType} from './children/head/new-forms-head/children/second-type/second-type';
+import {ThirdType} from './children/head/new-forms-head/children/third-type/third-type';
+import {FourthType} from './children/head/new-forms-head/children/fourth-type/fourth-type';
+import {FifthType} from './children/head/new-forms-head/children/fifth-type/fifth-type';
 
 export const routes: Routes = [
     {
@@ -25,12 +25,12 @@ export const routes: Routes = [
     },
     {
         path: 'department-head',
-        component: Dashboard,
+        component: DashboardHead,
         canActivate: [departmentHeadGuard],
         children: [
             {
                 path: 'forms',
-                component: Forms,
+                component: NewFormsHead,
                 children: [
                     {
                         path: 'type-1',
@@ -56,7 +56,7 @@ export const routes: Routes = [
             },
             {
                 path: 'archive',
-                component: Archive,
+                component: JournalFormsHead,
             },
             {
                 path: '',
@@ -67,7 +67,7 @@ export const routes: Routes = [
     },
     {
         path: 'department-head/reports',
-        component: Reports,
+        component: SummaryReportHead,
         canActivate: [departmentHeadGuard],
     },
 ];

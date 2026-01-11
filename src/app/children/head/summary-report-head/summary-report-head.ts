@@ -8,9 +8,9 @@ import {Header} from "../components/header/header";
         Footer,
         Header
     ],
-    templateUrl: './reports.html',
-    styleUrl: './reports.css',
+    templateUrl: './summary-report-head.html',
+    styleUrl: './summary-report-head.css',
 })
-export class Reports {
+export class SummaryReportHead {
 
 }
