@@ -1,34 +1,23 @@
-import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
-import {TuiChevron, TuiTabs} from '@taiga-ui/kit';
-import {AuthManagerService} from '../../../../data/service/auth/auth.manager.service';
-import {TuiAppearance, TuiDataList, TuiDropdown} from '@taiga-ui/core';
+import {Component, inject, OnInit} from '@angular/core';
+import {TuiAppearance, TuiButton, TuiDataList, TuiDropdown} from "@taiga-ui/core";
+import {TuiChevron} from "@taiga-ui/kit";
 import {FormsModule} from '@angular/forms';
-import {RouterLink, RouterLinkActive} from '@angular/router';
-import {NgForOf} from '@angular/common';
+import {AuthManagerService} from '../../../../data/service/auth/auth.manager.service';
 
 @Component({
-    selector: 'app-header-head',
+    selector: 'app-header-operator',
     imports: [
-        TuiTabs,
         FormsModule,
         TuiDropdown,
         TuiDataList,
         TuiChevron,
-        NgForOf,
-        RouterLink,
-        RouterLinkActive,
         TuiAppearance,
+        TuiButton,
     ],
-    templateUrl: './header-head.html',
-    styleUrl: './header-head.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: './header-operator.html',
+    styleUrl: './header-operator.css',
 })
-export class HeaderHead implements OnInit {
-
-    protected readonly tabs = [
-        {label: 'Производственный анализ', route: '/department-head/forms'},
-        {label: 'Сводный отчет', route: '/department-head/reports'},
-    ];
+export class HeaderOperator implements OnInit {
     protected userName: string = 'Пользователь';
     protected open: boolean = false;
     private readonly _auth: AuthManagerService = inject(AuthManagerService);

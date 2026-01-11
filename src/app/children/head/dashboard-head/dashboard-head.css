@@ -4,7 +4,7 @@
     min-height: 100vh;
 }
 
-app-header {
+app-header-head {
     flex-shrink: 0;
 }
 
