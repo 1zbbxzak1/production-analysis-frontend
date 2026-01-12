@@ -11,6 +11,7 @@ import {Router} from '@angular/router';
 import {EmployeeDto} from '../../models/dictionaries/responses/EmployeeDto';
 import {DictManagerService} from '../dictionaries/dict.manager.service';
 import CryptoJS from 'crypto-js';
+import {DepartmentDto} from '../../models/dictionaries/responses/DepartmentDto';
 
 @Injectable()
 export class AuthManagerService {
@@ -35,6 +36,7 @@ export class AuthManagerService {
         this.removeAccessToken();
         this.removeUserName();
         this.removeDepartmentId();
+        this.removeDepartmentName();
         this._router.navigate(['/']);
     }
 
@@ -81,6 +83,12 @@ export class AuthManagerService {
         const encryptedDepartmentId: string = this._cookie.get('department_id');
         if (!encryptedDepartmentId) return null;
         return this.decrypt(encryptedDepartmentId) || null;
+    }
+
+    public getDepartmentName(): string | null {
+        const encryptedDepartmentName: string = this._cookie.get('department_name');
+        if (!encryptedDepartmentName) return null;
+        return this.decrypt(encryptedDepartmentName) || null;
     }
 
     private isTokenExpired(token: string): boolean {
@@ -130,7 +138,7 @@ export class AuthManagerService {
     }
 
     private setDepartmentId(departmentId: string): void {
-        const encryptedDepartmentId = this.encrypt(departmentId);
+        const encryptedDepartmentId: string = this.encrypt(departmentId);
         this._cookie.set(environment.departmentId, encryptedDepartmentId, {expires: 1, path: '/'});
     }
 
@@ -138,7 +146,16 @@ export class AuthManagerService {
         this._cookie.delete(environment.departmentId, '/');
     }
 
-    private compareIds(id: any, sid: string): boolean {
+    private setDepartmentName(departmentId: string): void {
+        const encryptedDepartmentName: string = this.encrypt(departmentId);
+        this._cookie.set(environment.departmentName, encryptedDepartmentName, {expires: 1, path: '/'});
+    }
+
+    private removeDepartmentName(): void {
+        this._cookie.delete(environment.departmentName, '/');
+    }
+
+    private compareIds(id: any, sid: any): boolean {
         if (typeof id === 'number') {
             const sidAsNumber: number = parseInt(sid, 10);
             return !isNaN(sidAsNumber) && id === sidAsNumber;
@@ -172,7 +189,7 @@ export class AuthManagerService {
         });
     }
 
-    private getDepartmentFromServer(): Observable<string | null> {
+    private getDepartmentIdFromServer(): Observable<string | null> {
         const token: string | null = this.getAccessToken();
 
         if (token) {
@@ -193,14 +210,58 @@ export class AuthManagerService {
         });
     }
 
+    private getDepartmentNameFromServer(departmentId: string | null): Observable<string | null> {
+        if (!departmentId) {
+            return new Observable(observer => {
+                observer.next(null);
+                observer.complete();
+            });
+        }
+
+        return this._dictManager.getDepartments().pipe(
+            map((departments: DepartmentDto[]): string | null => {
+                const department = departments.find((dep: DepartmentDto): boolean =>
+                    this.compareIds(dep.id, departmentId)
+                );
+                return department?.name || null;
+            }),
+            catchError(() => {
+                return of(null);
+            })
+        );
+    }
+
     private loadAndSaveUserNameAsObservable(): Observable<void> {
         return forkJoin([
             this.getUserNameFromServer(),
-            this.getDepartmentFromServer()
+            this.getDepartmentIdFromServer()
         ]).pipe(
-            tap(([fullName, departmentId]: [string | null, string | null]): void => {
+            switchMap(([fullName, departmentId]: [string | null, string | null]): Observable<[string | null, string | null, string | null]> => {
+                if (departmentId) {
+                    return this.getDepartmentNameFromServer(departmentId).pipe(
+                        map((departmentName: string | null): [string | null, string | null, string | null] => [
+                            fullName,
+                            departmentId,
+                            departmentName
+                        ])
+                    );
+                } else {
+                    return new Observable(observer => {
+                        observer.next([fullName, departmentId, null]);
+                        observer.complete();
+                    });
+                }
+            }),
+            tap(([fullName, departmentId, departmentName]: [string | null, string | null, string | null]): void => {
                 if (fullName) this.setUserName(fullName);
                 if (departmentId) this.setDepartmentId(departmentId);
+                if (departmentName) this.setDepartmentName(departmentName);
+
+                console.log('✅ Auth data saved:', {
+                    fullName,
+                    departmentId,
+                    departmentName
+                });
             }),
             map(() => void 0),
             catchError(() => of(void 0))
