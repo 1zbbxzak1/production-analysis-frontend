@@ -20,7 +20,7 @@ export class LoaderService {
 
         this.autoTimeout = setTimeout(() => {
             this.hide();
-        }, 100);
+        }, 300);
     }
 
     public hide(): void {

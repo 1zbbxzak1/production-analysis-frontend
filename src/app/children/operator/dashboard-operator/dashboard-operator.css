@@ -37,16 +37,32 @@ app-header-operator {
     width: 100%;
 }
 
+.second-container-head {
+
+}
+
 .second-container {
-    margin-top: 24px;
-    margin-bottom: 24px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    width: 100%;
+    max-height: 44px !important;
+
+    margin-top: 32px;
+    margin-bottom: 16px;
 }
 
 tui-tabs {
-    width: 100%;
-
     border-bottom: 1px solid var(--day-base-base-04) !important;
     box-shadow: none !important;
+
+    max-height: 44px !important;
+}
+
+tui-textfield {
+    max-width: 300px !important;
+    width: 100%;
 }
 
 .badge {

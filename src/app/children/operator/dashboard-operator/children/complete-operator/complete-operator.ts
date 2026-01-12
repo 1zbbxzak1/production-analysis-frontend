@@ -12,6 +12,9 @@ import {FormStatus} from '../../../../../data/models/forms/enums/FormStatus';
 import {Loader} from '../../../../components/loader/loader';
 import {NgForOf, NgIf} from '@angular/common';
 import {TuiBlockStatus} from '@taiga-ui/layout';
+import {SearchFormsService} from '../../../../../data/service/forms/search.forms.service';
+import {debounceTime} from 'rxjs';
+import {FormsCountService} from '../../../../../data/service/forms/forms.count.service';
 
 @Component({
     selector: 'app-complete-operator',
@@ -26,6 +29,7 @@ import {TuiBlockStatus} from '@taiga-ui/layout';
 })
 export class CompleteOperator implements OnInit {
     protected forms: FormShortDtoPaginatedResponse | null = null;
+    protected filteredForms: FormShortDto[] = [];
     protected isLoading: boolean = false;
 
     private departmentId: number | null = null;
@@ -35,9 +39,15 @@ export class CompleteOperator implements OnInit {
     private readonly _cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
     private readonly _router: Router = inject(Router);
     private readonly _loaderService: LoaderService = inject(LoaderService);
+    private readonly _searchFormsService: SearchFormsService = inject(SearchFormsService);
+    private readonly _formsCountService: FormsCountService = inject(FormsCountService);
+
+    protected get allFormItems(): FormShortDto[] {
+        return this.forms?.items?.filter((item: FormShortDto): item is FormShortDto => item !== null) ?? [];
+    }
 
     protected get safeFormItems(): FormShortDto[] {
-        return this.forms?.items?.filter((item: FormShortDto): item is FormShortDto => item !== null) ?? [];
+        return this.filteredForms;
     }
 
     public ngOnInit(): void {
@@ -48,6 +58,13 @@ export class CompleteOperator implements OnInit {
         });
 
         this.waitForDepartmentIdAndLoadForms();
+
+        this._searchFormsService.searchValue$.pipe(
+            takeUntilDestroyed(this._destroyRef),
+            debounceTime(300)
+        ).subscribe((searchValue: string): void => {
+            this.applyFilter(searchValue);
+        });
     }
 
     protected goToFormById(formId: number): void {
@@ -73,6 +90,37 @@ export class CompleteOperator implements OnInit {
 
     protected getPaTypeDescription(paType: number): string {
         return PA_TYPE_DESCRIPTIONS[paType] || 'Неизвестный тип';
+    }
+
+    private applyFilter(searchValue: string): void {
+        if (!this.forms?.items) {
+            this.filteredForms = [];
+            return;
+        }
+
+        if (!searchValue.trim()) {
+            this.filteredForms = this.forms.items.filter((item: FormShortDto): boolean => item !== null) ?? [];
+        } else {
+            const lowerSearch: string = searchValue.toLowerCase().trim();
+            this.filteredForms = this.forms.items
+                ?.filter((item: FormShortDto): boolean => item !== null)
+                ?.filter((item: FormShortDto): boolean =>
+                    this.matchesSearch(item, lowerSearch)
+                ) ?? [];
+        }
+
+        this._cdr.detectChanges();
+    }
+
+    // TODO: заменить на productName когда появится на бэке
+    private matchesSearch(form: FormShortDto, search: string): boolean {
+        // const productName = form.productName?.toLowerCase() || 'втулка'.toLowerCase();
+
+        // Поле 4: Тип ПА
+        const paType = this.getPaTypeDescription(form.paType).toLowerCase();
+
+        // return productName.includes(search) || paType.includes(search);
+        return paType.includes(search);
     }
 
     private waitForDepartmentIdAndLoadForms(): void {
@@ -116,11 +164,14 @@ export class CompleteOperator implements OnInit {
         ).subscribe((formsInfo: FormShortDtoPaginatedResponse): void => {
             this.forms = formsInfo;
 
+            const formsCount: number = this.allFormItems.length;
+            this._formsCountService.setCompletedFormsCount(formsCount);
+
             this._cdr.detectChanges();
 
             setTimeout((): void => {
                 this._loaderService.hide();
-            }, 100);
+            }, 300);
         })
     }
 }

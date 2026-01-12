@@ -6,9 +6,11 @@
             Мои формы
         </p>
 
+        <div class="second-container-head">
+
+        </div>
         <div class="second-container">
             <tui-tabs *ngIf="!isFormTypeActive">
-
                 <button
                     [routerLink]="'/operator/progress-list'"
                     class="tab-link"
@@ -46,6 +48,18 @@
                     </tui-badge>
                 </button>
             </tui-tabs>
+
+            <tui-textfield
+                iconEnd="@tui.search"
+                tuiTextfieldSize="m"
+            >
+                <input
+                    (ngModelChange)="onSearchChange($event)"
+                    [(ngModel)]="searchValue"
+                    tuiTextfield
+                />
+
+            </tui-textfield>
         </div>
 
         <router-outlet></router-outlet>

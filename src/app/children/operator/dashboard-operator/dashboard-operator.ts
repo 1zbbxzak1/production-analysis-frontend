@@ -7,6 +7,9 @@ import {TuiBadge, TuiTab, TuiTabs} from '@taiga-ui/kit';
 import {filter} from 'rxjs';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {FormsCountService} from '../../../data/service/forms/forms.count.service';
+import {TuiTextfield} from '@taiga-ui/core';
+import {FormsModule} from '@angular/forms';
+import {SearchFormsService} from '../../../data/service/forms/search.forms.service';
 
 @Component({
     selector: 'app-dashboard-operator',
@@ -20,6 +23,8 @@ import {FormsCountService} from '../../../data/service/forms/forms.count.service
         TuiTabs,
         RouterOutlet,
         TuiBadge,
+        TuiTextfield,
+        FormsModule,
     ],
     templateUrl: './dashboard-operator.html',
     styleUrl: './dashboard-operator.css',
@@ -28,10 +33,12 @@ export class DashboardOperator implements OnInit {
     protected isFormTypeActive: boolean = false;
     protected progressFormsCount: number = 0;
     protected completedFormsCount: number = 0;
+    protected searchValue: string = '';
 
     private readonly _router: Router = inject(Router);
     private readonly _destroyRef: DestroyRef = inject(DestroyRef);
     private readonly _formsCountService: FormsCountService = inject(FormsCountService);
+    private readonly _searchFormsService: SearchFormsService = inject(SearchFormsService);
 
     public ngOnInit(): void {
         this.checkIfFormTypeActive(this._router.url);
@@ -54,6 +61,10 @@ export class DashboardOperator implements OnInit {
         ).subscribe((event: NavigationEnd): void => {
             this.checkIfFormTypeActive(event.url);
         });
+    }
+
+    protected onSearchChange(value: string): void {
+        this._searchFormsService.setSearch(value);
     }
 
     private checkIfFormTypeActive(url: string): void {
