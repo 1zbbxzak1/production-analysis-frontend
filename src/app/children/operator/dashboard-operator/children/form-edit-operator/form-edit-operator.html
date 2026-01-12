@@ -34,142 +34,116 @@
                      [ngClass]="{'type-1-rows-break': isBreakRow(row.values)}"
                      class="type-1-rows">
                     <ng-container *ngIf="isBreakRow(row.values); else normalRow">
-                        <!-- 1 столбец: только текст (уже обрезанный) -->
-                        <div [ngStyle]="{'justify-content': getJustifyContent(0)}"
-                             class="type-1-row-cell">
-                            {{ formatTimeCell(row.values, 1) }}
-                        </div>
-
-                        <!-- Остальные столбцы: просто значения, БЕЗ input/combo-box -->
-                        <div [ngStyle]="{'justify-content': getJustifyContent(1)}"
-                             class="type-1-row-cell">
-                            {{ getRowCellValue(row.values, 2) }}
-                        </div>
-
-                        <div [ngStyle]="{'justify-content': getJustifyContent(2)}"
-                             class="type-1-row-cell">
-                            {{ getRowCellValue(row.values, 3) }}
-                        </div>
-
-                        <div [ngStyle]="{'justify-content': getJustifyContent(3)}"
-                             class="type-1-row-cell">
-                            {{ getRowCellValue(row.values, 4) }}
-                        </div>
-
-                        <div [ngStyle]="{'justify-content': getJustifyContent(4)}"
-                             class="type-1-row-cell">
-                            {{ getRowCellValue(row.values, 5) }}
-                        </div>
-
-                        <div [ngStyle]="{'justify-content': getJustifyContent(5)}"
-                             class="type-1-row-cell">
-                            {{ getRowCellValue(row.values, 6) }}
-                        </div>
-
-                        <div [ngStyle]="{'justify-content': getJustifyContent(6)}"
-                             class="type-1-row-cell">
-                            {{ getRowCellValue(row.values, 7) }}
-                        </div>
-
-                        <div [ngStyle]="{'justify-content': getJustifyContent(7)}"
-                             class="type-1-row-cell reason">
-                            {{ getRowCellValue(row.values, 8) }}
-                        </div>
+                        <ng-container *ngFor="let col of columnHeaders; let colIndex = index">
+                            <div [ngStyle]="{'justify-content': getJustifyContent(colIndex)}"
+                                 class="type-1-row-cell">
+                                <ng-container *ngIf="colIndex === 0">
+                                    {{ formatTimeCell(row.values, colIndex) }}
+                                </ng-container>
+                                <ng-container *ngIf="colIndex !== 0">
+                                    {{ getRowCellValue(row.values, colIndex) }}
+                                </ng-container>
+                            </div>
+                        </ng-container>
                     </ng-container>
 
                     <ng-template #normalRow>
-                        <div [ngStyle]="{'justify-content': getJustifyContent(0)}"
-                             class="type-1-row-cell">
-                            {{ formatTimeCell(row.values, 1) }}
-                        </div>
+                        <ng-container *ngFor="let col of columnHeaders; let colIndex = index">
+                            <!-- Обычные ячейки (не input, не combo-box) -->
+                            <div *ngIf="colIndex !== 3 && colIndex !== 5 && colIndex !== 8 && colIndex !== 9 && colIndex !== 10"
+                                 [ngStyle]="{'justify-content': getJustifyContent(colIndex)}"
+                                 class="type-1-row-cell">
+                                <ng-container *ngIf="colIndex === 0">
+                                    {{ formatTimeCell(row.values, colIndex) }}
+                                </ng-container>
+                                <ng-container *ngIf="colIndex !== 0">
+                                    {{ getRowCellValue(row.values, colIndex) }}
+                                </ng-container>
+                            </div>
 
-                        <div [ngStyle]="{'justify-content': getJustifyContent(1)}"
-                             class="type-1-row-cell">
-                            {{ getRowCellValue(row.values, 2) }}
-                        </div>
+                            <!-- Input ячейка (колонка 3 - Факт, шт) -->
+                            <div *ngIf="colIndex === 3"
+                                 [ngStyle]="{'justify-content': getJustifyContent(colIndex)}"
+                                 class="type-1-row-cell type-1-row-input">
+                                <input
+                                        (change)="setRowCellValue(row, colIndex, $any($event.target).value)"
+                                        [class.has-value]="hasInputValue(row, colIndex)"
+                                        [value]="getRowCellValue(row.values, colIndex)"
+                                        class="cell-input"/>
+                            </div>
 
-                        <div [ngStyle]="{'justify-content': getJustifyContent(2)}"
-                             class="type-1-row-cell type-1-row-input">
-                            <input
-                                (change)="setRowCellValue(row, 3, $any($event.target).value)"
-                                [class.has-value]="hasInputValue(row, 3)"
-                                [value]="getRowCellValue(row.values, 3)"
-                                class="cell-input"
-                            />
-                        </div>
-
-                        <div [ngStyle]="{'text-align': getAlignText(3)}"
-                             class="type-1-row-cell">
-                            {{ getRowCellValue(row.values, 4) }}
-                        </div>
-
-                        <!-- ← СТОЛБЕЦ 5: Простой -->
-                        <div [ngStyle]="{'text-align': getAlignText(4)}"
-                             class="type-1-row-cell type-1-row-input">
-                            <input
-                                (change)="setRowCellValue(row, 5, $any($event.target).value)"
-                                [class.has-value]="hasInputValue(row, 5)"
-                                [value]="getRowCellValue(row.values, 5)"
-                                class="cell-input"
-                            />
-                        </div>
-
-                        <!-- ← СТОЛБЕЦ 6: Ответственный (DROPDOWN) -->
-                        <div [ngStyle]="{'text-align': getAlignText(5)}"
-                             class="type-1-row-cell type-1-row-input">
-                            <tui-combo-box
-                                [formControl]="getEmployeeControl(i)"
-                                [stringify]="stringify"
-                                [tuiDropdownMaxHeight]="150"
-                                [tuiTextfieldLabelOutside]="true"
-                                class="tui-input-row"
-                                tuiTextfieldSize="m"
-                            >
-                                <tui-data-list-wrapper
-                                    *tuiDataList
-                                    [itemContent]="stringify | tuiStringifyContent"
-                                    [items]="employees | tuiFilterByInput"
+                            <!-- Input ячейка (колонка 5 - Простой мин) -->
+                            <div *ngIf="colIndex === 7"
+                                 [ngStyle]="{'justify-content': getJustifyContent(colIndex)}"
+                                 class="type-1-row-cell type-1-row-input">
+                                <input
+                                        (change)="setRowCellValue(row, colIndex, $any($event.target).value)"
+                                        [class.has-value]="hasInputValue(row, colIndex)"
+                                        [value]="getRowCellValue(row.values, colIndex)"
+                                        class="cell-input"
                                 />
-                            </tui-combo-box>
-                        </div>
+                            </div>
 
-                        <!-- ← СТОЛБЕЦ 7: Группы причин -->
-                        <div [ngStyle]="{'text-align': getAlignText(6)}"
-                             class="type-1-row-cell type-1-row-input">
-                            <tui-combo-box
-                                [formControl]="getReasonControl(i)"
-                                [stringify]="stringifyReason"
-                                [tuiDropdownMaxHeight]="150"
-                                [tuiTextfieldLabelOutside]="true"
-                                class="tui-input-row"
-                                tuiTextfieldSize="m"
-                            >
-                                <tui-data-list-wrapper
-                                    *tuiDataList
-                                    [itemContent]="stringifyReason | tuiStringifyContent"
-                                    [items]="downtimeReasonGroups | tuiFilterByInput"
+                            <!-- Combo-box ячейка (колонка 8 - Ответственный за простой) -->
+                            <div *ngIf="colIndex === 8"
+                                 [ngStyle]="{'justify-content': getJustifyContent(colIndex)}"
+                                 class="type-1-row-cell type-1-row-input">
+                                <tui-combo-box
+                                        [formControl]="getEmployeeControl(row)"
+                                        [stringify]="stringify"
+                                        [tuiDropdownMaxHeight]="150"
+                                        [tuiTextfieldLabelOutside]="true"
+                                        class="tui-input-row"
+                                        tuiTextfieldSize="m"
+                                >
+                                    <tui-data-list-wrapper
+                                            *tuiDataList
+                                            [itemContent]="stringify | tuiStringifyContent"
+                                            [items]="employees | tuiFilterByInput"
+                                    />
+                                </tui-combo-box>
+                            </div>
+
+                            <!-- Combo-box ячейка (колонка 9 - Группы причин) -->
+                            <div *ngIf="colIndex === 9"
+                                 [ngStyle]="{'justify-content': getJustifyContent(colIndex)}"
+                                 class="type-1-row-cell type-1-row-input">
+                                <tui-combo-box
+                                        [formControl]="getReasonControl(row)"
+                                        [stringify]="stringifyReason"
+                                        [tuiDropdownMaxHeight]="150"
+                                        [tuiTextfieldLabelOutside]="true"
+                                        class="tui-input-row"
+                                        tuiTextfieldSize="m"
+                                >
+                                    <tui-data-list-wrapper
+                                            *tuiDataList
+                                            [itemContent]="stringifyReason | tuiStringifyContent"
+                                            [items]="downtimeReasonGroups | tuiFilterByInput"
+                                    />
+                                </tui-combo-box>
+                            </div>
+
+                            <!-- Input ячейка (колонка 10 - Причины отклонения) -->
+                            <div *ngIf="colIndex === 10"
+                                 [ngStyle]="{'justify-content': getJustifyContent(colIndex)}"
+                                 class="type-1-row-cell type-1-row-input">
+                                <input
+                                        (change)="setRowCellValue(row, colIndex, $any($event.target).value)"
+                                        [class.has-value]="hasInputValue(row, colIndex)"
+                                        [value]="getRowCellValue(row.values, colIndex)"
+                                        class="cell-input reason"
                                 />
-                            </tui-combo-box>
-                        </div>
-
-                        <!-- ← СТОЛБЕЦ 8: Причины отклонения -->
-                        <div [ngStyle]="{'justify-content': getJustifyContent(7)}"
-                             class="type-1-row-cell type-1-row-input">
-                            <input
-                                (change)="setRowCellValue(row, 8, $any($event.target).value)"
-                                [class.has-value]="hasInputValue(row, 8)"
-                                [value]="getRowCellValue(row.values, 8)"
-                                class="cell-input reason"
-                            />
-                        </div>
+                            </div>
+                        </ng-container>
                     </ng-template>
                 </div>
 
                 <div *ngIf="formInfo && formInfo.totalValues" class="type-1-rows-final">
                     <div class="type-1-row-cell">ИТОГО</div>
-                    <div *ngFor="let colIndex of [2, 3, 4]"
+                    <div *ngFor="let colIndex of [1, 2, 3]"
                          class="type-1-row-cell">
-                        {{ getRowCellValue(formInfo.totalValues, colIndex) }}
+                        {{ getTotalValue(colIndex) }}
                     </div>
                 </div>
             </div>
@@ -177,11 +151,11 @@
 
         <div class="final-btn">
             <button
-                [disabled]="!isThirdColumnValid"
-                appearance="primary"
-                size="m"
-                tuiButton
-                type="button"
+                    [disabled]="!isThirdColumnValid"
+                    appearance="primary"
+                    size="m"
+                    tuiButton
+                    type="button"
             >
                 Завершить
             </button>

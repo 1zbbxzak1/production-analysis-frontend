@@ -50,12 +50,13 @@
             </tui-tabs>
 
             <tui-textfield
-                iconEnd="@tui.search"
+                iconStart="@tui.search"
                 tuiTextfieldSize="m"
             >
                 <input
                     (ngModelChange)="onSearchChange($event)"
                     [(ngModel)]="searchValue"
+                    placeholder="Поиск"
                     tuiTextfield
                 />
 

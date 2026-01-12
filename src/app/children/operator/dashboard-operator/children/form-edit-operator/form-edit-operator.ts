@@ -51,8 +51,11 @@ export class FormEditOperator implements OnInit {
     protected columnHeaders: string[] = [
         'Время работы, час',
         'План, шт',
+        'План накоп, шт',
         'Факт, шт',
+        'Факт накоп, шт',
         'Отклонен шт',
+        'Отклонен накоп, шт',
         'Простой мин',
         'Ответственный за простой',
         'Группы причин',
@@ -63,12 +66,12 @@ export class FormEditOperator implements OnInit {
     protected formInfo: FormDto | null = null;
     protected formRows: FormRowDto[] | null = null;
     protected employees: EmployeeDto[] | null = null;
-    protected employeeControls: Map<number, FormControl<EmployeeDto | null>> = new Map();
+    protected employeeControls: Map<number, FormControl<EmployeeDto | null>> = new Map(); // key: row.order
     protected downtimeReasonGroups: DowntimeReasonGroupDto[] | null = null;
-    protected downtimeReasonGroupControls: Map<number, FormControl<DowntimeReasonGroupDto | null>> = new Map();
+    protected downtimeReasonGroupControls: Map<number, FormControl<DowntimeReasonGroupDto | null>> = new Map(); // key: row.order
 
     private columnAlignments: ('left' | 'center' | 'right')[] = [
-        'center', 'right', 'right', 'right', 'right', 'right', 'right', 'left'
+        'center', 'right', 'right', 'right', 'right', 'right', 'right', 'right', 'right', 'right', 'left'
     ];
 
     private readonly _destroyRef: DestroyRef = inject(DestroyRef);
@@ -79,14 +82,17 @@ export class FormEditOperator implements OnInit {
     private readonly _formsManager: FormsManagerService = inject(FormsManagerService);
 
     protected get isThirdColumnValid(): boolean {
-        if (!this.formRows || this.formRows.length === 0) {
+        if (!this.formRows || this.formRows.length === 0 || !this.formInfo) {
             return false;
         }
+
+        const thirdColumnKey = this.getFieldKeyByIndex(2); // индекс 2 = третий столбец (Факт, шт)
+        if (!thirdColumnKey) return false;
 
         return this.formRows
             .filter((row: FormRowDto): boolean => !this.isBreakRow(row.values)) // игнорируем break‑строки
             .every((row: FormRowDto): boolean => {
-                const value = row.values?.[3]?.value;
+                const value = row.values?.[thirdColumnKey]?.value;
                 return value !== undefined && value !== null && value !== '';
             });
     }
@@ -98,19 +104,55 @@ export class FormEditOperator implements OnInit {
         this.loadFormData();
     }
 
-    protected setRowCellValue(row: any, columnIndex: number, value: string): void {
+    /**
+     * Получает ключ поля по индексу колонки из template.tableColumns
+     */
+    protected getFieldKeyByIndex(columnIndex: number): string | null {
+        if (!this.formInfo?.template?.tableColumns || columnIndex < 0 || columnIndex >= this.formInfo.template.tableColumns.length) {
+            return null;
+        }
+        return this.formInfo.template.tableColumns[columnIndex].id.toString();
+    }
+
+    protected setRowCellValue(row: FormRowDto, columnIndex: number, value: string): void {
+        const fieldKey = this.getFieldKeyByIndex(columnIndex);
+        if (!fieldKey) return;
+
         if (!row.values) row.values = {};
-        if (!row.values[columnIndex]) row.values[columnIndex] = {};
-        row.values[columnIndex].value = value;
+        if (!row.values[fieldKey]) row.values[fieldKey] = {value: null, cumulativeValue: null};
+        row.values[fieldKey].value = value;
     }
 
-    protected getRowCellValue(values: Record<number, any> | null, columnIndex: number): string {
+    protected getRowCellValue(values: Record<string, any> | null, columnIndex: number): string {
         if (!values) return '';
-        return values[columnIndex]?.value ?? '';
+        const fieldKey = this.getFieldKeyByIndex(columnIndex);
+        if (!fieldKey) return '';
+        const value = values[fieldKey];
+        if (!value) return '';
+        // Если значение - объект с полем value (FormRowValueDto), возвращаем value
+        // Если значение - примитив, возвращаем его напрямую
+        if (typeof value === 'object' && 'value' in value) {
+            return value.value !== undefined && value.value !== null ? String(value.value) : '';
+        }
+        return String(value);
     }
 
-    protected hasInputValue(row: any, columnIndex: number): boolean {
-        const value = row.values?.[columnIndex]?.value;
+    /**
+     * Получает значение из totalValues (числовые ключи, значения - числа)
+     */
+    protected getTotalValue(columnIndex: number): string {
+        if (!this.formInfo?.totalValues) return '';
+        const fieldKey = this.getFieldKeyByIndex(columnIndex);
+        if (!fieldKey) return '';
+        const fieldId = Number(fieldKey);
+        const value = this.formInfo.totalValues[fieldId];
+        return value !== undefined && value !== null ? String(value) : '';
+    }
+
+    protected hasInputValue(row: FormRowDto, columnIndex: number): boolean {
+        const fieldKey = this.getFieldKeyByIndex(columnIndex);
+        if (!fieldKey) return false;
+        const value = row.values?.[fieldKey]?.value;
         return value !== undefined && value !== null && value !== '';
     }
 
@@ -124,40 +166,38 @@ export class FormEditOperator implements OnInit {
         return align;
     }
 
-    protected getEmployeeControl(rowIndex: number): FormControl<EmployeeDto | null> {
-        if (!this.employeeControls.has(rowIndex)) {
+    protected getEmployeeControl(row: FormRowDto): FormControl<EmployeeDto | null> {
+        const rowOrder = row.order;
+        if (!this.employeeControls.has(rowOrder)) {
             const control = new FormControl<EmployeeDto | null>(null);
 
             control.valueChanges
                 .pipe(takeUntilDestroyed(this._destroyRef))
                 .subscribe((employee: EmployeeDto | null) => {
-                    if (this.formRows && this.formRows[rowIndex]) {
-                        const employeeId = employee?.id?.toString() || '';
-                        this.setRowCellValue(this.formRows[rowIndex], 6, employeeId);
-                    }
+                    const employeeId = employee?.id?.toString() || '';
+                    this.setRowCellValue(row, 5, employeeId); // индекс 5 = столбец "Ответственный за простой"
                 });
 
-            this.employeeControls.set(rowIndex, control);
+            this.employeeControls.set(rowOrder, control);
         }
-        return this.employeeControls.get(rowIndex)!;
+        return this.employeeControls.get(rowOrder)!;
     }
 
-    protected getReasonControl(rowIndex: number): FormControl<DowntimeReasonGroupDto | null> {
-        if (!this.downtimeReasonGroupControls.has(rowIndex)) {
+    protected getReasonControl(row: FormRowDto): FormControl<DowntimeReasonGroupDto | null> {
+        const rowOrder = row.order;
+        if (!this.downtimeReasonGroupControls.has(rowOrder)) {
             const control = new FormControl<DowntimeReasonGroupDto | null>(null);
 
             control.valueChanges
                 .pipe(takeUntilDestroyed(this._destroyRef))
-                .subscribe((employee: DowntimeReasonGroupDto | null) => {
-                    if (this.formRows && this.formRows[rowIndex]) {
-                        const employeeId = employee?.id?.toString() || '';
-                        this.setRowCellValue(this.formRows[rowIndex], 6, employeeId);
-                    }
+                .subscribe((reason: DowntimeReasonGroupDto | null) => {
+                    const reasonId = reason?.id?.toString() || '';
+                    this.setRowCellValue(row, 6, reasonId); // индекс 6 = столбец "Группы причин"
                 });
 
-            this.downtimeReasonGroupControls.set(rowIndex, control);
+            this.downtimeReasonGroupControls.set(rowOrder, control);
         }
-        return this.downtimeReasonGroupControls.get(rowIndex)!;
+        return this.downtimeReasonGroupControls.get(rowOrder)!;
     }
 
     protected readonly stringify = (item: EmployeeDto): string =>
@@ -166,7 +206,7 @@ export class FormEditOperator implements OnInit {
     protected readonly stringifyReason = (item: DowntimeReasonGroupDto): string =>
         item.name || 'Неизвестно';
 
-    protected formatTimeCell(values: Record<number, any> | null, columnIndex: number): string {
+    protected formatTimeCell(values: Record<string, any> | null, columnIndex: number): string {
         const raw: string = this.getRowCellValue(values, columnIndex);
 
         if (!raw) {
@@ -182,13 +222,13 @@ export class FormEditOperator implements OnInit {
         return raw;
     }
 
-    protected isBreakRow(values: Record<number, any> | null): boolean {
-        const raw: string = this.getRowCellValue(values, 1);
+    protected isBreakRow(values: Record<string, any> | null): boolean {
+        const raw: string = this.getRowCellValue(values, 0); // индекс 0 = первый столбец "Время работы, час"
         if (!raw) {
             return false;
         }
 
-        const formatted: string = this.formatTimeCell(values, 1);
+        const formatted: string = this.formatTimeCell(values, 0);
 
         return formatted !== raw;
     }
@@ -222,8 +262,11 @@ export class FormEditOperator implements OnInit {
     private initializeEmployeeControls(): void {
         if (!this.formRows) return;
 
-        this.formRows.forEach((row, index) => {
-            const employeeId = row.values?.[6]?.value;
+        const employeeColumnKey = this.getFieldKeyByIndex(5); // индекс 5 = столбец "Ответственный за простой"
+        if (!employeeColumnKey) return;
+
+        this.formRows.forEach((row) => {
+            const employeeId = row.values?.[employeeColumnKey]?.value;
             const employee = employeeId && this.employees
                 ? this.employees.find(e => e.id === employeeId || e.id === Number(employeeId))
                 : null;
@@ -233,18 +276,21 @@ export class FormEditOperator implements OnInit {
             control.valueChanges
                 .pipe(takeUntilDestroyed(this._destroyRef))
                 .subscribe((emp: EmployeeDto | null) => {
-                    this.setRowCellValue(row, 6, emp?.id?.toString() || '');
+                    this.setRowCellValue(row, 5, emp?.id?.toString() || '');
                 });
 
-            this.employeeControls.set(index, control);
+            this.employeeControls.set(row.order, control);
         });
     }
 
     private initializeReasonControls(): void {
         if (!this.formRows) return;
 
-        this.formRows.forEach((row, index) => {
-            const reasonId = row.values?.[7]?.value;
+        const reasonColumnKey = this.getFieldKeyByIndex(6); // индекс 6 = столбец "Группы причин"
+        if (!reasonColumnKey) return;
+
+        this.formRows.forEach((row) => {
+            const reasonId = row.values?.[reasonColumnKey]?.value;
             const reason = reasonId && this.downtimeReasonGroups
                 ? this.downtimeReasonGroups.find(e => e.id === reasonId || e.id === Number(reasonId))
                 : null;
@@ -253,11 +299,11 @@ export class FormEditOperator implements OnInit {
 
             control.valueChanges
                 .pipe(takeUntilDestroyed(this._destroyRef))
-                .subscribe((emp: DowntimeReasonGroupDto | null) => {
-                    this.setRowCellValue(row, 6, emp?.id?.toString() || '');
+                .subscribe((reasonGroup: DowntimeReasonGroupDto | null) => {
+                    this.setRowCellValue(row, 6, reasonGroup?.id?.toString() || '');
                 });
 
-            this.downtimeReasonGroupControls.set(index, control);
+            this.downtimeReasonGroupControls.set(row.order, control);
         });
     }
 
