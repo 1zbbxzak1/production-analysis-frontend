@@ -56,8 +56,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: flex-end;
-
-    max-width: 1024px !important;
+    
     width: 100%;
 
     gap: 16px;

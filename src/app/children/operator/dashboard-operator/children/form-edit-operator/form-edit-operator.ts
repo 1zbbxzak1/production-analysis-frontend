@@ -86,7 +86,7 @@ export class FormEditOperator implements OnInit {
             return false;
         }
 
-        const thirdColumnKey = this.getFieldKeyByIndex(2); // индекс 2 = третий столбец (Факт, шт)
+        const thirdColumnKey = this.getFieldKeyByIndex(3);
         if (!thirdColumnKey) return false;
 
         return this.formRows
@@ -107,11 +107,23 @@ export class FormEditOperator implements OnInit {
     /**
      * Получает ключ поля по индексу колонки из template.tableColumns
      */
+    // protected getFieldKeyByIndex(columnIndex: number): string | null {
+    //     if (!this.formInfo?.template?.tableColumns || columnIndex < 0 || columnIndex >= this.formInfo.template.tableColumns.length) {
+    //         return null;
+    //     }
+    //     return this.formInfo.template.tableColumns[columnIndex].id.toString();
+    // }
+
     protected getFieldKeyByIndex(columnIndex: number): string | null {
-        if (!this.formInfo?.template?.tableColumns || columnIndex < 0 || columnIndex >= this.formInfo.template.tableColumns.length) {
+        if (
+            !this.columnHeaders ||
+            columnIndex < 0 ||
+            columnIndex >= this.columnHeaders.length
+        ) {
             return null;
         }
-        return this.formInfo.template.tableColumns[columnIndex].id.toString();
+
+        return (columnIndex + 1).toString();
     }
 
     protected setRowCellValue(row: FormRowDto, columnIndex: number, value: string): void {
@@ -121,6 +133,8 @@ export class FormEditOperator implements OnInit {
         if (!row.values) row.values = {};
         if (!row.values[fieldKey]) row.values[fieldKey] = {value: null, cumulativeValue: null};
         row.values[fieldKey].value = value;
+
+        this._cdr.detectChanges();
     }
 
     protected getRowCellValue(values: Record<string, any> | null, columnIndex: number): string {
@@ -175,7 +189,7 @@ export class FormEditOperator implements OnInit {
                 .pipe(takeUntilDestroyed(this._destroyRef))
                 .subscribe((employee: EmployeeDto | null) => {
                     const employeeId = employee?.id?.toString() || '';
-                    this.setRowCellValue(row, 5, employeeId); // индекс 5 = столбец "Ответственный за простой"
+                    this.setRowCellValue(row, 8, employeeId);
                 });
 
             this.employeeControls.set(rowOrder, control);
@@ -192,7 +206,7 @@ export class FormEditOperator implements OnInit {
                 .pipe(takeUntilDestroyed(this._destroyRef))
                 .subscribe((reason: DowntimeReasonGroupDto | null) => {
                     const reasonId = reason?.id?.toString() || '';
-                    this.setRowCellValue(row, 6, reasonId); // индекс 6 = столбец "Группы причин"
+                    this.setRowCellValue(row, 9, reasonId);
                 });
 
             this.downtimeReasonGroupControls.set(rowOrder, control);
@@ -262,7 +276,7 @@ export class FormEditOperator implements OnInit {
     private initializeEmployeeControls(): void {
         if (!this.formRows) return;
 
-        const employeeColumnKey = this.getFieldKeyByIndex(5); // индекс 5 = столбец "Ответственный за простой"
+        const employeeColumnKey = this.getFieldKeyByIndex(8);
         if (!employeeColumnKey) return;
 
         this.formRows.forEach((row) => {
@@ -276,7 +290,7 @@ export class FormEditOperator implements OnInit {
             control.valueChanges
                 .pipe(takeUntilDestroyed(this._destroyRef))
                 .subscribe((emp: EmployeeDto | null) => {
-                    this.setRowCellValue(row, 5, emp?.id?.toString() || '');
+                    this.setRowCellValue(row, 8, emp?.id?.toString() || '');
                 });
 
             this.employeeControls.set(row.order, control);
@@ -286,7 +300,7 @@ export class FormEditOperator implements OnInit {
     private initializeReasonControls(): void {
         if (!this.formRows) return;
 
-        const reasonColumnKey = this.getFieldKeyByIndex(6); // индекс 6 = столбец "Группы причин"
+        const reasonColumnKey = this.getFieldKeyByIndex(9);
         if (!reasonColumnKey) return;
 
         this.formRows.forEach((row) => {
@@ -300,7 +314,7 @@ export class FormEditOperator implements OnInit {
             control.valueChanges
                 .pipe(takeUntilDestroyed(this._destroyRef))
                 .subscribe((reasonGroup: DowntimeReasonGroupDto | null) => {
-                    this.setRowCellValue(row, 6, reasonGroup?.id?.toString() || '');
+                    this.setRowCellValue(row, 9, reasonGroup?.id?.toString() || '');
                 });
 
             this.downtimeReasonGroupControls.set(row.order, control);

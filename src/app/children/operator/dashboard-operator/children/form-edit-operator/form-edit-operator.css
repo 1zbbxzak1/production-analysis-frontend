@@ -8,9 +8,17 @@ app-header-operator {
     flex-shrink: 0;
 }
 
+app-header-form-operator {
+    margin-bottom: 24px;
+}
+
 .content-wrapper {
     display: flex;
     flex-direction: column;
+
+    background: var(--day-base-background);
+
+    overflow: auto;
 }
 
 .main-container {
@@ -21,6 +29,13 @@ app-header-operator {
     width: 100% !important;
 }
 
+.form-table-wrapper {
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: calc(100vh - 300px);
+    width: 100%;
+}
+
 .form-table {
     display: flex;
     flex-direction: column;
@@ -29,15 +44,15 @@ app-header-operator {
     border-radius: 8px;
     background: var(--day-text-icons-text-01-inverse);
 
-    margin-top: 24px;
+    width: fit-content;
 
-    max-width: 1824px !important;
-    width: 100%;
+    will-change: auto;
+    contain: layout style;
 }
 
 .type-1-header {
     display: grid;
-    grid-template-columns: 192px 96px 96px 96px 96px 96px 96px 96px 192px 96px 672px;
+    grid-template-columns: 192px 96px 96px 96px 96px 96px 96px 96px 192px 96px minmax(572px, 1fr);
 
     border-bottom: 1px solid var(--day-base-base-04);
 
@@ -70,12 +85,15 @@ app-header-operator {
 
 .type-1-rows {
     display: grid;
-    grid-template-columns: 192px 96px 96px 96px 96px 96px 96px 96px 192px 96px 1fr;
+    grid-template-columns: 192px 96px 96px 96px 96px 96px 96px 96px 192px 96px minmax(572px, 1fr);
 
     border-bottom: 1px solid var(--day-base-base-04);
 
     padding: 0;
     margin: 0;
+
+    will-change: auto;
+    contain: layout style;
 }
 
 .type-1-rows-break {
@@ -116,7 +134,6 @@ app-header-operator {
 
 .type-1-row-cell-final {
     border-right: 1px solid var(--day-base-base-04);
-    border-bottom: 1px solid var(--day-base-base-04);
 
     padding: 0 12px;
     display: flex;
@@ -129,6 +146,8 @@ app-header-operator {
 }
 
 .type-1-rows-final {
+    border-bottom: 1px solid var(--day-base-base-04);
+
     display: grid;
     grid-template-columns: repeat(4, 192px);
 
