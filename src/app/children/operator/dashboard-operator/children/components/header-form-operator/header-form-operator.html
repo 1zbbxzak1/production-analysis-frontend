@@ -1,0 +1,65 @@
+<div *ngIf="!isLoading && formInfo" class="header-info">
+    <div class="first-column">
+        <div class="pa-type-container">
+            <p class="pa-type tui-text_body-s">
+                {{ getPaTypeDescription(formInfo!.paType) }}
+            </p>
+
+            <tui-badge
+                *ngIf="formInfo!.status === 0"
+                appearance="accent"
+                class="badge"
+                size="m"
+            >
+                В работе
+            </tui-badge>
+
+            <tui-badge
+                *ngIf="formInfo!.status === 1"
+                class="badge"
+                size="m"
+            >
+                Завершенная
+            </tui-badge>
+        </div>
+
+        <div class="product-name">
+            <p class="tui-text_h4">
+                <!--                    {{ formInfo!.context.product.productId }}-->
+                Втулка
+            </p>
+        </div>
+    </div>
+
+    <div class="second-column">
+        <div class="card-indo card-department">
+            <p class="card-title-1 tui-text_body-s">Подразделение</p>
+            <p class="card-title-2 tui-text_body-m">{{ depName }}</p>
+        </div>
+
+        <div class="card-indo card-assignee">
+            <p class="card-title-1 tui-text_body-s">Исполнитель</p>
+            <p class="card-title-2 tui-text_body-m">{{ assigneeName }}</p>
+        </div>
+
+        <div class="card-indo">
+            <p class="card-title-1 tui-text_body-s">Дата / смена</p>
+            <p class="card-title-2 tui-text_body-m">{{ formatDate(formInfo!.creationDate) }} / 1</p>
+        </div>
+
+        <div *ngIf="formInfo!.context.product.cycleTime !== null" class="card-indo">
+            <p class="card-title-1 tui-text_body-s">Время такта, сек</p>
+            <p class="card-title-2 tui-text_body-m">{{ formInfo!.context.product.cycleTime || 'Нет данных' }}</p>
+        </div>
+
+        <div *ngIf="formInfo!.context.product.workstationCapacity !== null" class="card-indo">
+            <p class="card-title-1 tui-text_body-s">Мощность, шт/час</p>
+            <p class="card-title-2 tui-text_body-m">{{ formInfo!.context.product.workstationCapacity || 'Нет данных' }}</p>
+        </div>
+
+        <div class="card-indo">
+            <p class="card-title-1 tui-text_body-s">Суточный темп, шт</p>
+            <p class="card-title-2 tui-text_body-m">{{ formInfo!.context.product.dailyRate }}</p>
+        </div>
+    </div>
+</div>
