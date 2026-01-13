@@ -4,6 +4,5 @@ export interface FormFieldDto {
     inputType: string | null;
     inputSelector: string | null;
     valueType: string | null;
-    isCumulative: boolean;
     shouldMergeInGroup: boolean;
 }

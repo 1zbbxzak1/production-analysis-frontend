@@ -8,6 +8,7 @@ import {FormShortDto} from '../../models/forms/responses/FormShortDto';
 import {FormDto} from '../../models/forms/responses/FormDto';
 import {FormRowDto} from '../../models/forms/responses/FormRowDto';
 import {UpdateFormRowRequest} from '../../models/forms/requests/UpdateFormRowRequest';
+import {UpdateFormRowResponse} from '../../models/forms/responses/UpdateFormRowResponse';
 
 @Injectable()
 export class FormsManagerService {
@@ -51,8 +52,17 @@ export class FormsManagerService {
         );
     }
 
-    public updateFormRow(formId: number, rowOrder: number, values: UpdateFormRowRequest): Observable<FormRowDto> {
+    public updateFormRow(formId: number, rowOrder: number, values: UpdateFormRowRequest): Observable<UpdateFormRowResponse> {
         return this._forms.updateFormRow(formId, rowOrder, values).pipe(
+            catchError(err => {
+                this._error.handleError(err);
+                return NEVER;
+            }),
+        );
+    }
+
+    public completeForm(formId: number): Observable<void> {
+        return this._forms.completeForm(formId).pipe(
             catchError(err => {
                 this._error.handleError(err);
                 return NEVER;

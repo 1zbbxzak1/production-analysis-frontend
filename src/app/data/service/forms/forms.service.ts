@@ -9,6 +9,7 @@ import {FormShortDto} from '../../models/forms/responses/FormShortDto';
 import {FormDto} from '../../models/forms/responses/FormDto';
 import {FormRowDto} from '../../models/forms/responses/FormRowDto';
 import {UpdateFormRowRequest} from '../../models/forms/requests/UpdateFormRowRequest';
+import {UpdateFormRowResponse} from '../../models/forms/responses/UpdateFormRowResponse';
 
 @Injectable()
 export class FormsService {
@@ -32,7 +33,11 @@ export class FormsService {
         return this._http.get<FormRowDto[]>(`${this._api}/${id}/rows`);
     }
 
-    public updateFormRow(formId: number, rowOrder: number, values: UpdateFormRowRequest): Observable<FormRowDto> {
-        return this._http.put<FormRowDto>(`${this._api}/${formId}/rows/${rowOrder}`, values);
+    public updateFormRow(formId: number, rowOrder: number, values: UpdateFormRowRequest): Observable<UpdateFormRowResponse> {
+        return this._http.put<UpdateFormRowResponse>(`${this._api}/${formId}/rows/${rowOrder}`, values);
+    }
+
+    public completeForm(formId: number): Observable<void> {
+        return this._http.post<void>(`${this._api}/${formId}/complete`, formId);
     }
 }

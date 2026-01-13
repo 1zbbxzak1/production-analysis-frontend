@@ -3,4 +3,5 @@ export interface ProductContextDto {
     cycleTime: number | null;
     workstationCapacity: number | null;
     dailyRate: number;
+    productName: string | null;
 }

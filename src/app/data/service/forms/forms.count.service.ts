@@ -5,10 +5,10 @@ import {BehaviorSubject, Observable} from 'rxjs';
     providedIn: 'root',
 })
 export class FormsCountService {
-    private progressFormsCountSubject = new BehaviorSubject<number>(0);
+    private progressFormsCountSubject: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     public progressFormsCount$: Observable<number> = this.progressFormsCountSubject.asObservable();
 
-    private completedFormsCountSubject = new BehaviorSubject<number>(0);
+    private completedFormsCountSubject: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     public completedFormsCount$: Observable<number> = this.completedFormsCountSubject.asObservable();
 
     public setProgressFormsCount(count: number): void {
