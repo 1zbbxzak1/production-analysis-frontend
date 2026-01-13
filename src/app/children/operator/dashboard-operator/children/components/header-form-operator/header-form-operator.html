@@ -25,8 +25,7 @@
 
         <div class="product-name">
             <p class="tui-text_h4">
-                <!--                    {{ formInfo!.context.product.productId }}-->
-                Втулка
+                {{ formInfo!.context.product!.productName }}
             </p>
         </div>
     </div>
@@ -47,19 +46,19 @@
             <p class="card-title-2 tui-text_body-m">{{ formatDate(formInfo!.creationDate) }} / 1</p>
         </div>
 
-        <div *ngIf="formInfo!.context.product.cycleTime !== null" class="card-indo">
+        <div *ngIf="formInfo!.context.product!.cycleTime !== null" class="card-indo">
             <p class="card-title-1 tui-text_body-s">Время такта, сек</p>
-            <p class="card-title-2 tui-text_body-m">{{ formInfo!.context.product.cycleTime || 'Нет данных' }}</p>
+            <p class="card-title-2 tui-text_body-m">{{ formInfo!.context.product!.cycleTime || 'Нет данных' }}</p>
         </div>
 
-        <div *ngIf="formInfo!.context.product.workstationCapacity !== null" class="card-indo">
+        <div *ngIf="formInfo!.context!.product!.workstationCapacity !== null" class="card-indo">
             <p class="card-title-1 tui-text_body-s">Мощность, шт/час</p>
-            <p class="card-title-2 tui-text_body-m">{{ formInfo!.context.product.workstationCapacity || 'Нет данных' }}</p>
+            <p class="card-title-2 tui-text_body-m">{{ formInfo!.context.product!.workstationCapacity || 'Нет данных' }}</p>
         </div>
 
         <div class="card-indo">
             <p class="card-title-1 tui-text_body-s">Суточный темп, шт</p>
-            <p class="card-title-2 tui-text_body-m">{{ formInfo!.context.product.dailyRate }}</p>
+            <p class="card-title-2 tui-text_body-m">{{ formInfo!.context.product!.dailyRate }}</p>
         </div>
     </div>
 </div>

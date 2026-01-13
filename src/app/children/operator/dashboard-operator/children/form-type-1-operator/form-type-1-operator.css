@@ -17,8 +17,6 @@ app-header-form-operator {
     flex-direction: column;
 
     background: var(--day-base-background);
-
-    overflow: auto;
 }
 
 .main-container {
@@ -30,9 +28,7 @@ app-header-form-operator {
 }
 
 .form-table-wrapper {
-    overflow-x: auto;
-    overflow-y: auto;
-    max-height: calc(100vh - 300px);
+    overflow: auto;
     width: 100%;
 }
 
@@ -94,6 +90,8 @@ app-header-form-operator {
 
     will-change: auto;
     contain: layout style;
+
+    min-height: 44px !important;
 }
 
 .type-1-rows-break {
@@ -130,19 +128,6 @@ app-header-form-operator {
 
 .type-1-row-cell:last-child {
     border-right: none;
-}
-
-.type-1-row-cell-final {
-    border-right: 1px solid var(--day-base-base-04);
-
-    padding: 0 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
 .type-1-rows-final {

@@ -1,20 +1,15 @@
-import {ChangeDetectorRef, Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {BackHeader} from '../../../../../../components/back-header/back-header';
 import {TuiDataListWrapper, TuiFilterByInputPipe, TuiInputDate, TuiStringifyContentPipe} from '@taiga-ui/kit';
 import {TuiComboBoxModule, TuiTextfieldControllerModule} from '@taiga-ui/legacy';
 import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {TuiButton, TuiTextfield} from '@taiga-ui/core';
-import {TuiDay} from '@taiga-ui/cdk';
-import {Router} from '@angular/router';
-import {DictManagerService} from '../../../../../../../data/service/dictionaries/dict.manager.service';
-import {EmployeeDto} from '../../../../../../../data/models/dictionaries/responses/EmployeeDto';
-import {ShiftDto} from '../../../../../../../data/models/dictionaries/responses/ShiftDto';
 import {ProductDto} from '../../../../../../../data/models/dictionaries/responses/ProductDto';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import {FormsManagerService} from '../../../../../../../data/service/forms/forms.manager.service';
 import {CreateFormRequest} from '../../../../../../../data/models/forms/requests/CreateFormRequest';
 import {PaTypeDto} from '../../../../../../../data/models/forms/enums/PaTypeDto';
 import {FormShortDto} from '../../../../../../../data/models/forms/responses/FormShortDto';
+import {BaseFormType} from '../directives/base-form-type';
 
 @Component({
     selector: 'app-first-type',
@@ -34,41 +29,39 @@ import {FormShortDto} from '../../../../../../../data/models/forms/responses/For
     templateUrl: './first-type.html',
     styleUrl: './first-type.css',
 })
-export class FirstType implements OnInit {
+export class FirstType extends BaseFormType {
 
-    protected operators: EmployeeDto[] = [];
-    protected shifts: ShiftDto[] = [];
     protected product: ProductDto[] = [];
 
-    protected readonly today = TuiDay.currentLocal();
+    protected readonly controlProduct: FormControl<ProductDto | null> = new FormControl<ProductDto | null>(null);
+    protected readonly controlTactTime: FormControl<number | null> = new FormControl<number | null>(null);
+    protected readonly controlDailyRate: FormControl<number | null> = new FormControl<number | null>(null);
 
-    protected readonly controlOperators = new FormControl<EmployeeDto | null>(null);
-    protected readonly controlShifts = new FormControl<ShiftDto | null>(null);
-    protected readonly controlProduct = new FormControl<ProductDto | null>(null);
-    protected readonly controlDate = new FormControl<TuiDay | null>(null);
-    protected readonly controlTactTime = new FormControl<number | null>(null);
-    protected readonly controlDailyRate = new FormControl<number | null>(null);
+    protected readonly stringifyProduct: (product: ProductDto) => string = (product: ProductDto): string =>
+        product.name || 'Неизвестно';
 
-    private readonly _dictManager: DictManagerService = inject(DictManagerService);
-    private readonly _formsManager: FormsManagerService = inject(FormsManagerService);
-    private readonly _destroyRef: DestroyRef = inject(DestroyRef);
-    private readonly _cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
-    private readonly _router: Router = inject(Router);
+    protected isCompletedCreateForm(): boolean {
+        if (!this.controlOperators.value ||
+            !this.controlShifts.value ||
+            !this.controlProduct.value ||
+            !this.controlDate.value ||
+            !this.controlTactTime.value ||
+            !this.controlDailyRate.value) {
+            return true;
+        }
 
-    public ngOnInit(): void {
-        this.loadEmployees();
-        this.loadShifts();
-        this.loadProducts();
+        return false;
     }
 
-    protected readonly stringify = (item: EmployeeDto): string =>
-        item.fullName || 'Неизвестно';
+    protected override loadAdditionalData(): void {
+        this._dictManager.getProducts().pipe(
+            takeUntilDestroyed(this._destroyRef)
+        ).subscribe((products: ProductDto[]): void => {
+            this.product = products;
 
-    protected readonly stringifyShift = (shift: ShiftDto): string =>
-        `№${shift.name}: ${this.formatTime(shift.startTime)}` || 'Неизвестно';
-
-    protected readonly stringifyProduct = (product: ProductDto): string =>
-        product.name || 'Неизвестно';
+            this._cdr.detectChanges();
+        });
+    }
 
     protected createForm(): void {
         if (!this.controlOperators.value ||
@@ -84,11 +77,13 @@ export class FirstType implements OnInit {
             paType: PaTypeDto.SingleProductWithCycleTime,
             shiftId: this.controlShifts.value!.id,
             assigneeId: this.controlOperators.value!.id,
+            formDate: this.formatTuiDayToIsoString(this.controlDate.value!),
             product: {
                 productId: this.controlProduct.value!.id,
                 cycleTime: this.controlTactTime.value!,
                 workstationCapacity: null,
-                dailyRate: this.controlDailyRate.value!
+                dailyRate: this.controlDailyRate.value!,
+                productName: this.controlProduct.value!.name
             },
             products: null,
             operationOrProduct: null
@@ -101,51 +96,5 @@ export class FirstType implements OnInit {
                 this._router.navigate(['department-head']);
             }
         });
-    }
-
-    protected goBack(): void {
-        this._router.navigate(['department-head']);
-    }
-
-    private loadEmployees(): void {
-        this._dictManager.getEmployees().pipe(
-            takeUntilDestroyed(this._destroyRef)
-        ).subscribe((employees: EmployeeDto[]): void => {
-            this.operators = employees;
-
-            this._cdr.detectChanges();
-        });
-    }
-
-    private loadShifts(): void {
-        this._dictManager.getShifts().pipe(
-            takeUntilDestroyed(this._destroyRef)
-        ).subscribe((shifts: ShiftDto[]): void => {
-            this.shifts = shifts;
-
-            this._cdr.detectChanges();
-        });
-    }
-
-    private loadProducts(): void {
-        this._dictManager.getProducts().pipe(
-            takeUntilDestroyed(this._destroyRef)
-        ).subscribe((products: ProductDto[]): void => {
-            this.product = products;
-
-            this._cdr.detectChanges();
-        });
-    }
-
-    private formatTime(time: string): string {
-        if (!time) return 'Неизвестно';
-
-        const parts: string[] = time.split(':');
-
-        if (parts.length >= 2) {
-            return `${parts[0]}:${parts[1]}`;
-        }
-
-        return time;
     }
 }

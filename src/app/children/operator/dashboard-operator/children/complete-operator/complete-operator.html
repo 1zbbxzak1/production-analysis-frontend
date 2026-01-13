@@ -18,12 +18,10 @@
                 {{ formatDate(form.creationDate) }}
             </div>
             <div class="table-cell tui-text_body-m">
-                <!--                {{ form.shift || 'N/A' }}-->
-                1
+                {{ form.shift.name || 'N/A' }}
             </div>
             <div class="table-cell tui-text_body-m">
-                <!--                {{ form.productName || 'N/A' }}-->
-                Втулка
+                {{ form.productNames || 'N/A' }}
             </div>
             <div class="table-cell tui-text_body-m">
                 {{ getPaTypeDescription(form.paType) }}

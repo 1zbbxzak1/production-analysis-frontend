@@ -99,7 +99,7 @@
 
                 <tui-combo-box
                     [formControl]="controlProductOrOperation"
-                    [stringify]="stringifyProduct"
+                    [stringify]="stringifyProductOrOperation"
                     [tuiDropdownMaxHeight]="150"
                     [tuiTextfieldLabelOutside]="true"
                     tuiTextfieldSize="m"
@@ -108,7 +108,7 @@
 
                     <tui-data-list-wrapper
                         *tuiDataList
-                        [itemContent]="stringifyProduct | tuiStringifyContent"
+                        [itemContent]="stringifyProductOrOperation | tuiStringifyContent"
                         [items]="productsAndOperations | tuiFilterByInput"
                     />
                 </tui-combo-box>
@@ -118,6 +118,7 @@
         <div class="button-final">
             <button
                 (click)="createForm()"
+                [disabled]="isCompletedCreateForm()"
                 appearance="primary"
                 size="m"
                 tuiButton

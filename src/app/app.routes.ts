@@ -15,7 +15,9 @@ import {DashboardOperator} from './children/operator/dashboard-operator/dashboar
 import {operatorGuard} from './data/guard/operator-guard';
 import {ProgressOperator} from './children/operator/dashboard-operator/children/progress-operator/progress-operator';
 import {CompleteOperator} from './children/operator/dashboard-operator/children/complete-operator/complete-operator';
-import {FormEditOperator} from './children/operator/dashboard-operator/children/form-edit-operator/form-edit-operator';
+import {
+    FormType1Operator
+} from './children/operator/dashboard-operator/children/form-type-1-operator/form-type-1-operator';
 
 export const routes: Routes = [
     {
@@ -92,11 +94,11 @@ export const routes: Routes = [
     },
     {
         path: 'operator/progress-list/form-view/:id',
-        component: FormEditOperator
+        component: FormType1Operator
     },
     {
         path: 'operator/completed-list/form-view/:id',
-        component: FormEditOperator
+        component: FormType1Operator
     },
     {
         path: 'department-head/reports',

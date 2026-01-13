@@ -59,6 +59,12 @@
     margin-right: 0;
 
     flex-shrink: 0;
+
+    cursor: pointer;
+}
+
+.table-row:hover {
+    background: var(--day-base-base-02);
 }
 
 .not-found-container {

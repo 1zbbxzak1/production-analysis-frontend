@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, OnInit} from '@angular/core';
 import {Footer} from '../../../../components/footer/footer';
 import {HeaderOperator} from '../../../components/header-operator/header-operator';
 import {BackHeader} from '../../../../components/back-header/back-header';
@@ -10,17 +10,18 @@ import {Loader} from '../../../../components/loader/loader';
 import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {TuiDataListWrapper, TuiFilterByInputPipe, TuiStringifyContentPipe} from '@taiga-ui/kit';
 import {FormRowDto} from '../../../../../data/models/forms/responses/FormRowDto';
-import {forkJoin, tap} from 'rxjs';
+import {debounceTime, distinctUntilChanged, forkJoin, Observable, Subject, switchMap, tap} from 'rxjs';
 import {DictManagerService} from '../../../../../data/service/dictionaries/dict.manager.service';
 import {EmployeeDto} from '../../../../../data/models/dictionaries/responses/EmployeeDto';
 import {TuiComboBoxModule, TuiInputModule, TuiTextfieldControllerModule} from '@taiga-ui/legacy';
 import {FormControl, ReactiveFormsModule} from '@angular/forms';
-import {TuiButton, TuiTextfieldOptionsDirective} from '@taiga-ui/core';
+import {TuiAlertService, TuiButton, TuiTextfieldOptionsDirective} from '@taiga-ui/core';
 import {DowntimeReasonGroupDto} from '../../../../../data/models/dictionaries/responses/DowntimeReasonGroupDto';
 import {HeaderFormOperator} from '../components/header-form-operator/header-form-operator';
+import {UpdateFormRowResponse} from '../../../../../data/models/forms/responses/UpdateFormRowResponse';
 
 @Component({
-    selector: 'app-form-edit-operator',
+    selector: 'app-form-type-1-operator',
     imports: [
         Footer,
         HeaderOperator,
@@ -39,28 +40,15 @@ import {HeaderFormOperator} from '../components/header-form-operator/header-form
         TuiTextfieldOptionsDirective,
         HeaderFormOperator,
         NgClass,
-        TuiButton,
+        TuiButton
     ],
-    templateUrl: './form-edit-operator.html',
-    styleUrl: './form-edit-operator.css',
+    templateUrl: './form-type-1-operator.html',
+    styleUrl: './form-type-1-operator.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FormEditOperator implements OnInit {
+export class FormType1Operator implements OnInit {
 
     public isLoading: boolean = true;
-
-    protected columnHeaders: string[] = [
-        'Время работы, час',
-        'План, шт',
-        'План накоп, шт',
-        'Факт, шт',
-        'Факт накоп, шт',
-        'Отклонен шт',
-        'Отклонен накоп, шт',
-        'Простой мин',
-        'Ответственный за простой',
-        'Группы причин',
-        'Причины отклонения, принятые меры'
-    ];
 
     protected formId: number = 0;
     protected formInfo: FormDto | null = null;
@@ -74,56 +62,47 @@ export class FormEditOperator implements OnInit {
         'center', 'right', 'right', 'right', 'right', 'right', 'right', 'right', 'right', 'right', 'left'
     ];
 
+    private changedRowValues: Map<number, Record<number, any>> = new Map();
+    private rowChangeSubject: Subject<{ rowOrder: number, changes: Record<number, any> }> = new Subject();
+
     private readonly _destroyRef: DestroyRef = inject(DestroyRef);
     private readonly _cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
     private readonly _router: Router = inject(Router);
     private readonly _route: ActivatedRoute = inject(ActivatedRoute);
     private readonly _dictManager: DictManagerService = inject(DictManagerService);
     private readonly _formsManager: FormsManagerService = inject(FormsManagerService);
+    private readonly alerts: TuiAlertService = inject(TuiAlertService);
 
     protected get isThirdColumnValid(): boolean {
         if (!this.formRows || this.formRows.length === 0 || !this.formInfo) {
             return false;
         }
 
-        const thirdColumnKey = this.getFieldKeyByIndex(3);
+        const thirdColumnKey: string | null = this.getFieldKeyByIndex(3);
         if (!thirdColumnKey) return false;
 
         return this.formRows
             .filter((row: FormRowDto): boolean => !this.isBreakRow(row.values)) // игнорируем break‑строки
             .every((row: FormRowDto): boolean => {
-                const value = row.values?.[thirdColumnKey]?.value;
+                const value: any = row.values?.[thirdColumnKey]?.value;
                 return value !== undefined && value !== null && value !== '';
             });
     }
 
     public ngOnInit(): void {
+        this.initializeAutoSave();
+
         const getId: string = this._route.snapshot.paramMap.get('id')!;
         this.formId = parseInt(getId);
 
         this.loadFormData();
     }
 
-    /**
-     * Получает ключ поля по индексу колонки из template.tableColumns
-     */
-    // protected getFieldKeyByIndex(columnIndex: number): string | null {
-    //     if (!this.formInfo?.template?.tableColumns || columnIndex < 0 || columnIndex >= this.formInfo.template.tableColumns.length) {
-    //         return null;
-    //     }
-    //     return this.formInfo.template.tableColumns[columnIndex].id.toString();
-    // }
-
     protected getFieldKeyByIndex(columnIndex: number): string | null {
-        if (
-            !this.columnHeaders ||
-            columnIndex < 0 ||
-            columnIndex >= this.columnHeaders.length
-        ) {
+        if (!this.formInfo?.template?.tableColumns || columnIndex < 0 || columnIndex >= this.formInfo.template.tableColumns.length) {
             return null;
         }
-
-        return (columnIndex + 1).toString();
+        return this.formInfo.template.tableColumns[columnIndex].id.toString();
     }
 
     protected setRowCellValue(row: FormRowDto, columnIndex: number, value: string): void {
@@ -131,18 +110,26 @@ export class FormEditOperator implements OnInit {
         if (!fieldKey) return;
 
         if (!row.values) row.values = {};
-        if (!row.values[fieldKey]) row.values[fieldKey] = {value: null, cumulativeValue: null};
+
+        if (!row.values[fieldKey]) row.values[fieldKey] = {value: null};
         row.values[fieldKey].value = value;
+
+        if (this.hasInputValue(row, columnIndex)) {
+            this.trackRowChange(row.order, fieldKey, value);
+        }
 
         this._cdr.detectChanges();
     }
 
     protected getRowCellValue(values: Record<string, any> | null, columnIndex: number): string {
         if (!values) return '';
-        const fieldKey = this.getFieldKeyByIndex(columnIndex);
+
+        const fieldKey: string | null = this.getFieldKeyByIndex(columnIndex);
         if (!fieldKey) return '';
-        const value = values[fieldKey];
+
+        const value: any = values[fieldKey];
         if (!value) return '';
+
         // Если значение - объект с полем value (FormRowValueDto), возвращаем value
         // Если значение - примитив, возвращаем его напрямую
         if (typeof value === 'object' && 'value' in value) {
@@ -156,40 +143,54 @@ export class FormEditOperator implements OnInit {
      */
     protected getTotalValue(columnIndex: number): string {
         if (!this.formInfo?.totalValues) return '';
-        const fieldKey = this.getFieldKeyByIndex(columnIndex);
+
+        const fieldKey: string | null = this.getFieldKeyByIndex(columnIndex);
         if (!fieldKey) return '';
-        const fieldId = Number(fieldKey);
-        const value = this.formInfo.totalValues[fieldId];
+
+        const fieldId: number = Number(fieldKey);
+        const value: any = this.formInfo.totalValues[fieldId];
+
         return value !== undefined && value !== null ? String(value) : '';
     }
 
     protected hasInputValue(row: FormRowDto, columnIndex: number): boolean {
-        const fieldKey = this.getFieldKeyByIndex(columnIndex);
+        const fieldKey: string | null = this.getFieldKeyByIndex(columnIndex);
         if (!fieldKey) return false;
-        const value = row.values?.[fieldKey]?.value;
+
+        const value: any = row.values?.[fieldKey]?.value;
+
         return value !== undefined && value !== null && value !== '';
     }
 
     protected getJustifyContent(columnIndex: number): string {
-        const align = this.columnAlignments[columnIndex] || 'left';
+        const align: "left" | "center" | "right" = this.columnAlignments[columnIndex] || 'left';
         return align === 'left' ? 'flex-start' : align === 'right' ? 'flex-end' : 'center';
     }
 
     protected getAlignText(columnIndex: number): string {
-        const align = this.columnAlignments[columnIndex] || 'left';
+        const align: "left" | "center" | "right" = this.columnAlignments[columnIndex] || 'left';
         return align;
     }
 
     protected getEmployeeControl(row: FormRowDto): FormControl<EmployeeDto | null> {
-        const rowOrder = row.order;
+        const rowOrder: number = row.order;
+
         if (!this.employeeControls.has(rowOrder)) {
             const control = new FormControl<EmployeeDto | null>(null);
 
             control.valueChanges
                 .pipe(takeUntilDestroyed(this._destroyRef))
-                .subscribe((employee: EmployeeDto | null) => {
-                    const employeeId = employee?.id?.toString() || '';
+                .subscribe((employee: EmployeeDto | null): void => {
+                    const employeeId: string = employee?.id?.toString() || '';
+
                     this.setRowCellValue(row, 8, employeeId);
+
+                    if (this.hasInputValue(row, 8)) {
+                        const fieldKey: string | null = this.getFieldKeyByIndex(8);
+                        if (fieldKey) {
+                            this.trackRowChange(row.order, fieldKey, employeeId);
+                        }
+                    }
                 });
 
             this.employeeControls.set(rowOrder, control);
@@ -198,15 +199,22 @@ export class FormEditOperator implements OnInit {
     }
 
     protected getReasonControl(row: FormRowDto): FormControl<DowntimeReasonGroupDto | null> {
-        const rowOrder = row.order;
+        const rowOrder: number = row.order;
         if (!this.downtimeReasonGroupControls.has(rowOrder)) {
             const control = new FormControl<DowntimeReasonGroupDto | null>(null);
 
             control.valueChanges
                 .pipe(takeUntilDestroyed(this._destroyRef))
-                .subscribe((reason: DowntimeReasonGroupDto | null) => {
+                .subscribe((reason: DowntimeReasonGroupDto | null): void => {
                     const reasonId = reason?.id?.toString() || '';
                     this.setRowCellValue(row, 9, reasonId);
+
+                    if (this.hasInputValue(row, 9)) {
+                        const fieldKey: string | null = this.getFieldKeyByIndex(9);
+                        if (fieldKey) {
+                            this.trackRowChange(row.order, fieldKey, reasonId);
+                        }
+                    }
                 });
 
             this.downtimeReasonGroupControls.set(rowOrder, control);
@@ -214,10 +222,10 @@ export class FormEditOperator implements OnInit {
         return this.downtimeReasonGroupControls.get(rowOrder)!;
     }
 
-    protected readonly stringify = (item: EmployeeDto): string =>
+    protected readonly stringify: (item: EmployeeDto) => string = (item: EmployeeDto): string =>
         this.formatFullName(item.fullName) || 'Неизвестно';
 
-    protected readonly stringifyReason = (item: DowntimeReasonGroupDto): string =>
+    protected readonly stringifyReason: (item: DowntimeReasonGroupDto) => string = (item: DowntimeReasonGroupDto): string =>
         item.name || 'Неизвестно';
 
     protected formatTimeCell(values: Record<string, any> | null, columnIndex: number): string {
@@ -227,7 +235,7 @@ export class FormEditOperator implements OnInit {
             return '';
         }
 
-        const match = raw.match(/^\s*\d{2}:\d{2}-\d{2}:\d{2}\s+(.+)$/);
+        const match: RegExpMatchArray | null = raw.match(/^\s*\d{2}:\d{2}-\d{2}:\d{2}\s+(.+)$/);
 
         if (match && match[1]) {
             return match[1].trim();
@@ -251,6 +259,39 @@ export class FormEditOperator implements OnInit {
         this._router.navigate(['operator/progress-list']);
     }
 
+    protected completeForm(): void {
+        this._formsManager.completeForm(this.formId).pipe(
+            takeUntilDestroyed(this._destroyRef)
+        ).subscribe((): void => {
+            this.goBack();
+
+            this.alerts
+                .open('<strong>Форма завершена и сохранена</strong>', {
+                    appearance: 'positive',
+                })
+                .subscribe();
+
+            this._cdr.detectChanges();
+        });
+    }
+
+    private initializeAutoSave(): void {
+        this.rowChangeSubject.pipe(
+            debounceTime(500),
+            distinctUntilChanged((prev, curr): boolean =>
+                prev.rowOrder === curr.rowOrder &&
+                JSON.stringify(prev.changes) === JSON.stringify(curr.changes)
+            ),
+            switchMap(({rowOrder, changes}): Observable<UpdateFormRowResponse> =>
+                this._formsManager.updateFormRow(this.formId, rowOrder, {values: changes})
+            ),
+            tap((): void => {
+                this.reloadFormData();
+            }),
+            takeUntilDestroyed(this._destroyRef)
+        ).subscribe();
+    }
+
     private loadFormData(): void {
         forkJoin([
             this._formsManager.getFormById(this.formId),
@@ -269,7 +310,31 @@ export class FormEditOperator implements OnInit {
             }),
             takeUntilDestroyed(this._destroyRef)
         ).subscribe({
-            complete: () => this.hideLoader()
+            complete: (): void => this.hideLoader()
+        });
+    }
+
+    private reloadFormData(): void {
+        forkJoin([
+            this._formsManager.getFormRows(this.formId),
+        ]).pipe(
+            tap(([formRows]: [FormRowDto[]]): void => {
+                this.formRows = formRows;
+
+                this.employeeControls.clear();
+                this.downtimeReasonGroupControls.clear();
+                this.changedRowValues.clear();
+
+                this.initializeEmployeeControls();
+                this.initializeReasonControls();
+
+                this._cdr.detectChanges();
+            }),
+            takeUntilDestroyed(this._destroyRef)
+        ).subscribe({
+            complete: (): void => {
+                this.hideLoader();
+            }
         });
     }
 
@@ -318,6 +383,20 @@ export class FormEditOperator implements OnInit {
                 });
 
             this.downtimeReasonGroupControls.set(row.order, control);
+        });
+    }
+
+    private trackRowChange(rowOrder: number, indicatorId: string, value: any): void {
+        if (!this.changedRowValues.has(rowOrder)) {
+            this.changedRowValues.set(rowOrder, {});
+        }
+
+        const rowChanges: Record<number, any> = this.changedRowValues.get(rowOrder)!;
+        rowChanges[Number(indicatorId)] = value;
+
+        this.rowChangeSubject.next({
+            rowOrder,
+            changes: rowChanges
         });
     }
 

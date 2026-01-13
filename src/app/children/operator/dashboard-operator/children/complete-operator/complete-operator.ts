@@ -112,15 +112,13 @@ export class CompleteOperator implements OnInit {
         this._cdr.detectChanges();
     }
 
-    // TODO: заменить на productName когда появится на бэке
     private matchesSearch(form: FormShortDto, search: string): boolean {
-        // const productName = form.productName?.toLowerCase() || 'втулка'.toLowerCase();
+        const productName: string = form.productNames!.toLowerCase();
 
         // Поле 4: Тип ПА
-        const paType = this.getPaTypeDescription(form.paType).toLowerCase();
+        const paType: string = this.getPaTypeDescription(form.paType).toLowerCase();
 
-        // return productName.includes(search) || paType.includes(search);
-        return paType.includes(search);
+        return productName.includes(search) || paType.includes(search);
     }
 
     private waitForDepartmentIdAndLoadForms(): void {
