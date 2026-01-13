@@ -51,6 +51,7 @@ export class FormType1Operator implements OnInit {
     public isLoading: boolean = true;
 
     protected formId: number = 0;
+    protected isCompleted: boolean = false;
     protected formInfo: FormDto | null = null;
     protected formRows: FormRowDto[] | null = null;
     protected employees: EmployeeDto[] | null = null;
@@ -181,14 +182,14 @@ export class FormType1Operator implements OnInit {
             control.valueChanges
                 .pipe(takeUntilDestroyed(this._destroyRef))
                 .subscribe((employee: EmployeeDto | null): void => {
-                    const employeeId: string = employee?.id?.toString() || '';
+                    const employeeName: string = employee ? this.formatFullName(employee.fullName) : '';
 
-                    this.setRowCellValue(row, 8, employeeId);
+                    this.setRowCellValue(row, 8, employeeName);
 
                     if (this.hasInputValue(row, 8)) {
                         const fieldKey: string | null = this.getFieldKeyByIndex(8);
                         if (fieldKey) {
-                            this.trackRowChange(row.order, fieldKey, employeeId);
+                            this.trackRowChange(row.order, fieldKey, employeeName);
                         }
                     }
                 });
@@ -206,13 +207,14 @@ export class FormType1Operator implements OnInit {
             control.valueChanges
                 .pipe(takeUntilDestroyed(this._destroyRef))
                 .subscribe((reason: DowntimeReasonGroupDto | null): void => {
-                    const reasonId = reason?.id?.toString() || '';
-                    this.setRowCellValue(row, 9, reasonId);
+                    const reasonName: string = reason?.name || '';
+
+                    this.setRowCellValue(row, 9, reasonName);
 
                     if (this.hasInputValue(row, 9)) {
                         const fieldKey: string | null = this.getFieldKeyByIndex(9);
                         if (fieldKey) {
-                            this.trackRowChange(row.order, fieldKey, reasonId);
+                            this.trackRowChange(row.order, fieldKey, reasonName);
                         }
                     }
                 });
@@ -253,6 +255,16 @@ export class FormType1Operator implements OnInit {
         const formatted: string = this.formatTimeCell(values, 0);
 
         return formatted !== raw;
+    }
+
+    protected isCompletedForm(): boolean {
+        if (this.formInfo && this.formInfo.status === 0) {
+            this.isCompleted = false;
+            return false;
+        } else {
+            this.isCompleted = true;
+            return true;
+        }
     }
 
     protected goBack(): void {
@@ -316,9 +328,11 @@ export class FormType1Operator implements OnInit {
 
     private reloadFormData(): void {
         forkJoin([
+            this._formsManager.getFormById(this.formId),
             this._formsManager.getFormRows(this.formId),
         ]).pipe(
-            tap(([formRows]: [FormRowDto[]]): void => {
+            tap(([formInfo, formRows]: [FormDto, FormRowDto[]]): void => {
+                this.formInfo = formInfo;
                 this.formRows = formRows;
 
                 this.employeeControls.clear();
@@ -341,21 +355,23 @@ export class FormType1Operator implements OnInit {
     private initializeEmployeeControls(): void {
         if (!this.formRows) return;
 
-        const employeeColumnKey = this.getFieldKeyByIndex(8);
+        const employeeColumnKey: string | null = this.getFieldKeyByIndex(8);
         if (!employeeColumnKey) return;
 
-        this.formRows.forEach((row) => {
-            const employeeId = row.values?.[employeeColumnKey]?.value;
-            const employee = employeeId && this.employees
-                ? this.employees.find(e => e.id === employeeId || e.id === Number(employeeId))
+        this.formRows.forEach((row: FormRowDto): void => {
+            const employeeName: any = row.values?.[employeeColumnKey]?.value;
+
+            const employee: EmployeeDto | undefined | null = employeeName && this.employees
+                ? this.employees.find((e: EmployeeDto): boolean => this.formatFullName(e.fullName) === employeeName)
                 : null;
 
             const control = new FormControl<EmployeeDto | null>(employee || null);
 
             control.valueChanges
                 .pipe(takeUntilDestroyed(this._destroyRef))
-                .subscribe((emp: EmployeeDto | null) => {
-                    this.setRowCellValue(row, 8, emp?.id?.toString() || '');
+                .subscribe((emp: EmployeeDto | null): void => {
+                    const formattedName: string = emp ? this.formatFullName(emp.fullName) : '';
+                    this.setRowCellValue(row, 8, formattedName);
                 });
 
             this.employeeControls.set(row.order, control);
@@ -365,21 +381,22 @@ export class FormType1Operator implements OnInit {
     private initializeReasonControls(): void {
         if (!this.formRows) return;
 
-        const reasonColumnKey = this.getFieldKeyByIndex(9);
+        const reasonColumnKey: string | null = this.getFieldKeyByIndex(9);
         if (!reasonColumnKey) return;
 
-        this.formRows.forEach((row) => {
-            const reasonId = row.values?.[reasonColumnKey]?.value;
-            const reason = reasonId && this.downtimeReasonGroups
-                ? this.downtimeReasonGroups.find(e => e.id === reasonId || e.id === Number(reasonId))
+        this.formRows.forEach((row: FormRowDto): void => {
+            const reasonName: any = row.values?.[reasonColumnKey]?.value;
+
+            const reason: DowntimeReasonGroupDto | undefined | null = reasonName && this.downtimeReasonGroups
+                ? this.downtimeReasonGroups.find((e: DowntimeReasonGroupDto): boolean => e.name === reasonName)
                 : null;
 
             const control = new FormControl<DowntimeReasonGroupDto | null>(reason || null);
 
             control.valueChanges
                 .pipe(takeUntilDestroyed(this._destroyRef))
-                .subscribe((reasonGroup: DowntimeReasonGroupDto | null) => {
-                    this.setRowCellValue(row, 9, reasonGroup?.id?.toString() || '');
+                .subscribe((reasonGroup: DowntimeReasonGroupDto | null): void => {
+                    this.setRowCellValue(row, 9, reasonGroup?.name || '');
                 });
 
             this.downtimeReasonGroupControls.set(row.order, control);

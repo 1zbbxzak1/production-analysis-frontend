@@ -42,10 +42,9 @@
 
                         <ng-template #normalRow>
                             <ng-container *ngFor="let col of formInfo!.template.tableColumns; let i = index">
-                                <div
-                                    *ngIf="i !== 3 && i !== 7 && i !== 8 && i !== 9 && i !== 10"
-                                    [ngStyle]="{'justify-content': getJustifyContent(i)}"
-                                    class="type-1-row-cell">
+                                <div *ngIf="i !== 3 && i !== 7 && i !== 8 && i !== 9 && i !== 10"
+                                     [ngStyle]="{'justify-content': getJustifyContent(i)}"
+                                     class="type-1-row-cell">
                                     <ng-container *ngIf="i === 0">
                                         {{ formatTimeCell(row.values, i) }}
                                     </ng-container>
@@ -56,30 +55,32 @@
                                 </div>
 
                                 <!-- Input ячейка (колонка 4 - Факт, шт) -->
-                                <div *ngIf="i === 3 && formInfo && formInfo.status !== 1"
+                                <div *ngIf="i === 3"
                                      [ngStyle]="{'justify-content': getJustifyContent(i)}"
                                      class="type-1-row-cell type-1-row-input">
                                     <input
                                         (change)="setRowCellValue(row, i, $any($event.target).value)"
                                         [class.has-value]="hasInputValue(row, i)"
+                                        [disabled]="isCompletedForm()"
                                         [value]="getRowCellValue(row.values, i)"
                                         class="cell-input"/>
                                 </div>
 
                                 <!-- Input ячейка (колонка 8 - Простой мин) -->
-                                <div *ngIf="i === 7 && formInfo && formInfo.status !== 1"
+                                <div *ngIf="i === 7"
                                      [ngStyle]="{'justify-content': getJustifyContent(i)}"
                                      class="type-1-row-cell type-1-row-input">
                                     <input
                                         (change)="setRowCellValue(row, i, $any($event.target).value)"
                                         [class.has-value]="hasInputValue(row, i)"
+                                        [disabled]="isCompletedForm()"
                                         [value]="getRowCellValue(row.values, i)"
                                         class="cell-input"
                                     />
                                 </div>
 
                                 <!-- Combo-box ячейка (колонка 9 - Ответственный за простой) -->
-                                <div *ngIf="i === 8 && formInfo && formInfo.status !== 1"
+                                <div *ngIf="i === 8 && !isCompleted"
                                      [ngStyle]="{'justify-content': getJustifyContent(i)}"
                                      class="type-1-row-cell type-1-row-input">
                                     <tui-combo-box
@@ -98,8 +99,20 @@
                                     </tui-combo-box>
                                 </div>
 
+                                <div *ngIf="i === 8 && isCompleted"
+                                     [ngStyle]="{'justify-content': getJustifyContent(i)}"
+                                     class="type-1-row-cell type-1-row-input">
+                                    <input
+                                        (change)="setRowCellValue(row, i, $any($event.target).value)"
+                                        [class.has-value]="hasInputValue(row, i)"
+                                        [disabled]="isCompletedForm()"
+                                        [value]="getRowCellValue(row.values, i)"
+                                        class="cell-input"
+                                    />
+                                </div>
+
                                 <!-- Combo-box ячейка (колонка 10 - Группы причин) -->
-                                <div *ngIf="i === 9 && formInfo && formInfo.status !== 1"
+                                <div *ngIf="i === 9 && !isCompleted"
                                      [ngStyle]="{'justify-content': getJustifyContent(i)}"
                                      class="type-1-row-cell type-1-row-input">
                                     <tui-combo-box
@@ -118,13 +131,26 @@
                                     </tui-combo-box>
                                 </div>
 
-                                <!-- Input ячейка (колонка 11 - Причины отклонения) -->
-                                <div *ngIf="i === 10 && formInfo && formInfo.status !== 1"
+                                <div *ngIf="i === 9 && isCompleted"
                                      [ngStyle]="{'justify-content': getJustifyContent(i)}"
                                      class="type-1-row-cell type-1-row-input">
                                     <input
                                         (change)="setRowCellValue(row, i, $any($event.target).value)"
                                         [class.has-value]="hasInputValue(row, i)"
+                                        [disabled]="isCompletedForm()"
+                                        [value]="getRowCellValue(row.values, i)"
+                                        class="cell-input"
+                                    />
+                                </div>
+
+                                <!-- Input ячейка (колонка 11 - Причины отклонения) -->
+                                <div *ngIf="i === 10"
+                                     [ngStyle]="{'justify-content': getJustifyContent(i)}"
+                                     class="type-1-row-cell type-1-row-input">
+                                    <input
+                                        (change)="setRowCellValue(row, i, $any($event.target).value)"
+                                        [class.has-value]="hasInputValue(row, i)"
+                                        [disabled]="isCompletedForm()"
                                         [value]="getRowCellValue(row.values, i)"
                                         class="cell-input reason"
                                     />
