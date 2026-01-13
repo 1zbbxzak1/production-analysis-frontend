@@ -1,0 +1,44 @@
+<div *ngIf="isVisible" class="modal-overlay">
+    <div (click)="$event.stopPropagation()" class="modal-container">
+        <div class="modal-content">
+            <button (click)="closeModal()" class="x-close">
+                <img alt="Закрыть" height="24" src="assets/x-close.svg" width="24">
+            </button>
+
+            <div class="modal-header">
+                <p class="tui-text_h5">
+                    Завершить заполнение?
+                </p>
+            </div>
+
+            <div class="modal-body">
+                <p class="tui-text_body-m">
+                    После завершения форма перейдёт в статус «Завершена»,
+                    и вы больше не сможете её изменить
+                </p>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button
+                (click)="confirm()"
+                appearance="primary"
+                size="m"
+                tuiButton
+                type="button"
+            >
+                Завершить
+            </button>
+            <button
+                (click)="closeModal()"
+                appearance="outline"
+                class="outline-b"
+                size="m"
+                tuiButton
+                type="button"
+            >
+                Отменить
+            </button>
+        </div>
+    </div>
+</div>

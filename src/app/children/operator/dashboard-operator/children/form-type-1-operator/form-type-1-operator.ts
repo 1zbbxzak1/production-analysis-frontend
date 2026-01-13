@@ -19,6 +19,7 @@ import {TuiAlertService, TuiButton, TuiTextfieldOptionsDirective} from '@taiga-u
 import {DowntimeReasonGroupDto} from '../../../../../data/models/dictionaries/responses/DowntimeReasonGroupDto';
 import {HeaderFormOperator} from '../components/header-form-operator/header-form-operator';
 import {UpdateFormRowResponse} from '../../../../../data/models/forms/responses/UpdateFormRowResponse';
+import {CompletedFormPopUp} from '../components/completed-form-pop-up/completed-form-pop-up';
 
 @Component({
     selector: 'app-form-type-1-operator',
@@ -40,7 +41,8 @@ import {UpdateFormRowResponse} from '../../../../../data/models/forms/responses/
         TuiTextfieldOptionsDirective,
         HeaderFormOperator,
         NgClass,
-        TuiButton
+        TuiButton,
+        CompletedFormPopUp
     ],
     templateUrl: './form-type-1-operator.html',
     styleUrl: './form-type-1-operator.css',
@@ -49,6 +51,9 @@ import {UpdateFormRowResponse} from '../../../../../data/models/forms/responses/
 export class FormType1Operator implements OnInit {
 
     public isLoading: boolean = true;
+    protected modalStates = {
+        complete: false,
+    }
 
     protected formId: number = 0;
     protected isCompleted: boolean = false;
@@ -269,6 +274,16 @@ export class FormType1Operator implements OnInit {
 
     protected goBack(): void {
         this._router.navigate(['operator/progress-list']);
+    }
+
+    protected toggleModal(type: keyof typeof this.modalStates, state: boolean): void {
+        this.modalStates[type] = state;
+
+        if (state) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
     }
 
     protected completeForm(): void {

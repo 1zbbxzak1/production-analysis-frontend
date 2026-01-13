@@ -172,7 +172,7 @@
 
         <div *ngIf="formInfo && formInfo.status !== 1" class="final-btn">
             <button
-                (click)="completeForm()"
+                (click)="toggleModal('complete',true)"
                 [disabled]="!isThirdColumnValid"
                 appearance="primary"
                 size="m"
@@ -183,6 +183,12 @@
             </button>
         </div>
     </div>
+
+    <app-completed-form-pop-up
+        (close)="toggleModal('complete',false)"
+        (complete)="completeForm()"
+        [isVisible]="modalStates.complete">
+    </app-completed-form-pop-up>
 </div>
 
 <app-footer/>
