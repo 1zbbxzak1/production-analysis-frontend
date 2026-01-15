@@ -5,6 +5,7 @@
     align-items: center;
 
     gap: 12px;
+    width: 78px;
 
     cursor: pointer;
 
@@ -18,4 +19,9 @@
 .back-container img {
     width: 24px;
     height: 24px;
+}
+
+.tui-text_body-s {
+    margin: 0;
+    padding: 0;
 }

@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {TuiComboBoxModule, TuiTextfieldControllerModule} from '@taiga-ui/legacy';
 import {ProductDto} from '../../../../../../../data/models/dictionaries/responses/ProductDto';
@@ -9,7 +9,7 @@ import {CreateFormRequest} from '../../../../../../../data/models/forms/requests
 import {BaseFormType} from '../directives/base-form-type';
 import {BackHeader} from '../../../../../../components/back-header/back-header';
 import {TuiDataListWrapper, TuiFilterByInputPipe, TuiInputDate, TuiStringifyContentPipe} from '@taiga-ui/kit';
-import {TuiButton, TuiTextfield} from '@taiga-ui/core';
+import {TuiAlertService, TuiButton, TuiTextfield} from '@taiga-ui/core';
 
 @Component({
     selector: 'app-second-type',
@@ -36,6 +36,8 @@ export class SecondType extends BaseFormType {
     protected readonly controlProduct: FormControl<ProductDto | null> = new FormControl<ProductDto | null>(null);
     protected readonly controlWorkCapacity: FormControl<number | null> = new FormControl<number | null>(null);
     protected readonly controlDailyRate: FormControl<number | null> = new FormControl<number | null>(null);
+
+    private readonly alerts: TuiAlertService = inject(TuiAlertService);
 
     protected readonly stringifyProduct: (product: ProductDto) => string = (product: ProductDto): string =>
         product.name || 'Неизвестно';
@@ -82,8 +84,7 @@ export class SecondType extends BaseFormType {
                 productId: this.controlProduct.value!.id,
                 cycleTime: null,
                 workstationCapacity: this.controlWorkCapacity.value!,
-                dailyRate: this.controlDailyRate.value!,
-                productName: this.controlProduct.value!.name
+                dailyRate: this.controlDailyRate.value!
             },
             products: null,
             operationOrProduct: null
@@ -93,6 +94,12 @@ export class SecondType extends BaseFormType {
             takeUntilDestroyed(this._destroyRef)
         ).subscribe({
             next: (response: FormShortDto): void => {
+                this.alerts
+                    .open('<strong>Форма "По мощности рабочего места" создана</strong>', {
+                        appearance: 'positive',
+                    })
+                    .subscribe();
+
                 this._router.navigate(['department-head']);
             }
         });

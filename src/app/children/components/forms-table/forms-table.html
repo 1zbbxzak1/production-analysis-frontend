@@ -1,0 +1,138 @@
+<div class="progress-container">
+    <app-loader [isLoading]="isLoading"/>
+
+    <div *ngIf="!isLoading && isHead" class="table-header-is-head">
+        <div class="table-cell header-cell tui-text_body-s">Дата</div>
+        <div class="table-cell header-cell tui-text_body-s">Смена</div>
+        <div class="table-cell header-cell tui-text_body-s">Исполнитель</div>
+        <div class="table-cell header-cell tui-text_body-s">Статус</div>
+        <div class="table-cell header-cell tui-text_body-s">Наименование продукции</div>
+        <div class="table-cell header-cell tui-text_body-s">Тип ведения</div>
+        <div class="table-cell header-cell tui-text_body-s"></div>
+    </div>
+
+    <div *ngIf="!isLoading && !isHead" class="table-header">
+        <div class="table-cell header-cell tui-text_body-s">Дата</div>
+        <div class="table-cell header-cell tui-text_body-s">Смена</div>
+        <div class="table-cell header-cell tui-text_body-s">Наименование продукции</div>
+        <div class="table-cell header-cell tui-text_body-s">Тип ведения</div>
+    </div>
+
+    <div *ngIf="safeFormItems.length > 0 && !isLoading" class="progress-table">
+        <ng-container *ngIf="isHead">
+            <div (click)="goToFormById(form.id)"
+                 (mouseenter)="onMouseEnter(form.id)"
+                 (mouseleave)="onMouseLeave()"
+                 *ngFor="let form of safeFormItems"
+                 [class.hovered]="isFormHovered(form.id) && !isButtonHovered"
+                 class="table-row-is-head">
+                <div class="table-cell tui-text_body-m">
+                    {{ formatDate(form.formDate) }}
+                </div>
+                <div class="table-cell tui-text_body-m">
+                    {{ form.shift.name || 'N/A' }}
+                </div>
+                <div *ngIf="isHead" class="table-cell tui-text_body-m">
+                    {{ formatFullName(form.assignee.fullName) || 'N/A' }}
+                </div>
+                <div *ngIf="isHead" class="table-cell tui-text_body-m">
+                    <tui-badge
+                        *ngIf="form.status === 0"
+                        appearance="accent"
+                        class="badge"
+                        size="m"
+                    >
+                        В работе
+                    </tui-badge>
+
+                    <tui-badge
+                        *ngIf="form.status === 1"
+                        appearance="primary"
+                        class="badge"
+                        size="m"
+                    >
+                        Завершена
+                    </tui-badge>
+                </div>
+                <div class="table-cell tui-text_body-m">
+                    {{ form.productNames || 'N/A' }}
+                </div>
+                <div class="table-cell tui-text_body-m">
+                    {{ getPaTypeDescription(form.paType) }}
+                </div>
+                <button
+                    (click)="$event.stopPropagation()"
+                    (mouseenter)="onButtonMouseEnter(form.id, $event)"
+                    (mouseleave)="onButtonMouseLeave($event)"
+                    [tuiDropdown]="content"
+                    class="button-more-btn"
+                    tuiDropdownAlign="right"
+                    tuiDropdownLimitWidth="auto"
+                    tuiDropdownOpen
+                    type="button"
+                >
+                    <img
+                        [src]="shouldShowHoverImage(form.id) ? 'assets/more-btn-hover.svg' : 'assets/more-btn.svg'"
+                        alt="More"
+                        height="24"
+                        width="24"
+                    />
+                </button>
+
+                <ng-template #content>
+                    <tui-data-list
+                        (click)="$event.stopPropagation(); onClick()"
+                        size="s">
+                        <button
+                            (click)="$event.stopPropagation(); deleteForm(form.id)"
+                            iconEnd="@tui.trash"
+                            tuiOption
+                            type="button"
+                        >
+                            Удалить
+                        </button>
+                    </tui-data-list>
+                </ng-template>
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="!isHead">
+            <div (click)="goToFormById(form.id)"
+                 *ngFor="let form of safeFormItems"
+                 class="table-row">
+                <div class="table-cell tui-text_body-m">
+                    {{ formatDate(form.formDate) }}
+                </div>
+                <div class="table-cell tui-text_body-m">
+                    {{ form.shift.name || 'N/A' }}
+                </div>
+                <div class="table-cell tui-text_body-m">
+                    {{ form.productNames || 'N/A' }}
+                </div>
+                <div class="table-cell tui-text_body-m">
+                    {{ getPaTypeDescription(form.paType) }}
+                </div>
+            </div>
+        </ng-container>
+    </div>
+
+    <div *ngIf="safeFormItems.length === 0 && !isLoading" class="not-found-container">
+        <img
+            alt="Not found"
+            class="image"
+            height="64"
+            src="assets/not-found-forms.svg"
+            width="64"
+        />
+        <p class="not-title tui-text_body-m">{{ emptyMessage }}</p>
+        <p class="not-desc">{{ emptyDescription }}</p>
+    </div>
+
+    <div *ngIf="shouldShowPagination && !isLoading" class="pagination-container">
+        <tui-pagination
+            (indexChange)="onPageChange($event)"
+            [index]="currentPage"
+            [length]="totalPages"
+        />
+    </div>
+</div>

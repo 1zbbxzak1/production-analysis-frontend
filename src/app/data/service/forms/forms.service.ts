@@ -10,6 +10,7 @@ import {FormDto} from '../../models/forms/responses/FormDto';
 import {FormRowDto} from '../../models/forms/responses/FormRowDto';
 import {UpdateFormRowRequest} from '../../models/forms/requests/UpdateFormRowRequest';
 import {UpdateFormRowResponse} from '../../models/forms/responses/UpdateFormRowResponse';
+import {FormCountsDto} from '../../models/forms/responses/FormCountsDto';
 
 @Injectable()
 export class FormsService {
@@ -39,5 +40,13 @@ export class FormsService {
 
     public completeForm(formId: number): Observable<void> {
         return this._http.post<void>(`${this._api}/${formId}/complete`, formId);
+    }
+
+    public getFormCounts(): Observable<FormCountsDto> {
+        return this._http.get<FormCountsDto>(`${this._api}/counts`);
+    }
+
+    public deleteForm(formId: number): Observable<void> {
+        return this._http.delete<void>(`${this._api}/${formId}`);
     }
 }

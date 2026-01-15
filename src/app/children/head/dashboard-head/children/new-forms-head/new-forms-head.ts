@@ -1,14 +1,20 @@
 import {Component, DestroyRef, inject, OnInit} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {NavigationEnd, Router, RouterOutlet} from '@angular/router';
-import {NgIf} from '@angular/common';
 import {filter} from 'rxjs';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {BackHeader} from '../../../../components/back-header/back-header';
+import {HeaderHead} from '../../../components/header-head/header-head';
+import {Footer} from '../../../../components/footer/footer';
+import {NgIf} from '@angular/common';
 
 @Component({
     selector: 'app-forms',
     imports: [
         FormsModule,
+        BackHeader,
+        HeaderHead,
+        Footer,
         RouterOutlet,
         NgIf,
     ],
@@ -29,6 +35,10 @@ export class NewFormsHead implements OnInit {
         ).subscribe((event: NavigationEnd): void => {
             this.checkIfFormTypeActive(event.url);
         });
+    }
+
+    protected goBack(): void {
+        this._router.navigate(['/department-head/all-list']);
     }
 
     protected navigateToFormType(type: string): void {

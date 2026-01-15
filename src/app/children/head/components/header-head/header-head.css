@@ -1,5 +1,4 @@
 tui-tabs-with-more {
-    padding: 0 48px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -7,8 +6,9 @@ tui-tabs-with-more {
     box-shadow: 0 2px 4px 0 rgba(27, 31, 59, 0.04) !important;
     border-bottom: 1px solid var(--day-base-base-02) !important;
 
-    margin-bottom: 48px;
+    padding: 0 48px;
     position: relative;
+    height: 56px !important;
 }
 
 
@@ -55,6 +55,15 @@ tui-tabs-with-more > ng-container {
 .user-button-btn {
     margin: 0 !important;
     padding: 0 8px !important;
+
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 150%;
+    color: var(--day-text-icons-text-01);
+
+    background: none !important;
+
+    height: 30px;
 }
 
 @media (max-width: 1200px) {

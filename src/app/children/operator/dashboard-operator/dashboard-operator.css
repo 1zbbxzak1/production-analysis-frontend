@@ -21,6 +21,7 @@ app-header-operator {
     align-items: self-start;
 
     flex: 1;
+    max-height: 709px !important;
 
     padding: 32px;
     border: 1px solid var(--day-base-base-03);
@@ -35,10 +36,6 @@ app-header-operator {
     padding: 0 !important;
     margin: 0 !important;
     width: 100%;
-}
-
-.second-container-head {
-
 }
 
 .second-container {
@@ -66,7 +63,6 @@ tui-textfield {
 }
 
 .badge {
-    padding: 0 !important;
     margin-left: 6px;
 }
 

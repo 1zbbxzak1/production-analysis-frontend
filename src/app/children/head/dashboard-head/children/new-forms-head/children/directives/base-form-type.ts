@@ -45,7 +45,7 @@ export abstract class BaseFormType implements OnInit {
     protected abstract createForm(): void;
 
     protected goBack(): void {
-        this._router.navigate(['department-head']);
+        this._router.navigate(['department-head/forms']);
     }
 
     protected formatTime(time: string): string {
@@ -63,10 +63,6 @@ export abstract class BaseFormType implements OnInit {
             Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0)
         );
         return utcDate.toISOString();
-    }
-
-    protected navigateToHome(): void {
-        this._router.navigate(['department-head']);
     }
 
     private loadEmployees(): void {

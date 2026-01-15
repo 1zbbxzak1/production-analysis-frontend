@@ -1,7 +1,7 @@
-import {Component} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {BackHeader} from "../../../../../../components/back-header/back-header";
 import {FormControl, FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {TuiButton, TuiTextfield} from "@taiga-ui/core";
+import {TuiAlertService, TuiButton, TuiTextfield} from "@taiga-ui/core";
 import {TuiComboBoxModule, TuiTextfieldControllerModule} from "@taiga-ui/legacy";
 import {TuiDataListWrapper, TuiFilterByInputPipe, TuiInputDate, TuiStringifyContentPipe} from "@taiga-ui/kit";
 import {ProductDto} from '../../../../../../../data/models/dictionaries/responses/ProductDto';
@@ -35,7 +35,9 @@ export class FourthType extends BaseFormType {
 
     protected productsAndOperations: (ProductDto | OperationDto)[] = [];
 
-    protected readonly controlProductOrOperation = new FormControl<ProductDto | OperationDto | null>(null);
+    protected readonly controlProductOrOperation: FormControl<ProductDto | OperationDto | null> = new FormControl<ProductDto | OperationDto | null>(null);
+
+    private readonly alerts: TuiAlertService = inject(TuiAlertService);
 
     protected readonly stringifyProductOrOperation: (item: (ProductDto | OperationDto)) => string = (item: ProductDto | OperationDto): string => {
         if (this.isOperation(item)) {
@@ -101,9 +103,7 @@ export class FourthType extends BaseFormType {
             products: null,
             operationOrProduct: {
                 operationId: this.isOperation(selectedItem) ? selectedItem.id : null,
-                productId: this.isProduct(selectedItem) ? selectedItem.id : null,
-                operationName: this.isOperation(selectedItem) ? selectedItem.name : null,
-                productName: this.isProduct(selectedItem) ? selectedItem.name : null
+                productId: this.isProduct(selectedItem) ? selectedItem.id : null
             }
         };
 
@@ -111,6 +111,12 @@ export class FourthType extends BaseFormType {
             takeUntilDestroyed(this._destroyRef)
         ).subscribe({
             next: (response: FormShortDto): void => {
+                this.alerts
+                    .open('<strong>Форма "Менее 1 изделия в час" создана</strong>', {
+                        appearance: 'positive',
+                    })
+                    .subscribe();
+
                 this._router.navigate(['department-head']);
             }
         });

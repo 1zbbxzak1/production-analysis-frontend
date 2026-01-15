@@ -1,49 +1,69 @@
-<ng-container *ngIf="!isFormTypeActive">
-    <p class="tui-text_h4">
-        Выберите тип ведения производственного анализа
-    </p>
+<app-header-head/>
 
-    <div class="forms-select">
-        <div (click)="navigateToFormType('type-1')" class="form-container">
-            <img class="form-image" height="198" src="../../../../../../assets/type-1.svg" width="198">
+<div class="main-container">
+    <app-back-header (backClicked)="goBack()" *ngIf="!isFormTypeActive"/>
 
-            <p class="tui-text_h6">
-                Почасовой по времени такта
-            </p>
-        </div>
+    <div *ngIf="!isFormTypeActive" class="forms-container">
+        <p class="tui-text_h4">
+            Выберите тип ведения
+        </p>
 
-        <div (click)="navigateToFormType('type-2')" class="form-container">
-            <img class="form-image" height="198" src="../../../../../../assets/type-2.svg" width="198">
+        <div class="forms-select">
+            <div (click)="navigateToFormType('type-1')" class="form-container">
+                <div class="image-container">
+                    <img class="form-image" height="133" src="assets/type-1.svg" width="133">
+                </div>
 
-            <p class="tui-text_h6">
-                Почасовой по мощности рабочего места
-            </p>
-        </div>
+                <div class="title-container">
+                    <p class="tui-text_h6">
+                        По времени такта
+                    </p>
+                </div>
+            </div>
 
-        <div (click)="navigateToFormType('type-3')" class="form-container">
-            <img class="form-image" height="198" src="../../../../../../assets/type-3.svg" width="198">
+            <div (click)="navigateToFormType('type-2')" class="form-container">
+                <div class="image-container">
+                    <img class="form-image" height="133" src="assets/type-2.svg" width="133">
+                </div>
 
-            <p class="tui-text_h6">
-                Почасовой несколько номенклатур
-            </p>
-        </div>
+                <p class="tui-text_h6">
+                    По мощности рабочего места
+                </p>
+            </div>
 
-        <div (click)="navigateToFormType('type-4')" class="form-container">
-            <img class="form-image" height="198" src="../../../../../../assets/type-4.svg" width="198">
+            <div (click)="navigateToFormType('type-3')" class="form-container">
+                <div class="image-container">
+                    <img class="form-image" height="133" src="assets/type-3.svg" width="133">
+                </div>
 
-            <p class="tui-text_h6">
-                Почасовой менее 1 изделия в час
-            </p>
-        </div>
+                <p class="tui-text_h6">
+                    Несколько номенклатур
+                </p>
+            </div>
 
-        <div (click)="navigateToFormType('type-5')" class="form-container">
-            <img class="form-image" height="198" src="../../../../../../assets/type-5.svg" width="198">
+            <div (click)="navigateToFormType('type-4')" class="form-container">
+                <div class="image-container">
+                    <img class="form-image" height="133" src="assets/type-4.svg" width="133">
+                </div>
 
-            <p class="tui-text_h6">
-                Почасовой менее 1 изделия в смену
-            </p>
+                <p class="tui-text_h6">
+                    Менее 1 изделия в час
+                </p>
+            </div>
+
+            <div (click)="navigateToFormType('type-5')" class="form-container">
+                <div class="image-container">
+                    <img class="form-image" height="133" src="assets/type-5.svg" width="133">
+                </div>
+
+                <p class="tui-text_h6">
+                    Менее 1 изделия в смену
+                </p>
+            </div>
         </div>
     </div>
-</ng-container>
 
-<router-outlet></router-outlet>
+    <router-outlet></router-outlet>
+</div>
+
+<app-footer/>

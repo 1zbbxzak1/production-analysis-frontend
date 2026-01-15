@@ -21,29 +21,32 @@
         </div>
 
         <button
-            (tui-tab-activate.stop)="(0)"
-            [(tuiDropdownOpen)]="open"
             [tuiDropdown]="content"
             class="user-button-btn"
+            size="l"
+            tuiButton
             tuiChevron
-            tuiTab
+            tuiDropdownAlign="right"
+            tuiDropdownLimitWidth="auto"
+            tuiDropdownOpen
             type="button"
         >
             {{ userName }}
-            <ng-template #content>
-                <tui-data-list
-                    (click)="onClick()"
-                    size="s">
-                    <button
-                        (click)="logout()"
-                        tuiAppearance="flat-destructive"
-                        tuiOption
-                        type="button"
-                    >
-                        Выйти
-                    </button>
-                </tui-data-list>
-            </ng-template>
         </button>
+
+        <ng-template #content>
+            <tui-data-list
+                (click)="onClick()"
+                size="s">
+                <button
+                    (click)="logout()"
+                    tuiAppearance="flat-destructive"
+                    tuiOption
+                    type="button"
+                >
+                    Выйти
+                </button>
+            </tui-data-list>
+        </ng-template>
     </div>
 </tui-tabs-with-more>

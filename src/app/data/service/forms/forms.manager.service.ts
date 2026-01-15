@@ -9,6 +9,7 @@ import {FormDto} from '../../models/forms/responses/FormDto';
 import {FormRowDto} from '../../models/forms/responses/FormRowDto';
 import {UpdateFormRowRequest} from '../../models/forms/requests/UpdateFormRowRequest';
 import {UpdateFormRowResponse} from '../../models/forms/responses/UpdateFormRowResponse';
+import {FormCountsDto} from '../../models/forms/responses/FormCountsDto';
 
 @Injectable()
 export class FormsManagerService {
@@ -63,6 +64,24 @@ export class FormsManagerService {
 
     public completeForm(formId: number): Observable<void> {
         return this._forms.completeForm(formId).pipe(
+            catchError(err => {
+                this._error.handleError(err);
+                return NEVER;
+            }),
+        );
+    }
+
+    public getFormCounts(): Observable<FormCountsDto> {
+        return this._forms.getFormCounts().pipe(
+            catchError(err => {
+                this._error.handleError(err);
+                return NEVER;
+            }),
+        );
+    }
+
+    public deleteForm(formId: number): Observable<void> {
+        return this._forms.deleteForm(formId).pipe(
             catchError(err => {
                 this._error.handleError(err);
                 return NEVER;

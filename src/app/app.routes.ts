@@ -4,7 +4,6 @@ import {Auth} from './children/auth/auth';
 import {departmentHeadGuard} from './data/guard/department-head-guard';
 import {NewFormsHead} from './children/head/dashboard-head/children/new-forms-head/new-forms-head';
 import {SummaryReportHead} from './children/head/summary-report-head/summary-report-head';
-import {JournalFormsHead} from './children/head/dashboard-head/children/journal-forms-head/journal-forms-head';
 import {DashboardHead} from './children/head/dashboard-head/dashboard-head';
 import {FirstType} from './children/head/dashboard-head/children/new-forms-head/children/first-type/first-type';
 import {SecondType} from './children/head/dashboard-head/children/new-forms-head/children/second-type/second-type';
@@ -13,11 +12,16 @@ import {FourthType} from './children/head/dashboard-head/children/new-forms-head
 import {FifthType} from './children/head/dashboard-head/children/new-forms-head/children/fifth-type/fifth-type';
 import {DashboardOperator} from './children/operator/dashboard-operator/dashboard-operator';
 import {operatorGuard} from './data/guard/operator-guard';
-import {ProgressOperator} from './children/operator/dashboard-operator/children/progress-operator/progress-operator';
-import {CompleteOperator} from './children/operator/dashboard-operator/children/complete-operator/complete-operator';
 import {
-    FormType1Operator
-} from './children/operator/dashboard-operator/children/form-type-1-operator/form-type-1-operator';
+    ProgressFormsOperator
+} from './children/operator/dashboard-operator/children/progress-forms-operator/progress-forms-operator';
+import {
+    CompletedFormsOperator
+} from './children/operator/dashboard-operator/children/completed-forms-operator/completed-forms-operator';
+import {FormType12Operator} from './children/components/forms-table-edit-check/form-type-1-2/form-type-1-2-operator';
+import {AllFormsHead} from './children/head/dashboard-head/children/all-forms-head/all-forms-head';
+import {ProgressFormsHead} from './children/head/dashboard-head/children/progress-forms-head/progress-forms-head';
+import {CompletedFormsHead} from './children/head/dashboard-head/children/completed-forms-head/completed-forms-head';
 
 export const routes: Routes = [
     {
@@ -36,41 +40,61 @@ export const routes: Routes = [
         canActivate: [departmentHeadGuard],
         children: [
             {
-                path: 'forms',
-                component: NewFormsHead,
-                children: [
-                    {
-                        path: 'type-1',
-                        component: FirstType,
-                    },
-                    {
-                        path: 'type-2',
-                        component: SecondType,
-                    },
-                    {
-                        path: 'type-3',
-                        component: ThirdType,
-                    },
-                    {
-                        path: 'type-4',
-                        component: FourthType,
-                    },
-                    {
-                        path: 'type-5',
-                        component: FifthType,
-                    },
-                ]
+                path: 'all-list',
+                component: AllFormsHead
             },
             {
-                path: 'archive',
-                component: JournalFormsHead,
+                path: 'progress-list',
+                component: ProgressFormsHead
+            },
+            {
+                path: 'completed-list',
+                component: CompletedFormsHead
             },
             {
                 path: '',
-                redirectTo: 'forms',
+                redirectTo: 'progress-list',
                 pathMatch: 'full',
             }
         ]
+    },
+    {
+        path: 'department-head/forms',
+        component: NewFormsHead,
+        children: [
+            {
+                path: 'type-1',
+                component: FirstType,
+            },
+            {
+                path: 'type-2',
+                component: SecondType,
+            },
+            {
+                path: 'type-3',
+                component: ThirdType,
+            },
+            {
+                path: 'type-4',
+                component: FourthType,
+            },
+            {
+                path: 'type-5',
+                component: FifthType,
+            },
+        ]
+    },
+    {
+        path: 'department-head/all-list/form-view/:id',
+        component: FormType12Operator
+    },
+    {
+        path: 'department-head/progress-list/form-view/:id',
+        component: FormType12Operator
+    },
+    {
+        path: 'department-head/completed-list/form-view/:id',
+        component: FormType12Operator
     },
     {
         path: 'operator',
@@ -79,11 +103,11 @@ export const routes: Routes = [
         children: [
             {
                 path: 'progress-list',
-                component: ProgressOperator
+                component: ProgressFormsOperator
             },
             {
                 path: 'completed-list',
-                component: CompleteOperator
+                component: CompletedFormsOperator
             },
             {
                 path: '',
@@ -94,11 +118,11 @@ export const routes: Routes = [
     },
     {
         path: 'operator/progress-list/form-view/:id',
-        component: FormType1Operator
+        component: FormType12Operator
     },
     {
         path: 'operator/completed-list/form-view/:id',
-        component: FormType1Operator
+        component: FormType12Operator
     },
     {
         path: 'department-head/reports',

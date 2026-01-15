@@ -1,0 +1,11 @@
+<app-forms-table
+    (pageChange)="onPageChange($event)"
+    [currentPage]="currentPage - 1"
+    [forms]="forms"
+    [isLoading]="isLoading"
+    [totalItems]="totalItems"
+    emptyDescription="Начальник цеха пока не назначил вам формы для заполнения.
+    Как только появятся новые задания, они отобразятся здесь автоматически."
+    emptyMessage="Нет форм в работе"
+    navigateRoute="progress-list">
+</app-forms-table>

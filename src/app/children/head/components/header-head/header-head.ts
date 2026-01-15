@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
 import {TuiChevron, TuiTabs} from '@taiga-ui/kit';
 import {AuthManagerService} from '../../../../data/service/auth/auth.manager.service';
-import {TuiAppearance, TuiDataList, TuiDropdown} from '@taiga-ui/core';
+import {TuiAppearance, TuiButton, TuiDataList, TuiDropdown} from '@taiga-ui/core';
 import {FormsModule} from '@angular/forms';
 import {RouterLink, RouterLinkActive} from '@angular/router';
 import {NgForOf} from '@angular/common';
@@ -18,6 +18,7 @@ import {NgForOf} from '@angular/common';
         RouterLink,
         RouterLinkActive,
         TuiAppearance,
+        TuiButton,
     ],
     templateUrl: './header-head.html',
     styleUrl: './header-head.css',

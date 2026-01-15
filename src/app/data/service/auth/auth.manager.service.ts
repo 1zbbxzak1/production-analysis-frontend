@@ -1,9 +1,9 @@
 import {inject, Injectable} from '@angular/core';
 import {AuthService} from './auth.service';
 import {CookieService} from 'ngx-cookie-service';
-import {LoginRequest} from '../../models/auth/LoginRequest';
+import {LoginRequest} from '../../models/auth/request/LoginRequest';
 import {catchError, forkJoin, map, Observable, of, switchMap, tap, throwError} from 'rxjs';
-import {LoginResponse} from '../../models/auth/LoginResponse';
+import {LoginResponse} from '../../models/auth/response/LoginResponse';
 import {HttpErrorResponse} from '@angular/common/http';
 import {jwtDecode} from 'jwt-decode';
 import {environment} from '../../../../environments/environment';
@@ -25,9 +25,10 @@ export class AuthManagerService {
         return this._auth.login(loginReq).pipe(
             tap((loginRes: LoginResponse): void => {
                 this.setAccessToken(loginRes.token);
+                this.saveRoleFromToken();
             }),
-            switchMap(() => this.loadAndSaveUserNameAsObservable()),
-            map(() => true),
+            switchMap((): Observable<void> => this.loadAndSaveUserNameAsObservable()),
+            map((): boolean => true),
             catchError(err => this.handleLoginError(err))
         );
     }
@@ -35,9 +36,20 @@ export class AuthManagerService {
     public logout(): void {
         this.removeAccessToken();
         this.removeUserName();
+        this.removeRole();
         this.removeDepartmentId();
         this.removeDepartmentName();
         this._router.navigate(['/']);
+    }
+
+    public getUserRole(): string | null {
+        const encryptedRole: string = this._cookie.get(environment.userRoles);
+        if (!encryptedRole) {
+            return null;
+        }
+
+        const role: string = this.decrypt(encryptedRole);
+        return role || null;
     }
 
     public getUserRoles(): string[] | null {
@@ -155,6 +167,22 @@ export class AuthManagerService {
         this._cookie.delete(environment.departmentName, '/');
     }
 
+    private setRole(role: string): void {
+        const encryptedRole: string = this.encrypt(role);
+        this._cookie.set(environment.userRoles, encryptedRole, {expires: 1, path: '/'});
+    }
+
+    private removeRole(): void {
+        this._cookie.delete(environment.userRoles, '/');
+    }
+
+    private saveRoleFromToken(): void {
+        const roles: string[] | null = this.getUserRoles();
+        if (roles && roles.length > 0) {
+            this.setRole(roles[0]);
+        }
+    }
+
     private compareIds(id: any, sid: any): boolean {
         if (typeof id === 'number') {
             const sidAsNumber: number = parseInt(sid, 10);
@@ -256,12 +284,6 @@ export class AuthManagerService {
                 if (fullName) this.setUserName(fullName);
                 if (departmentId) this.setDepartmentId(departmentId);
                 if (departmentName) this.setDepartmentName(departmentName);
-
-                console.log('✅ Auth data saved:', {
-                    fullName,
-                    departmentId,
-                    departmentName
-                });
             }),
             map(() => void 0),
             catchError(() => of(void 0))

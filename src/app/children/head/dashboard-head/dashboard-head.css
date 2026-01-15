@@ -4,19 +4,77 @@
     min-height: 100vh;
 }
 
-app-header-head {
-    flex-shrink: 0;
+.main-container {
+    flex: 1;
+    min-height: 0;
+    max-width: 1344px !important;
+    width: 100% !important;
 }
 
-tui-tabs-with-more {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
+app-header-head {
+    flex-shrink: 0;
+    margin-bottom: 48px;
+}
 
+.dashboard-operator {
+    display: flex;
+    flex-direction: column;
+    align-items: self-start;
+
+    flex: 1;
+    max-height: 709px !important;
+
+    padding: 32px;
+    border: 1px solid var(--day-base-base-03);
+    border-radius: 16px;
+
+    margin-bottom: 48px;
+
+    background: var(--day-text-icons-text-01-inverse);
+}
+
+.tui-text_h4 {
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100%;
+}
+
+.first-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+}
+
+.second-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    width: 100%;
+    max-height: 44px !important;
+
+    margin-top: 32px;
+    margin-bottom: 16px;
+}
+
+tui-tabs {
     border-bottom: 1px solid var(--day-base-base-04) !important;
     box-shadow: none !important;
-    flex-shrink: 0;
+
+    max-height: 44px !important;
+}
+
+tui-textfield {
+    max-width: 300px !important;
+    width: 100%;
+}
+
+.badge {
+    padding: 0 !important;
+    margin-left: 6px;
 }
 
 .tab-link {

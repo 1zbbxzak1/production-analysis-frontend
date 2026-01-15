@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {FormControl, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {TuiComboBoxModule, TuiTextfieldControllerModule} from "@taiga-ui/legacy";
 import {ProductDto} from '../../../../../../../data/models/dictionaries/responses/ProductDto';
@@ -6,13 +6,13 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {CreateFormRequest} from '../../../../../../../data/models/forms/requests/CreateFormRequest';
 import {PaTypeDto} from '../../../../../../../data/models/forms/enums/PaTypeDto';
 import {FormShortDto} from '../../../../../../../data/models/forms/responses/FormShortDto';
-import {ProductContextDto} from '../../../../../../../data/models/forms/ProductContextDto';
 import {BaseFormType} from '../directives/base-form-type';
 import {TableItem} from './interfaces/TableItem';
 import {BackHeader} from '../../../../../../components/back-header/back-header';
 import {TuiDataListWrapper, TuiFilterByInputPipe, TuiInputDate, TuiStringifyContentPipe} from '@taiga-ui/kit';
-import {TuiButton, TuiTextfield} from '@taiga-ui/core';
+import {TuiAlertService, TuiButton, TuiTextfield} from '@taiga-ui/core';
 import {NgForOf, NgIf} from '@angular/common';
+import {ProductContextRequest} from '../../../../../../../data/models/forms/requests/ProductContextRequest';
 
 @Component({
     selector: 'app-third-type',
@@ -46,6 +46,8 @@ export class ThirdType extends BaseFormType {
         }
     ];
 
+    private readonly alerts: TuiAlertService = inject(TuiAlertService);
+
     protected readonly stringifyProduct: (product: ProductDto) => string = (product: ProductDto): string =>
         product.name || 'Неизвестно';
 
@@ -69,7 +71,7 @@ export class ThirdType extends BaseFormType {
             !this.controlDate.value) {
             return true;
         }
-        
+
         return false;
     }
 
@@ -100,12 +102,11 @@ export class ThirdType extends BaseFormType {
 
         if (!isTableValid) return;
 
-        const products: ProductContextDto[] = this.tableItems.map((item: TableItem) => ({
+        const products: ProductContextRequest[] = this.tableItems.map((item: TableItem) => ({
             productId: item.product.value!.id,
             cycleTime: item.cycleTime.value!,
             workstationCapacity: null,
-            dailyRate: item.dailyPace.value!,
-            productName: item.product.value!.name,
+            dailyRate: item.dailyPace.value!
         }));
 
         const req: CreateFormRequest = {
@@ -122,6 +123,12 @@ export class ThirdType extends BaseFormType {
             takeUntilDestroyed(this._destroyRef)
         ).subscribe({
             next: (response: FormShortDto): void => {
+                this.alerts
+                    .open('<strong>Форма "Несколько номенклатур" создана</strong>', {
+                        appearance: 'positive',
+                    })
+                    .subscribe();
+
                 this._router.navigate(['department-head']);
             }
         });

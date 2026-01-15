@@ -1,0 +1,84 @@
+<div *ngIf="!isLoading && formInfo" class="header-info">
+    <div class="first-column">
+        <div class="pa-type-container">
+            <p class="pa-type tui-text_body-s">
+                {{ getPaTypeDescription(formInfo!.paType) }}
+            </p>
+
+            <tui-badge
+                *ngIf="formInfo!.status === 0"
+                appearance="accent"
+                class="badge"
+                size="m"
+            >
+                В работе
+            </tui-badge>
+
+            <tui-badge
+                *ngIf="formInfo!.status === 1"
+                class="badge"
+                size="m"
+            >
+                Завершена
+            </tui-badge>
+        </div>
+
+        <div class="product-name">
+            <p class="tui-text_h4">
+                {{ getProductsName() }}
+            </p>
+        </div>
+    </div>
+
+    <div class="second-column">
+        <div class="card-info card-department">
+            <p class="card-title-1 tui-text_body-s">Подразделение</p>
+            <p [title]="depName" class="card-title-2 tui-text_body-m">
+                {{ depName }}
+            </p>
+        </div>
+
+        <div class="card-info card-assignee">
+            <p class="card-title-1 tui-text_body-s">Исполнитель</p>
+            <p [title]="assigneeName" class="card-title-2 tui-text_body-m">
+                {{ assigneeName }}
+            </p>
+        </div>
+
+        <div class="card-info">
+            <p [title]="'Дата / смена'" class="card-title-1 tui-text_body-s">
+                Дата / смена
+            </p>
+            <p [title]="getDateShiftTitle()" class="card-title-2 tui-text_body-m">
+                {{ getDateShiftTitle() }}
+            </p>
+        </div>
+
+        <div *ngIf="shouldShowCycleTime()" class="card-info">
+            <p [title]="'Время такта, сек'" class="card-title-1 tui-text_body-s">
+                Время такта, сек
+            </p>
+            <p [title]="getCycleTime()" class="card-title-2 tui-text_body-m">
+                {{ getCycleTime() }}
+            </p>
+        </div>
+
+        <div *ngIf="shouldShowWorkstationCapacity()" class="card-info">
+            <p [title]="'Мощность, шт/час'" class="card-title-1 tui-text_body-s">
+                Мощность, шт/час
+            </p>
+            <p [title]="getWorkstationCapacity()" class="card-title-2 tui-text_body-m">
+                {{ getWorkstationCapacity() }}
+            </p>
+        </div>
+
+        <div class="card-info">
+            <p [title]="'Суточный темп, шт'" class="card-title-1 tui-text_body-s">
+                Суточный темп, шт
+            </p>
+            <p [title]="getDailyRate()" class="card-title-2 tui-text_body-m">
+                {{ getDailyRate() }}
+            </p>
+        </div>
+    </div>
+</div>

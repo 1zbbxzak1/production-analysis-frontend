@@ -1,0 +1,13 @@
+<app-forms-table
+    (pageChange)="onPageChange($event)"
+    [currentPage]="currentPage - 1"
+    [forms]="forms"
+    [isHead]="true"
+    [isLoading]="isLoading"
+    [totalItems]="totalItems"
+    emptyDescription="Вы пока не назначили формы для заполнения.
+    Как только появятся новые формы, они отобразятся здесь автоматически."
+    emptyMessage="Нет форм в работе"
+    navigateRoute="completed-list"
+    url="department-head">
+</app-forms-table>

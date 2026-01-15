@@ -2,9 +2,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background: var(--day-base-background);
-    z-index: 1000;
+    height: 100%;
 }
 
 .spinner {

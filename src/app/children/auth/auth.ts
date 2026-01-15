@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, injec
 import {NgIf} from '@angular/common';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import {LoginRequest} from '../../data/models/auth/LoginRequest';
+import {LoginRequest} from '../../data/models/auth/request/LoginRequest';
 import {Router} from '@angular/router';
 import {AuthManagerService} from '../../data/service/auth/auth.manager.service';
 import {TuiButton, TuiIcon, TuiTextfield, TuiTextfieldComponent, TuiTextfieldDirective} from '@taiga-ui/core';
@@ -68,9 +68,9 @@ export class Auth implements OnInit {
                     if (roles.includes('Admin')) {
                         this._router.navigate(['admin']);
                     } else if (roles.includes('DepartmentHead')) {
-                        this._router.navigate(['department-head/forms']);
+                        this._router.navigate(['department-head/all-list']);
                     } else if (roles.includes('Operator')) {
-                        this._router.navigate(['operator']);
+                        this._router.navigate(['operator/progress-list']);
                     } else {
                         this._router.navigate(['/']);
                     }
