@@ -28,6 +28,7 @@ import {
     TuiOption
 } from '@taiga-ui/core';
 import {FormsManagerService} from '../../../data/service/forms/forms.manager.service';
+import {PaTypeDto} from '../../../data/models/forms/enums/PaTypeDto';
 
 @Component({
     selector: 'app-forms-table',
@@ -57,7 +58,7 @@ export class FormsTable implements OnInit, OnChanges {
     @Input()
     public isLoading: boolean = false;
     @Input()
-    public navigateRoute: string = ''; // 'progress-list' или 'completed-list'
+    public navigateRoute: string = '';
     @Input()
     public emptyMessage: string = 'Форм пока нет';
     @Input()
@@ -116,7 +117,17 @@ export class FormsTable implements OnInit, OnChanges {
     }
 
     protected goToFormById(formId: number): void {
-        this._router.navigate([`${this.url}/${this.navigateRoute}/form-view`, formId]);
+        const form: FormShortDto | undefined = this.forms.find((f: FormShortDto): boolean => f.id === formId);
+
+        if (!form) {
+            return; // Форма не найдена
+        }
+
+        if (form.paType === PaTypeDto.MultipleProductsWithCycleTime) {
+            this._router.navigate([`${this.url}/${this.navigateRoute}/form-view-3`, formId]);
+        } else {
+            this._router.navigate([`${this.url}/${this.navigateRoute}/form-view`, formId]);
+        }
     }
 
     protected onClick(): void {

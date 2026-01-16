@@ -17,6 +17,7 @@ app-header-form {
     flex-direction: column;
 
     background: var(--day-base-background);
+    padding-bottom: 32px;
 }
 
 .main-container {
@@ -46,8 +47,9 @@ app-header-form {
     contain: layout style;
 }
 
-.type-1-header {
+.type-header {
     display: grid;
+    /* вместо 110px 110px должно быть 96px 96px, но на бэке приходит Отклонение, а не Отклонен */
     grid-template-columns: 192px 96px 96px 96px 96px 110px 110px 96px 192px 96px minmax(572px, 1fr);
 
     border-bottom: 1px solid var(--day-base-base-04);
@@ -56,7 +58,7 @@ app-header-form {
     margin: 0;
 }
 
-.type-1-header-column-en {
+.type-header-column-en {
     border-right: 1px solid var(--day-base-base-04);
     padding: 0 12px;
 
@@ -68,18 +70,20 @@ app-header-form {
     font-size: 14px;
     line-height: 143%;
     color: var(--day-text-icons-text-02);
+
+    height: 44px;
 }
 
-.type-1-header-column-en:last-child {
+.type-header-column-en:last-child {
     border-right: none !important;
 }
 
-.type-1-rows-container {
+.type-rows-container {
     flex: 1;
     min-width: 0;
 }
 
-.type-1-rows {
+.type-rows {
     display: grid;
     /* вместо 110px 110px должно быть 96px 96px, но на бэке приходит Отклонение, а не Отклонен */
     grid-template-columns: 192px 96px 96px 96px 96px 110px 110px 96px 192px 96px minmax(572px, 1fr);
@@ -95,12 +99,12 @@ app-header-form {
     min-height: 44px !important;
 }
 
-.type-1-rows-break {
+.type-rows-break {
     min-height: 32px !important;
     background: var(--day-base-base-02);
 }
 
-.type-1-row-cell {
+.type-row-cell {
     border-right: 1px solid var(--day-base-base-04);
     padding: 0 12px;
 
@@ -119,7 +123,7 @@ app-header-form {
     white-space: nowrap;
 }
 
-.type-1-row-cell:first-child {
+.type-row-cell:first-child {
     font-weight: 700;
     font-size: 14px;
     line-height: 143%;
@@ -127,11 +131,11 @@ app-header-form {
     color: var(--day-text-icons-text-02);
 }
 
-.type-1-row-cell:last-child {
+.type-row-cell:last-child {
     border-right: none;
 }
 
-.type-1-rows-final {
+.type-rows-final {
     border-bottom: 1px solid var(--day-base-base-04);
 
     display: grid;
@@ -145,7 +149,7 @@ app-header-form {
     height: 100%;
 }
 
-.type-1-rows-final .type-1-row-cell {
+.type-rows-final .type-row-cell {
     font-weight: 700;
     font-size: 16px;
     line-height: 125%;
@@ -155,16 +159,16 @@ app-header-form {
     padding: 12px;
 }
 
-.type-1-rows-final .type-1-row-cell:last-child {
+.type-rows-final .type-row-cell:last-child {
     border-right: 1px solid var(--day-base-base-04);
 }
 
-.type-1-row-input {
+.type-row-input {
     padding: 0 !important;
     justify-content: center;
 }
 
-.type-1-row-input:hover {
+.type-row-input:hover {
     background: var(--day-base-base-02);
 }
 
@@ -227,7 +231,6 @@ app-header-form {
 
 .final-btn {
     margin-top: 24px;
-    margin-bottom: 32px;
 }
 
 app-footer {

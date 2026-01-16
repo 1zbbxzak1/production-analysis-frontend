@@ -1,18 +1,18 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {FormType12Operator} from './form-type-1-2-operator';
+import {FormType12} from './form-type-1-2';
 
 describe('FormEditOperator', () => {
-    let component: FormType12Operator;
-    let fixture: ComponentFixture<FormType12Operator>;
+    let component: FormType12;
+    let fixture: ComponentFixture<FormType12>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [FormType12Operator]
+            imports: [FormType12]
         })
             .compileComponents();
 
-        fixture = TestBed.createComponent(FormType12Operator);
+        fixture = TestBed.createComponent(FormType12);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

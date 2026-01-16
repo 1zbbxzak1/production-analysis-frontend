@@ -18,10 +18,11 @@ import {
 import {
     CompletedFormsOperator
 } from './children/operator/dashboard-operator/children/completed-forms-operator/completed-forms-operator';
-import {FormType12Operator} from './children/components/forms-table-edit-check/form-type-1-2/form-type-1-2-operator';
+import {FormType12} from './children/components/forms-table-edit-check/form-type-1-2/form-type-1-2';
 import {AllFormsHead} from './children/head/dashboard-head/children/all-forms-head/all-forms-head';
 import {ProgressFormsHead} from './children/head/dashboard-head/children/progress-forms-head/progress-forms-head';
 import {CompletedFormsHead} from './children/head/dashboard-head/children/completed-forms-head/completed-forms-head';
+import {FormType3} from './children/components/forms-table-edit-check/form-type-3/form-type-3';
 
 export const routes: Routes = [
     {
@@ -86,15 +87,27 @@ export const routes: Routes = [
     },
     {
         path: 'department-head/all-list/form-view/:id',
-        component: FormType12Operator
+        component: FormType12
     },
     {
         path: 'department-head/progress-list/form-view/:id',
-        component: FormType12Operator
+        component: FormType12
     },
     {
         path: 'department-head/completed-list/form-view/:id',
-        component: FormType12Operator
+        component: FormType12
+    },
+    {
+        path: 'department-head/all-list/form-view-3/:id',
+        component: FormType3
+    },
+    {
+        path: 'department-head/progress-list/form-view-3/:id',
+        component: FormType3
+    },
+    {
+        path: 'department-head/completed-list/form-view-3/:id',
+        component: FormType3
     },
     {
         path: 'operator',
@@ -118,11 +131,19 @@ export const routes: Routes = [
     },
     {
         path: 'operator/progress-list/form-view/:id',
-        component: FormType12Operator
+        component: FormType12
     },
     {
         path: 'operator/completed-list/form-view/:id',
-        component: FormType12Operator
+        component: FormType12
+    },
+    {
+        path: 'operator/progress-list/form-view-3/:id',
+        component: FormType3
+    },
+    {
+        path: 'operator/completed-list/form-view-3/:id',
+        component: FormType3
     },
     {
         path: 'department-head/reports',

@@ -1,55 +1,20 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, OnInit} from '@angular/core';
-import {Footer} from '../../footer/footer';
-import {HeaderOperator} from '../../../operator/components/header-operator/header-operator';
-import {BackHeader} from '../../back-header/back-header';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormsManagerService} from '../../../../data/service/forms/forms.manager.service';
+import {ChangeDetectorRef, DestroyRef, Directive, inject, OnInit} from '@angular/core';
 import {FormDto} from '../../../../data/models/forms/responses/FormDto';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import {Loader} from '../../loader/loader';
-import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
-import {TuiDataListWrapper, TuiFilterByInputPipe, TuiStringifyContentPipe} from '@taiga-ui/kit';
 import {FormRowDto} from '../../../../data/models/forms/responses/FormRowDto';
-import {debounceTime, distinctUntilChanged, forkJoin, Observable, Subject, switchMap, tap} from 'rxjs';
-import {DictManagerService} from '../../../../data/service/dictionaries/dict.manager.service';
 import {EmployeeDto} from '../../../../data/models/dictionaries/responses/EmployeeDto';
-import {TuiComboBoxModule, TuiInputModule, TuiTextfieldControllerModule} from '@taiga-ui/legacy';
-import {FormControl, ReactiveFormsModule} from '@angular/forms';
-import {TuiAlertService, TuiButton, TuiTextfieldOptionsDirective} from '@taiga-ui/core';
 import {DowntimeReasonGroupDto} from '../../../../data/models/dictionaries/responses/DowntimeReasonGroupDto';
-import {HeaderForm} from '../components/header-form/header-form';
-import {UpdateFormRowResponse} from '../../../../data/models/forms/responses/UpdateFormRowResponse';
-import {CompletedFormPopUp} from '../components/completed-form-pop-up/completed-form-pop-up';
+import {FormControl} from '@angular/forms';
+import {debounceTime, distinctUntilChanged, forkJoin, Observable, Subject, switchMap, tap} from 'rxjs';
+import {ActivatedRoute, Router} from '@angular/router';
 import {AuthManagerService} from '../../../../data/service/auth/auth.manager.service';
+import {DictManagerService} from '../../../../data/service/dictionaries/dict.manager.service';
+import {FormsManagerService} from '../../../../data/service/forms/forms.manager.service';
+import {TuiAlertService} from '@taiga-ui/core';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {UpdateFormRowResponse} from '../../../../data/models/forms/responses/UpdateFormRowResponse';
 
-@Component({
-    selector: 'app-form-type-operator',
-    imports: [
-        Footer,
-        HeaderOperator,
-        BackHeader,
-        Loader,
-        NgIf,
-        NgForOf,
-        NgStyle,
-        TuiInputModule,
-        TuiDataListWrapper,
-        ReactiveFormsModule,
-        TuiComboBoxModule,
-        TuiStringifyContentPipe,
-        TuiFilterByInputPipe,
-        TuiTextfieldControllerModule,
-        TuiTextfieldOptionsDirective,
-        HeaderForm,
-        NgClass,
-        TuiButton,
-        CompletedFormPopUp
-    ],
-    templateUrl: './form-type-1-2-operator.html',
-    styleUrl: './form-type-1-2-operator.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
-})
-export class FormType12Operator implements OnInit {
+@Directive()
+export abstract class BaseFormTypeTables implements OnInit {
 
     public isLoading: boolean = true;
     protected modalStates: { complete: boolean } = {
@@ -66,14 +31,8 @@ export class FormType12Operator implements OnInit {
 
     protected employeeControls: Map<number, FormControl<EmployeeDto | null>> = new Map();
     protected downtimeReasonGroupControls: Map<number, FormControl<DowntimeReasonGroupDto | null>> = new Map(); // key: row.order
-
-    private columnAlignments: ('left' | 'center' | 'right')[] = [
-        'center', 'right', 'right', 'right', 'right', 'right', 'right', 'right', 'right', 'right', 'left'
-    ];
-
     private changedRowValues: Map<number, Record<number, any>> = new Map();
     private rowChangeSubject: Subject<{ rowOrder: number, changes: Record<number, any> }> = new Subject();
-
     private readonly _destroyRef: DestroyRef = inject(DestroyRef);
     private readonly _cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
     private readonly _router: Router = inject(Router);
@@ -125,6 +84,19 @@ export class FormType12Operator implements OnInit {
         this.loadFormData();
     }
 
+    protected goBack(): void {
+        if (this.userRoles === 'DepartmentHead') {
+            this._router.navigate(['department-head/all-list']);
+        }
+        this._router.navigate(['operator/progress-list']);
+    }
+
+    protected readonly stringify: (item: EmployeeDto) => string = (item: EmployeeDto): string =>
+        this.formatFullName(item.fullName) || 'Неизвестно';
+
+    protected readonly stringifyReason: (item: DowntimeReasonGroupDto) => string = (item: DowntimeReasonGroupDto): string =>
+        item.name || 'Неизвестно';
+
     protected getFieldKeyByIndex(columnIndex: number): string | null {
         if (!this.formInfo?.template?.tableColumns || columnIndex < 0 || columnIndex >= this.formInfo.template.tableColumns.length) {
             return null;
@@ -132,20 +104,34 @@ export class FormType12Operator implements OnInit {
         return this.formInfo.template.tableColumns[columnIndex].id.toString();
     }
 
-    protected setRowCellValue(row: FormRowDto, columnIndex: number, value: string): void {
-        const fieldKey = this.getFieldKeyByIndex(columnIndex);
-        if (!fieldKey) return;
-
-        if (!row.values) row.values = {};
-
-        if (!row.values[fieldKey]) row.values[fieldKey] = {value: null};
-        row.values[fieldKey].value = value;
-
-        if (this.hasInputValue(row, columnIndex)) {
-            this.trackRowChange(row.order, fieldKey, value);
+    protected isBreakRow(values: Record<string, any> | null): boolean {
+        const raw: string = this.getRowCellValue(values, 0); // индекс 0 = первый столбец "Время работы, час"
+        if (!raw) {
+            return false;
         }
 
-        this._cdr.detectChanges();
+        const formatted: string = this.formatTimeCell(values, 0);
+
+        return formatted !== raw;
+    }
+
+    protected hasInputValue(row: FormRowDto, columnIndex: number): boolean {
+        const fieldKey: string | null = this.getFieldKeyByIndex(columnIndex);
+        if (!fieldKey) return false;
+
+        const value: any = row.values?.[fieldKey]?.value;
+
+        return value !== undefined && value !== null && value !== '';
+    }
+
+    protected getJustifyContent(columnAlignments: ('left' | 'center' | 'right')[], columnIndex: number): string {
+        const align: "left" | "center" | "right" = columnAlignments[columnIndex] || 'left';
+        return align === 'left' ? 'flex-start' : align === 'right' ? 'flex-end' : 'center';
+    }
+
+    protected getAlignText(columnAlignments: ('left' | 'center' | 'right')[], columnIndex: number): string {
+        const align: "left" | "center" | "right" = columnAlignments[columnIndex] || 'left';
+        return align;
     }
 
     protected getRowCellValue(values: Record<string, any> | null, columnIndex: number): string {
@@ -180,23 +166,20 @@ export class FormType12Operator implements OnInit {
         return value !== undefined && value !== null ? String(value) : '';
     }
 
-    protected hasInputValue(row: FormRowDto, columnIndex: number): boolean {
-        const fieldKey: string | null = this.getFieldKeyByIndex(columnIndex);
-        if (!fieldKey) return false;
+    protected setRowCellValue(row: FormRowDto, columnIndex: number, value: string): void {
+        const fieldKey = this.getFieldKeyByIndex(columnIndex);
+        if (!fieldKey) return;
 
-        const value: any = row.values?.[fieldKey]?.value;
+        if (!row.values) row.values = {};
 
-        return value !== undefined && value !== null && value !== '';
-    }
+        if (!row.values[fieldKey]) row.values[fieldKey] = {value: null};
+        row.values[fieldKey].value = value;
 
-    protected getJustifyContent(columnIndex: number): string {
-        const align: "left" | "center" | "right" = this.columnAlignments[columnIndex] || 'left';
-        return align === 'left' ? 'flex-start' : align === 'right' ? 'flex-end' : 'center';
-    }
+        if (this.hasInputValue(row, columnIndex)) {
+            this.trackRowChange(row.order, fieldKey, value);
+        }
 
-    protected getAlignText(columnIndex: number): string {
-        const align: "left" | "center" | "right" = this.columnAlignments[columnIndex] || 'left';
-        return align;
+        this._cdr.detectChanges();
     }
 
     protected getEmployeeControl(row: FormRowDto): FormControl<EmployeeDto | null> {
@@ -250,43 +233,6 @@ export class FormType12Operator implements OnInit {
         return this.downtimeReasonGroupControls.get(rowOrder)!;
     }
 
-    protected readonly stringify: (item: EmployeeDto) => string = (item: EmployeeDto): string =>
-        this.formatFullName(item.fullName) || 'Неизвестно';
-
-    protected readonly stringifyReason: (item: DowntimeReasonGroupDto) => string = (item: DowntimeReasonGroupDto): string =>
-        item.name || 'Неизвестно';
-
-    protected formatTimeCell(values: Record<string, any> | null, columnIndex: number): string {
-        const raw: string = this.getRowCellValue(values, columnIndex);
-
-        if (!raw) {
-            return '';
-        }
-
-        const match: RegExpMatchArray | null = raw.match(/^\s*\d{2}:\d{2}-\d{2}:\d{2}\s+(.+)$/);
-
-        if (match && match[1]) {
-            return match[1].trim();
-        }
-
-        return raw;
-    }
-
-    protected isBreakRow(values: Record<string, any> | null): boolean {
-        const raw: string = this.getRowCellValue(values, 0); // индекс 0 = первый столбец "Время работы, час"
-        if (!raw) {
-            return false;
-        }
-
-        const formatted: string = this.formatTimeCell(values, 0);
-
-        return formatted !== raw;
-    }
-
-    protected goBack(): void {
-        this._router.navigate(['operator/progress-list']);
-    }
-
     protected toggleModal(type: keyof typeof this.modalStates, state: boolean): void {
         this.modalStates[type] = state;
 
@@ -311,6 +257,48 @@ export class FormType12Operator implements OnInit {
 
             this._cdr.detectChanges();
         });
+    }
+
+    protected formatTimeCell(values: Record<string, any> | null, columnIndex: number): string {
+        const raw: string = this.getRowCellValue(values, columnIndex);
+
+        if (!raw) {
+            return '';
+        }
+
+        const match: RegExpMatchArray | null = raw.match(/^\s*\d{2}:\d{2}-\d{2}:\d{2}\s+(.+)$/);
+
+        if (match && match[1]) {
+            return match[1].trim();
+        }
+
+        return raw;
+    }
+
+    private formatFullName(fullName: string | null): string {
+        if (!fullName) {
+            return '';
+        }
+
+        const parts: string[] = fullName.trim().split(/\s+/);
+
+        if (parts.length === 0) {
+            return '';
+        }
+
+        if (parts.length === 1) {
+            return parts[0];
+        }
+
+        if (parts.length === 2) {
+            return `${parts[0]} ${parts[1].charAt(0)}.`;
+        }
+
+        if (parts.length >= 3) {
+            return `${parts[0]} ${parts[1].charAt(0)}.${parts[2].charAt(0)}.`;
+        }
+
+        return fullName;
     }
 
     private initializeAutoSave(): void {
@@ -455,34 +443,8 @@ export class FormType12Operator implements OnInit {
         });
     }
 
-    private formatFullName(fullName: string | null): string {
-        if (!fullName) {
-            return '';
-        }
-
-        const parts: string[] = fullName.trim().split(/\s+/);
-
-        if (parts.length === 0) {
-            return '';
-        }
-
-        if (parts.length === 1) {
-            return parts[0];
-        }
-
-        if (parts.length === 2) {
-            return `${parts[0]} ${parts[1].charAt(0)}.`;
-        }
-
-        if (parts.length >= 3) {
-            return `${parts[0]} ${parts[1].charAt(0)}.${parts[2].charAt(0)}.`;
-        }
-
-        return fullName;
-    }
-
     private hideLoader(): void {
-        setTimeout(() => {
+        setTimeout((): void => {
             this.isLoading = false;
             this._cdr.detectChanges();
         }, 500);
