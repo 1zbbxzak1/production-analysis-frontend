@@ -66,7 +66,7 @@ export class FourthType extends BaseFormType {
         return false;
     }
 
-    protected override loadAdditionalData() {
+    protected override loadAdditionalData(): void {
         forkJoin({
             products: this._dictManager.getProducts(),
             operations: this._dictManager.getOperations()

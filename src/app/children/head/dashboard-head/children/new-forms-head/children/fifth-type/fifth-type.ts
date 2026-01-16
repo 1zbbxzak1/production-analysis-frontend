@@ -33,7 +33,7 @@ export class FifthType extends BaseFormType {
 
     protected products: ProductDto[] = [];
 
-    protected readonly controlProducts = new FormControl<ProductDto | null>(null);
+    protected readonly controlProducts: FormControl<ProductDto | null> = new FormControl<ProductDto | null>(null);
 
     private readonly alerts: TuiAlertService = inject(TuiAlertService);
 
@@ -58,7 +58,7 @@ export class FifthType extends BaseFormType {
         });
     }
 
-    protected readonly stringifyProduct = (product: ProductDto): string =>
+    protected readonly stringifyProduct: (product: ProductDto) => string = (product: ProductDto): string =>
         product.name || 'Неизвестно';
 
     protected createForm(): void {

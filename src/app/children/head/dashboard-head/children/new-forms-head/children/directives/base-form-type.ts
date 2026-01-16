@@ -31,10 +31,10 @@ export abstract class BaseFormType implements OnInit {
         this.loadAdditionalData();
     }
 
-    protected readonly stringify = (item: EmployeeDto): string =>
+    protected readonly stringify: (item: EmployeeDto) => string = (item: EmployeeDto): string =>
         item.fullName || 'Неизвестно';
 
-    protected readonly stringifyShift = (shift: ShiftDto): string =>
+    protected readonly stringifyShift: (shift: ShiftDto) => string = (shift: ShiftDto): string =>
         `№${shift.name}: ${this.formatTime(shift.startTime)}` || 'Неизвестно';
 
     // Переопределить в подклассах для загрузки специфических данных
