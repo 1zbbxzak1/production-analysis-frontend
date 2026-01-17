@@ -24,8 +24,7 @@ app-header-form {
     display: flex;
     flex-direction: column;
 
-    max-width: 1824px !important;
-    width: 100% !important;
+    min-width: 100% !important;
 }
 
 .form-table-wrapper {
@@ -42,6 +41,8 @@ app-header-form {
     background: var(--day-text-icons-text-01-inverse);
 
     width: fit-content;
+    min-width: 100%;
+    box-sizing: border-box;
 
     will-change: auto;
     contain: layout style;
@@ -49,8 +50,7 @@ app-header-form {
 
 .type-header {
     display: grid;
-    /* вместо 110px 110px должно быть 96px 96px, но на бэке приходит Отклонение, а не Отклонен */
-    grid-template-columns: 192px 96px 96px 96px 96px 110px 110px 96px 192px 96px minmax(572px, 1fr);
+    grid-template-columns: 192px 96px 96px 96px 96px 96px 96px 96px 192px 96px minmax(350px, 1fr);
 
     border-bottom: 1px solid var(--day-base-base-04);
 
@@ -85,8 +85,7 @@ app-header-form {
 
 .type-rows {
     display: grid;
-    /* вместо 110px 110px должно быть 96px 96px, но на бэке приходит Отклонение, а не Отклонен */
-    grid-template-columns: 192px 96px 96px 96px 96px 110px 110px 96px 192px 96px minmax(572px, 1fr);
+    grid-template-columns: 192px 96px 96px 96px 96px 96px 96px 96px 192px 96px minmax(350px, 1fr);
 
     border-bottom: 1px solid var(--day-base-base-04);
 
@@ -139,8 +138,7 @@ app-header-form {
     border-bottom: 1px solid var(--day-base-base-04);
 
     display: grid;
-    /* должно быть repeat(4, 192px) */
-    grid-template-columns: 192px 192px 192px 220px;
+    grid-template-columns: repeat(4, 192px);
 
     padding: 0;
     margin: 0;
@@ -194,7 +192,7 @@ app-header-form {
     appearance: none;
 }
 
-.reason {
+.cell-input.reason {
     text-align: left;
 }
 

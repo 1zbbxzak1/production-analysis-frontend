@@ -175,6 +175,7 @@
                                             (change)="setRowCellValue(row, colIndex, $any($event.target).value)"
                                             [class.has-value]="hasInputValue(row, colIndex)"
                                             [disabled]="isCompletedForm"
+                                            [title]="getRowCellValue(row.values, colIndex)"
                                             [value]="getRowCellValue(row.values, colIndex)"
                                             class="cell-input reason"
                                         />

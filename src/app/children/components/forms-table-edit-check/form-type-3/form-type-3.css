@@ -24,8 +24,7 @@ app-header-form {
     display: flex;
     flex-direction: column;
 
-    max-width: 1824px !important;
-    width: 100% !important;
+    min-width: 100% !important;
 }
 
 .form-table-wrapper {
@@ -42,6 +41,8 @@ app-header-form {
     background: var(--day-text-icons-text-01-inverse);
 
     width: fit-content;
+    min-width: 100%;
+    box-sizing: border-box;
 
     will-change: auto;
     contain: layout style;
@@ -49,7 +50,7 @@ app-header-form {
 
 .type-header {
     display: grid;
-    grid-template-columns: 240.8px 96px 96px 96px 96px 110px 110px 96px 192px 96px minmax(624px, 1fr);
+    grid-template-columns: 240.8px 96px 96px 96px 96px 96px 96px 96px 192px 96px minmax(350px, 1fr);
 
     border-bottom: 1px solid var(--day-base-base-04);
 
@@ -156,7 +157,7 @@ app-header-form {
 
 .type-rows-final {
     display: grid;
-    grid-template-columns: 48.8px 192px 192px 192px 220px;
+    grid-template-columns: 48.8px 192px 192px 192px 192px;
 
     padding: 0;
     margin: 0;
@@ -210,7 +211,7 @@ app-header-form {
     appearance: none;
 }
 
-.reason {
+.cell-input.reason {
     text-align: left;
 }
 
@@ -258,13 +259,13 @@ app-footer {
     flex: 1;
     min-width: 0;
     display: grid;
-    grid-template-columns: 48px 192px 96px 96px 96px 96px 110px 110px 96px 192px 96px minmax(572px, 1fr);
+    grid-template-columns: 48px 192px 96px 96px 96px 96px 96px 96px 96px 192px 96px minmax(350px, 1fr);
 }
 
 .type-rows {
     grid-column: 2 / -1;
     display: grid;
-    grid-template-columns: 192px 96px 96px 96px 96px 110px 110px 96px 192px 96px minmax(572px, 1fr);
+    grid-template-columns: 192px 96px 96px 96px 96px 96px 96px 96px 192px 96px minmax(350px, 1fr);
 
     border-bottom: 1px solid var(--day-base-base-04);
     border-left: 1px solid var(--day-base-base-04);
