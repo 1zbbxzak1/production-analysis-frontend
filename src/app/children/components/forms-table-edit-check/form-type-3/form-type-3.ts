@@ -121,7 +121,6 @@ export class FormType3 extends BaseFormTypeTables implements OnInit {
 
     /**
      * Вычисляет rowspan для объединения ячейки продукта
-     * ОСТАНАВЛИВАЕТСЯ на break-строках БЕЗ productId (и НЕ считает их)
      */
     protected getProductRowspan(rowIndex: number): number {
         if (!this.formRows || rowIndex < 0 || rowIndex >= this.formRows.length) {
@@ -135,49 +134,22 @@ export class FormType3 extends BaseFormTypeTables implements OnInit {
             return 1;
         }
 
-        let count: number = 1;
+        let count: number = 0;
 
-        for (let i = rowIndex + 1; i < this.formRows.length; i++) {
+        for (let i = rowIndex; i < this.formRows.length; i++) {
             const row: FormRowDto = this.formRows[i];
 
-            // Если это break-строка БЕЗ productId - ПРЕРЫВАЕМ (и не считаем в rowspan)
+            // break-строка БЕЗ productId
             if (this.isBreakRow(row.values) && !row.productId) {
                 break;
             }
 
-            // Если это break-строка С productId - проверяем, есть ли после неё ещё строки с нашим productId
-            if (this.isBreakRow(row.values)) {
-                let hasMoreWithSameProduct: boolean = false;
-
-                for (let j = i + 1; j < this.formRows.length; j++) {
-                    // Пропускаем break-строки БЕЗ productId
-                    if (this.isBreakRow(this.formRows[j].values) && !this.formRows[j].productId) {
-                        break;
-                    }
-                    // Пропускаем остальные break-строки
-                    if (this.isBreakRow(this.formRows[j].values)) {
-                        continue;
-                    }
-                    hasMoreWithSameProduct = this.formRows[j].productId === productId;
-                    break;
-                }
-
-                if (hasMoreWithSameProduct) {
-                    count++;
-                    continue;
-                } else {
-                    break;
-                }
+            // обычная строка с другим productId
+            if (!this.isBreakRow(row.values) && row.productId !== productId) {
+                break;
             }
 
-            // Если это строка с тем же productId
-            if (row.productId === productId) {
-                count++;
-                continue;
-            }
-
-            // Если это строка с другим productId (или null) - прерываем
-            break;
+            count++;
         }
 
         return count;
@@ -185,7 +157,6 @@ export class FormType3 extends BaseFormTypeTables implements OnInit {
 
     /**
      * Вычисляет высоту для ячейки продукта
-     * ОСТАНАВЛИВАЕТСЯ на break-строках БЕЗ productId (и НЕ считает их)
      */
     protected getProductLabelHeight(rowIndex: number): string {
         if (!this.formRows || rowIndex < 0 || rowIndex >= this.formRows.length) {
@@ -199,29 +170,22 @@ export class FormType3 extends BaseFormTypeTables implements OnInit {
             return '44px';
         }
 
-        const normalRowHeight = 44;
-        const breakRowHeight = 32;
-
+        const normalRowHeight = 44.8;
+        const breakRowHeight = 32.8;
         let totalHeight: number = 0;
 
         for (let i = rowIndex; i < this.formRows.length; i++) {
             const row: FormRowDto = this.formRows[i];
 
-            // Если это break-строка БЕЗ productId - ПРЕРЫВАЕМ (и не считаем высоту)
             if (this.isBreakRow(row.values) && !row.productId) {
                 break;
             }
 
-            if (this.isBreakRow(row.values)) {
-                totalHeight += breakRowHeight;
-                continue;
-            }
-
-            if (row.productId !== productId) {
+            if (!this.isBreakRow(row.values) && row.productId !== productId) {
                 break;
             }
 
-            totalHeight += normalRowHeight;
+            totalHeight += this.isBreakRow(row.values) ? breakRowHeight : normalRowHeight;
         }
 
         return `${totalHeight}px`;

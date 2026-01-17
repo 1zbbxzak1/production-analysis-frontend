@@ -49,7 +49,7 @@ app-header-form {
 
 .type-header {
     display: grid;
-    grid-template-columns: 240px 96px 96px 96px 96px 110px 110px 96px 192px 96px minmax(624px, 1fr);
+    grid-template-columns: 240.8px 96px 96px 96px 96px 110px 110px 96px 192px 96px minmax(624px, 1fr);
 
     border-bottom: 1px solid var(--day-base-base-04);
 
@@ -118,7 +118,7 @@ app-header-form {
 }
 
 .product-label-cell {
-    border-bottom: 1px solid var(--day-base-base-04);
+    border-top: 1px solid var(--day-base-base-04);
     padding: 0 8px;
 
     display: flex;
@@ -143,12 +143,7 @@ app-header-form {
     transform: rotate(180deg);
 }
 
-.product-label-cell:first-child {
-    border-bottom: none;
-}
-
 .product-label-empty {
-    border-top: 1px solid var(--day-base-base-04);
     border-bottom: 1px solid var(--day-base-base-04);
     background: var(--day-base-base-02);
     min-height: 32px;
@@ -156,12 +151,12 @@ app-header-form {
 }
 
 .type-rows-break .product-label-empty {
-    min-height: 32px;
+    min-height: 32px !important;
 }
 
 .type-rows-final {
     display: grid;
-    grid-template-columns: 48px 192px 192px 192px 220px;
+    grid-template-columns: 48.8px 192px 192px 192px 220px;
 
     padding: 0;
     margin: 0;
@@ -182,10 +177,6 @@ app-header-form {
 
 .type-rows-final .type-row-cell:last-child {
     border-right: 1px solid var(--day-base-base-04);
-}
-
-.type-row-empty {
-    border-top: 1px solid var(--day-base-base-04);
 }
 
 .type-row-input {
@@ -284,5 +275,5 @@ app-footer {
     padding: 0;
     margin: 0;
 
-    min-height: 44px !important;
+    min-height: 44px;
 }
