@@ -6,7 +6,10 @@
 export const environment = {
     api: 'https://api.example.com',
     tokenName: 'access_token',
+    encryptionKey: 'dev-secret-key-min-32-characters-long-1234',
     userName: 'full_name_user',
-    encryptionKey: 'prod-secret-key-min-32-characters-long-1234',
+    userRoles: 'user_roles',
+    departmentId: 'department_id',
+    departmentName: 'department_name',
 };
 ```
