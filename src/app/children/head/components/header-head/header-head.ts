@@ -27,7 +27,7 @@ import {NgForOf} from '@angular/common';
 export class HeaderHead implements OnInit {
 
     protected readonly tabs = [
-        {label: 'Производственный анализ', route: '/department-head/forms'},
+        {label: 'Производственный анализ', route: '/department-head/all-list'},
         {label: 'Сводный отчет', route: '/department-head/reports'},
     ];
     protected userName: string = 'Пользователь';
