@@ -54,7 +54,7 @@ export const routes: Routes = [
             },
             {
                 path: '',
-                redirectTo: 'progress-list',
+                redirectTo: 'all-list',
                 pathMatch: 'full',
             }
         ]
