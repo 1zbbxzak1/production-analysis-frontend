@@ -75,7 +75,7 @@
     justify-content: center;
 
     flex: 0 1 auto;
-    width: auto;
+    width: 100%;
     min-width: 70px;
     max-width: 152px;
     max-height: 76px;
