@@ -1,0 +1,52 @@
+<tui-tabs-with-more>
+    <div class="header-cont">
+        <p class="header-title">ИБП</p>
+    </div>
+
+    <ng-container *ngFor="let tab of tabs; let i = index">
+        <a
+            *tuiItem
+            [routerLink]="tab.route"
+            routerLinkActive="active"
+            tuiTab
+            type="button"
+        >
+            {{ tab.label }}
+        </a>
+    </ng-container>
+
+    <div class="user-button">
+        <div class="user-button-icon">
+            <img height="24" src="assets/user-round.svg" width="24"/>
+        </div>
+
+        <button
+            [tuiDropdown]="content"
+            class="user-button-btn"
+            size="l"
+            tuiButton
+            tuiChevron
+            tuiDropdownAlign="right"
+            tuiDropdownLimitWidth="auto"
+            tuiDropdownOpen
+            type="button"
+        >
+            {{ userName }}
+        </button>
+
+        <ng-template #content>
+            <tui-data-list
+                (click)="onClick()"
+                size="s">
+                <button
+                    (click)="logout()"
+                    tuiAppearance="flat-destructive"
+                    tuiOption
+                    type="button"
+                >
+                    Выйти
+                </button>
+            </tui-data-list>
+        </ng-template>
+    </div>
+</tui-tabs-with-more>
