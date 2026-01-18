@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, HostBinding, Input} from '@angular/core';
 import {NgIf} from '@angular/common';
 
 @Component({
@@ -18,5 +18,10 @@ export class Loader {
             return this.isLoading();
         }
         return this.isLoading as boolean;
+    }
+
+    @HostBinding('class.is-loading')
+    public get isLoadingClass(): boolean {
+        return this.loading;
     }
 }

@@ -6,6 +6,7 @@
 }
 
 .progress-container {
+    position: relative;
     background: var(--day-text-icons-text-01-inverse);
 
     display: flex;

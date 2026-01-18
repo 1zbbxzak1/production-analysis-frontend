@@ -13,8 +13,10 @@ app-header-form {
 }
 
 .content-wrapper {
+    position: relative;
     display: flex;
     flex-direction: column;
+    flex: 1;
 
     background: var(--day-base-background);
     padding-bottom: 32px;
