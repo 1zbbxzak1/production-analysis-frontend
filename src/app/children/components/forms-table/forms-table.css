@@ -44,11 +44,11 @@
 .table-header-is-head {
     display: grid;
     grid-template-columns:
-        minmax(103px, 120px)
-        minmax(48px, 120px)
+        minmax(90px, 120px)
+        minmax(60px, 120px)
         minmax(150px, 220px)
         minmax(100px, 140px)
-        minmax(184px, 270px)
+        minmax(200px, 270px)
         minmax(200px, 270px)
         48px;
 
@@ -90,11 +90,11 @@
 .table-row-is-head {
     display: grid;
     grid-template-columns:
-        minmax(103px, 120px)
-        minmax(48px, 120px)
+        minmax(90px, 120px)
+        minmax(60px, 120px)
         minmax(150px, 220px)
         minmax(100px, 140px)
-        minmax(184px, 270px)
+        minmax(200px, 270px)
         minmax(200px, 270px)
         48px;
 
