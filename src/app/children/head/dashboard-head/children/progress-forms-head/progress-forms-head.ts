@@ -7,6 +7,7 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {SearchFormsFilterDto} from '../../../../../data/models/forms/requests/SearchFormsFilterDto';
 import {FormShortDtoPaginatedResponse} from '../../../../../data/models/forms/responses/FormShortDtoPaginatedResponse';
 import {FormStatus} from '../../../../../data/models/forms/enums/FormStatus';
+import {FormsCountService} from '../../../../../data/service/forms/forms.count.service';
 import {FormsTable} from '../../../../components/forms-table/forms-table';
 
 @Component({
@@ -28,6 +29,7 @@ export class ProgressFormsHead implements OnInit {
     private departmentId: number | null = null;
     private readonly _authManager: AuthManagerService = inject(AuthManagerService);
     private readonly _formsManager: FormsManagerService = inject(FormsManagerService);
+    private readonly _formsCountService: FormsCountService = inject(FormsCountService);
     private readonly _destroyRef: DestroyRef = inject(DestroyRef);
     private readonly _loaderService: LoaderService = inject(LoaderService);
 
@@ -36,6 +38,12 @@ export class ProgressFormsHead implements OnInit {
             takeUntilDestroyed(this._destroyRef)
         ).subscribe((isLoading: boolean): void => {
             this.isLoading = isLoading;
+        });
+
+        this._formsCountService.formDeleted$.pipe(
+            takeUntilDestroyed(this._destroyRef)
+        ).subscribe((): void => {
+            this.searchForms();
         });
 
         this.waitForDepartmentIdAndLoadForms();

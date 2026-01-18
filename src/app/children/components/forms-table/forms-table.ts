@@ -28,6 +28,7 @@ import {
     TuiOption
 } from '@taiga-ui/core';
 import {FormsManagerService} from '../../../data/service/forms/forms.manager.service';
+import {FormsCountService} from '../../../data/service/forms/forms.count.service';
 import {PaTypeDto} from '../../../data/models/forms/enums/PaTypeDto';
 
 @Component({
@@ -79,6 +80,7 @@ export class FormsTable implements OnInit, OnChanges {
 
     private readonly _router: Router = inject(Router);
     private readonly _formsManager: FormsManagerService = inject(FormsManagerService);
+    private readonly _formsCountService: FormsCountService = inject(FormsCountService);
     private readonly _searchFormsService: SearchFormsService = inject(SearchFormsService);
     private readonly _destroyRef: DestroyRef = inject(DestroyRef);
     private readonly _cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
@@ -217,6 +219,8 @@ export class FormsTable implements OnInit, OnChanges {
         this._formsManager.deleteForm(formId).pipe(
             takeUntilDestroyed(this._destroyRef),
         ).subscribe((): void => {
+            this._formsCountService.notifyFormDeleted(formId);
+
             this.alerts
                 .open('<strong>Форма удалена</strong>', {
                     appearance: 'positive',

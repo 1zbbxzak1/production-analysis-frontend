@@ -50,6 +50,7 @@ export class DashboardHead implements OnInit {
 
         this.subscribeToFormCounts();
         this.subscribeToRouterEvents();
+        this.subscribeToFormDeleted();
 
         this.checkIfFormTypeActive(this._router.url);
     }
@@ -99,6 +100,14 @@ export class DashboardHead implements OnInit {
             takeUntilDestroyed(this._destroyRef)
         ).subscribe((event: NavigationEnd): void => {
             this.checkIfFormTypeActive(event.url);
+        });
+    }
+
+    private subscribeToFormDeleted(): void {
+        this._formsCountService.formDeleted$.pipe(
+            takeUntilDestroyed(this._destroyRef)
+        ).subscribe((): void => {
+            this.loadFormCounts();
         });
     }
 }
