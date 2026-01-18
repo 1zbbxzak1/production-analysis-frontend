@@ -9,6 +9,9 @@ import {AuxiliaryOperationDto} from "../../models/dictionaries/responses/Auxilia
 import {OperationDto} from "../../models/dictionaries/responses/OperationDto";
 import {ProductDto} from "../../models/dictionaries/responses/ProductDto";
 import {ShiftDto} from "../../models/dictionaries/responses/ShiftDto";
+import {CreateEmployeeRequest} from '../../models/dictionaries/requests/CreateEmployeeRequest';
+import {UpdateEmployeeRequest} from '../../models/dictionaries/requests/UpdateEmployeeRequest';
+import {PositionDto} from '../../models/dictionaries/responses/PositionDto';
 
 @Injectable()
 export class DictManagerService {
@@ -36,6 +39,15 @@ export class DictManagerService {
 
     public getEmployees(): Observable<EmployeeDto[]> {
         return this._dict.getEmployees().pipe(
+            catchError(err => {
+                this._error.handleError(err);
+                return NEVER;
+            }),
+        );
+    }
+
+    public getPositions(): Observable<PositionDto[]> {
+        return this._dict.getPositions().pipe(
             catchError(err => {
                 this._error.handleError(err);
                 return NEVER;
@@ -81,6 +93,33 @@ export class DictManagerService {
 
     public getShifts(): Observable<ShiftDto[]> {
         return this._dict.getShifts().pipe(
+            catchError(err => {
+                this._error.handleError(err);
+                return NEVER;
+            }),
+        );
+    }
+
+    public createEmployee(employee: CreateEmployeeRequest): Observable<EmployeeDto> {
+        return this._dict.createEmployee(employee).pipe(
+            catchError(err => {
+                this._error.handleError(err);
+                return NEVER;
+            }),
+        );
+    }
+
+    public updateEmployee(id: number, employee: UpdateEmployeeRequest): Observable<EmployeeDto> {
+        return this._dict.updateEmployee(id, employee).pipe(
+            catchError(err => {
+                this._error.handleError(err);
+                return NEVER;
+            }),
+        );
+    }
+
+    public deleteEmployee(id: number): Observable<void> {
+        return this._dict.deleteEmployee(id).pipe(
             catchError(err => {
                 this._error.handleError(err);
                 return NEVER;

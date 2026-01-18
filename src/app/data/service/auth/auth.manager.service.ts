@@ -1,9 +1,9 @@
 import {inject, Injectable} from '@angular/core';
 import {AuthService} from './auth.service';
 import {CookieService} from 'ngx-cookie-service';
-import {LoginRequest} from '../../models/auth/request/LoginRequest';
+import {LoginRequest} from '../../models/auth/requests/LoginRequest';
 import {catchError, forkJoin, map, Observable, of, switchMap, tap, throwError} from 'rxjs';
-import {LoginResponse} from '../../models/auth/response/LoginResponse';
+import {LoginResponse} from '../../models/auth/responses/LoginResponse';
 import {HttpErrorResponse} from '@angular/common/http';
 import {jwtDecode} from 'jwt-decode';
 import {environment} from '../../../../environments/environment';

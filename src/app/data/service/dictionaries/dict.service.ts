@@ -10,6 +10,9 @@ import {AuxiliaryOperationDto} from "../../models/dictionaries/responses/Auxilia
 import {OperationDto} from "../../models/dictionaries/responses/OperationDto";
 import {ProductDto} from "../../models/dictionaries/responses/ProductDto";
 import {ShiftDto} from "../../models/dictionaries/responses/ShiftDto";
+import {CreateEmployeeRequest} from '../../models/dictionaries/requests/CreateEmployeeRequest';
+import {UpdateEmployeeRequest} from '../../models/dictionaries/requests/UpdateEmployeeRequest';
+import {PositionDto} from '../../models/dictionaries/responses/PositionDto';
 
 @Injectable()
 export class DictService {
@@ -27,6 +30,10 @@ export class DictService {
 
     public getEmployees(): Observable<EmployeeDto[]> {
         return this._http.get<EmployeeDto[]>(`${this._api}/employees`);
+    }
+
+    public getPositions(): Observable<PositionDto[]> {
+        return this._http.get<PositionDto[]>(`${this._api}/positions`);
     }
 
     public getEnterprises(): Observable<EnterpriseDto[]> {
@@ -47,5 +54,17 @@ export class DictService {
 
     public getShifts(): Observable<ShiftDto[]> {
         return this._http.get<ShiftDto[]>(`${this._api}/shifts`);
+    }
+
+    public createEmployee(employee: CreateEmployeeRequest): Observable<EmployeeDto> {
+        return this._http.post<EmployeeDto>(`${this._api}/employees`, employee);
+    }
+
+    public updateEmployee(id: number, employee: UpdateEmployeeRequest): Observable<EmployeeDto> {
+        return this._http.put<EmployeeDto>(`${this._api}/employees/${id}`, employee);
+    }
+
+    public deleteEmployee(id: number): Observable<void> {
+        return this._http.delete<void>(`${this._api}/employees/${id}`);
     }
 }
