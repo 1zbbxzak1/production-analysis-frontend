@@ -23,6 +23,7 @@ import {AllFormsHead} from './children/head/dashboard-head/children/all-forms-he
 import {ProgressFormsHead} from './children/head/dashboard-head/children/progress-forms-head/progress-forms-head';
 import {CompletedFormsHead} from './children/head/dashboard-head/children/completed-forms-head/completed-forms-head';
 import {FormType3} from './children/components/forms-table-edit-check/form-type-3/form-type-3';
+import {FormType5} from './children/components/forms-table-edit-check/form-type-5/form-type-5';
 
 export const routes: Routes = [
     {
@@ -110,6 +111,18 @@ export const routes: Routes = [
         component: FormType3
     },
     {
+        path: 'department-head/all-list/form-view-5/:id',
+        component: FormType5
+    },
+    {
+        path: 'department-head/progress-list/form-view-5/:id',
+        component: FormType5
+    },
+    {
+        path: 'department-head/completed-list/form-view-5/:id',
+        component: FormType5
+    },
+    {
         path: 'operator',
         component: DashboardOperator,
         canActivate: [operatorGuard],
@@ -144,6 +157,14 @@ export const routes: Routes = [
     {
         path: 'operator/completed-list/form-view-3/:id',
         component: FormType3
+    },
+    {
+        path: 'operator/progress-list/form-view-5/:id',
+        component: FormType5
+    },
+    {
+        path: 'operator/completed-list/form-view-5/:id',
+        component: FormType5
     },
     {
         path: 'department-head/reports',

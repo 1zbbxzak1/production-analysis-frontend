@@ -7,4 +7,5 @@ export interface OperationDto {
     basedOnType: OperationBasedOnType;
     basedOperationId: number | null;
     basedProductId: number | null;
+    SubOperations: OperationDto[] | null;
 }

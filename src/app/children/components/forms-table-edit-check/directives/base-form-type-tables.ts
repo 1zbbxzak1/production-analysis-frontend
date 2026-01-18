@@ -31,6 +31,8 @@ export abstract class BaseFormTypeTables implements OnInit {
 
     protected employeeControls: Map<number, FormControl<EmployeeDto | null>> = new Map();
     protected downtimeReasonGroupControls: Map<number, FormControl<DowntimeReasonGroupDto | null>> = new Map(); // key: row.order
+    protected employeeColumnIndex: number = 8;
+    protected reasonColumnIndex: number = 9;
     private changedRowValues: Map<number, Record<number, any>> = new Map();
     private rowChangeSubject: Subject<{ rowOrder: number, changes: Record<number, any> }> = new Subject();
     private readonly _destroyRef: DestroyRef = inject(DestroyRef);
@@ -193,10 +195,10 @@ export abstract class BaseFormTypeTables implements OnInit {
                 .subscribe((employee: EmployeeDto | null): void => {
                     const employeeName: string = employee ? this.formatFullName(employee.fullName) : '';
 
-                    this.setRowCellValue(row, 8, employeeName);
+                    this.setRowCellValue(row, this.employeeColumnIndex, employeeName);
 
-                    if (this.hasInputValue(row, 8)) {
-                        const fieldKey: string | null = this.getFieldKeyByIndex(8);
+                    if (this.hasInputValue(row, this.employeeColumnIndex)) {
+                        const fieldKey: string | null = this.getFieldKeyByIndex(this.employeeColumnIndex);
                         if (fieldKey) {
                             this.trackRowChange(row.order, fieldKey, employeeName);
                         }
@@ -218,10 +220,10 @@ export abstract class BaseFormTypeTables implements OnInit {
                 .subscribe((reason: DowntimeReasonGroupDto | null): void => {
                     const reasonName: string = reason?.name || '';
 
-                    this.setRowCellValue(row, 9, reasonName);
+                    this.setRowCellValue(row, this.reasonColumnIndex, reasonName);
 
-                    if (this.hasInputValue(row, 9)) {
-                        const fieldKey: string | null = this.getFieldKeyByIndex(9);
+                    if (this.hasInputValue(row, this.reasonColumnIndex)) {
+                        const fieldKey: string | null = this.getFieldKeyByIndex(this.reasonColumnIndex);
                         if (fieldKey) {
                             this.trackRowChange(row.order, fieldKey, reasonName);
                         }
@@ -381,7 +383,7 @@ export abstract class BaseFormTypeTables implements OnInit {
     private initializeEmployeeControls(): void {
         if (!this.formRows) return;
 
-        const employeeColumnKey: string | null = this.getFieldKeyByIndex(8);
+        const employeeColumnKey: string | null = this.getFieldKeyByIndex(this.employeeColumnIndex);
         if (!employeeColumnKey) return;
 
         this.formRows.forEach((row: FormRowDto): void => {
@@ -397,7 +399,7 @@ export abstract class BaseFormTypeTables implements OnInit {
                 .pipe(takeUntilDestroyed(this._destroyRef))
                 .subscribe((emp: EmployeeDto | null): void => {
                     const formattedName: string = emp ? this.formatFullName(emp.fullName) : '';
-                    this.setRowCellValue(row, 8, formattedName);
+                    this.setRowCellValue(row, this.employeeColumnIndex, formattedName);
                 });
 
             this.employeeControls.set(row.order, control);
@@ -407,7 +409,7 @@ export abstract class BaseFormTypeTables implements OnInit {
     private initializeReasonControls(): void {
         if (!this.formRows) return;
 
-        const reasonColumnKey: string | null = this.getFieldKeyByIndex(9);
+        const reasonColumnKey: string | null = this.getFieldKeyByIndex(this.reasonColumnIndex);
         if (!reasonColumnKey) return;
 
         this.formRows.forEach((row: FormRowDto): void => {
@@ -422,7 +424,7 @@ export abstract class BaseFormTypeTables implements OnInit {
             control.valueChanges
                 .pipe(takeUntilDestroyed(this._destroyRef))
                 .subscribe((reasonGroup: DowntimeReasonGroupDto | null): void => {
-                    this.setRowCellValue(row, 9, reasonGroup?.name || '');
+                    this.setRowCellValue(row, this.reasonColumnIndex, reasonGroup?.name || '');
                 });
 
             this.downtimeReasonGroupControls.set(row.order, control);

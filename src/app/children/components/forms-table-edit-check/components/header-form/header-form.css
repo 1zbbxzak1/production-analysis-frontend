@@ -118,21 +118,21 @@
 }
 
 @media (max-width: 1582px) {
-    .card-department {
+    .header-info:not(.pa-type-5) .card-department {
         display: none;
     }
 }
 
 @media (max-width: 1280px) {
-    .card-department,
-    .card-assignee {
+    .header-info:not(.pa-type-5) .card-department,
+    .header-info:not(.pa-type-5) .card-assignee {
         display: none;
     }
 }
 
 @media (max-width: 1024px) {
-    .card-department,
-    .card-assignee {
+    .header-info:not(.pa-type-5) .card-department,
+    .header-info:not(.pa-type-5) .card-assignee {
         display: none;
     }
 

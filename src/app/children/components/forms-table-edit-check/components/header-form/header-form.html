@@ -1,4 +1,4 @@
-<div *ngIf="!isLoading && formInfo" class="header-info">
+<div *ngIf="!isLoading && formInfo" [ngClass]="{'header-info': true, 'pa-type-5': formInfo!.paType === 5}">
     <div class="first-column">
         <div class="pa-type-container">
             <p class="pa-type tui-text_body-s">
@@ -25,7 +25,7 @@
 
         <div class="product-name">
             <p class="tui-text_h4">
-                {{ getProductsName() }}
+                {{ getProductsName() || 'N/A' }}
             </p>
         </div>
     </div>
@@ -72,7 +72,7 @@
             </p>
         </div>
 
-        <div class="card-info">
+        <div *ngIf="shouldShowDailyRate()" class="card-info">
             <p [title]="'Суточный темп, шт'" class="card-title-1 tui-text_body-s">
                 Суточный темп, шт
             </p>

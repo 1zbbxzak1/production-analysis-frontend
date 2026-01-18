@@ -1,5 +1,5 @@
 import {Component, inject, Input, OnInit} from '@angular/core';
-import {NgIf} from "@angular/common";
+import {NgClass, NgIf} from "@angular/common";
 import {TuiBadge} from "@taiga-ui/kit";
 import {FormDto} from '../../../../../data/models/forms/responses/FormDto';
 import {PA_TYPE_DESCRIPTIONS} from '../../../../../data/models/forms/enums/PaTypeDescriptions';
@@ -9,6 +9,7 @@ import {ProductContextDto} from '../../../../../data/models/forms/ProductContext
 @Component({
     selector: 'app-header-form',
     imports: [
+        NgClass,
         NgIf,
         TuiBadge
     ],
@@ -87,7 +88,6 @@ export class HeaderForm implements OnInit {
         return this.formInfo.context.product;
     }
 
-
     protected shouldShowCycleTime(): boolean {
         const product: ProductContextDto | null = this.getContextProduct();
         return product?.cycleTime !== null && product?.cycleTime !== undefined;
@@ -96,6 +96,11 @@ export class HeaderForm implements OnInit {
     protected shouldShowWorkstationCapacity(): boolean {
         const product: ProductContextDto | null = this.getContextProduct();
         return product?.workstationCapacity !== null && product?.workstationCapacity !== undefined;
+    }
+
+    protected shouldShowDailyRate(): boolean {
+        const product: ProductContextDto | null = this.getContextProduct();
+        return product?.dailyRate !== null && product?.dailyRate !== undefined;
     }
 
     protected getDateShiftTitle(): string {
