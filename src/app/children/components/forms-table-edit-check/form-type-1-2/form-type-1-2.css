@@ -137,8 +137,6 @@ app-header-form {
 }
 
 .type-rows-final {
-    border-bottom: 1px solid var(--day-base-base-04);
-
     display: grid;
     grid-template-columns: repeat(4, 192px);
 

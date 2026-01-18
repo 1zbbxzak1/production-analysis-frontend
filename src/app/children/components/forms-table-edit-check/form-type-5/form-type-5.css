@@ -138,8 +138,6 @@ app-header-form {
 }
 
 .type-rows-final {
-    border-bottom: 1px solid var(--day-base-base-04);
-
     display: grid;
     grid-template-columns: 336px 384px 96px 96px;
     gap: 0;
@@ -161,6 +159,12 @@ app-header-form {
     padding: 12px;
     border-right: 1px solid var(--day-base-base-04);
     box-sizing: border-box;
+}
+
+.type-rows-final .type-row-cell:first-child {
+    border-left: none !important;
+    text-align: left;
+    justify-content: flex-start;
 }
 
 .type-rows-final .type-row-cell:last-child {

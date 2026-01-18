@@ -1,12 +1,12 @@
-<app-header-operator/>
+<app-header-operator />
 
 <div class="content-wrapper">
-    <app-loader [isLoading]="isLoading"/>
+    <app-loader [isLoading]="isLoading" />
 
     <div [hidden]="isLoading" class="main-container">
-        <app-back-header (backClicked)="goBack()" *ngIf="!isLoading && formInfo"/>
+        <app-back-header (backClicked)="goBack()" *ngIf="!isLoading && formInfo" />
 
-        <app-header-form [formInfo]="formInfo" [isLoading]="isLoading"/>
+        <app-header-form [formInfo]="formInfo" [isLoading]="isLoading" />
 
         <div [hidden]="isLoading" class="form-table-wrapper">
             <div class="form-table">
@@ -14,7 +14,7 @@
                     <ng-container *ngFor="let col of formInfo!.template!.tableColumns; let i = index">
                         <!-- Стандартные столбцы (0, 5+) -->
                         <div *ngIf="i === 0 || i > 4" [ngStyle]="getStandardColumnStyle(i)"
-                             class="type-header-column-en">
+                            class="type-header-column-en">
                             {{ col.name }}
                         </div>
 
@@ -54,17 +54,17 @@
 
                 <div class="type-rows-container">
                     <div *ngFor="let row of formRows; let i = index"
-                         [ngClass]="{'type-rows-break': isBreakRow(row.values)}" class="type-rows">
-                        <ng-container *ngIf="isBreakRow(row.values); else normalRow">
+                        [ngClass]="{'type-rows-break': row.isAuxiliaryOperation}" class="type-rows">
+                        <ng-container *ngIf="row.isAuxiliaryOperation; else normalRow">
                             <ng-container *ngFor="let col of formInfo!.template.tableColumns; let i = index">
                                 <div [ngStyle]="{'justify-content': getJustifyContent(columnAlignments, i)}"
-                                     class="type-row-cell">
+                                    class="type-row-cell">
                                     <ng-container *ngIf="i === 0">
                                         {{ formatTimeCell(row.values, i) }}
                                     </ng-container>
 
-                                    <ng-container *ngIf="i !== 0">
-                                        {{ getRowCellValue(row.values, i) }}
+                                    <ng-container *ngIf="i === 1">
+                                        {{ getBreakRowText(getRowCellValue(row.values, 0)) }}
                                     </ng-container>
                                 </div>
                             </ng-container>
@@ -73,8 +73,8 @@
                         <ng-template #normalRow>
                             <ng-container *ngFor="let col of formInfo!.template.tableColumns; let i = index">
                                 <div *ngIf="i !== 2 && i !== 4 && i !== 7 && i !== 8 && i !== 9"
-                                     [ngStyle]="{'justify-content': getJustifyContent(columnAlignments, i)}"
-                                     class="type-row-cell">
+                                    [ngStyle]="{'justify-content': getJustifyContent(columnAlignments, i)}"
+                                    class="type-row-cell">
                                     <ng-container *ngIf="i === 0">
                                         {{ formatTimeCell(row.values, i) }}
                                     </ng-container>
@@ -86,72 +86,72 @@
 
                                 <!-- Input ячейка (колонка 4 - Факт, время начала) -->
                                 <div *ngIf="i === 2"
-                                     [ngStyle]="{'justify-content': getJustifyContent(columnAlignments, i)}"
-                                     class="type-row-cell type-row-input">
+                                    [ngStyle]="{'justify-content': getJustifyContent(columnAlignments, i)}"
+                                    class="type-row-cell type-row-input">
                                     <input (change)="setRowCellValue(row, i, $any($event.target).value)"
-                                           [class.has-value]="hasInputValue(row, i)" [disabled]="isCompletedForm"
-                                           [value]="getRowCellValue(row.values, i)" class="cell-input"/>
+                                        [class.has-value]="hasInputValue(row, i)" [disabled]="isCompletedForm"
+                                        [value]="getRowCellValue(row.values, i)" class="cell-input" />
                                 </div>
 
                                 <!-- Input ячейка (колонка 4 - Факт, время окончания) -->
                                 <div *ngIf="i === 4"
-                                     [ngStyle]="{'justify-content': getJustifyContent(columnAlignments, i)}"
-                                     class="type-row-cell type-row-input">
+                                    [ngStyle]="{'justify-content': getJustifyContent(columnAlignments, i)}"
+                                    class="type-row-cell type-row-input">
                                     <input (change)="setRowCellValue(row, i, $any($event.target).value)"
-                                           [class.has-value]="hasInputValue(row, i)" [disabled]="isCompletedForm"
-                                           [value]="getRowCellValue(row.values, i)" class="cell-input"/>
+                                        [class.has-value]="hasInputValue(row, i)" [disabled]="isCompletedForm"
+                                        [value]="getRowCellValue(row.values, i)" class="cell-input" />
                                 </div>
 
                                 <!-- Combo-box ячейка (колонка 8 - Ответственный за простой) -->
                                 <div *ngIf="i === 7 && !isCompletedForm"
-                                     [ngStyle]="{'justify-content': getJustifyContent(columnAlignments, i)}"
-                                     class="type-row-cell type-row-input">
+                                    [ngStyle]="{'justify-content': getJustifyContent(columnAlignments, i)}"
+                                    class="type-row-cell type-row-input">
                                     <tui-combo-box [formControl]="getEmployeeControl(row)" [stringify]="stringify"
-                                                   [tuiDropdownMaxHeight]="150" [tuiTextfieldLabelOutside]="true"
-                                                   class="tui-input-row" tuiTextfieldSize="m">
+                                        [tuiDropdownMaxHeight]="150" [tuiTextfieldLabelOutside]="true"
+                                        class="tui-input-row" tuiTextfieldSize="m">
                                         <tui-data-list-wrapper *tuiDataList
-                                                               [itemContent]="stringify | tuiStringifyContent"
-                                                               [items]="employees | tuiFilterByInput"/>
+                                            [itemContent]="stringify | tuiStringifyContent"
+                                            [items]="employees | tuiFilterByInput" />
                                     </tui-combo-box>
                                 </div>
 
                                 <div *ngIf="i === 7 && isCompletedForm"
-                                     [ngStyle]="{'justify-content': getJustifyContent(columnAlignments, i)}"
-                                     class="type-row-cell type-row-input">
+                                    [ngStyle]="{'justify-content': getJustifyContent(columnAlignments, i)}"
+                                    class="type-row-cell type-row-input">
                                     <input (change)="setRowCellValue(row, i, $any($event.target).value)"
-                                           [class.has-value]="hasInputValue(row, i)" [disabled]="isCompletedForm"
-                                           [value]="getRowCellValue(row.values, i)" class="cell-input"/>
+                                        [class.has-value]="hasInputValue(row, i)" [disabled]="isCompletedForm"
+                                        [value]="getRowCellValue(row.values, i)" class="cell-input" />
                                 </div>
 
                                 <!-- Combo-box ячейка (колонка 9 - Группы причин) -->
                                 <div *ngIf="i === 8 && !isCompletedForm"
-                                     [ngStyle]="{'justify-content': getJustifyContent(columnAlignments, i)}"
-                                     class="type-row-cell type-row-input">
+                                    [ngStyle]="{'justify-content': getJustifyContent(columnAlignments, i)}"
+                                    class="type-row-cell type-row-input">
                                     <tui-combo-box [formControl]="getReasonControl(row)" [stringify]="stringifyReason"
-                                                   [tuiDropdownMaxHeight]="150" [tuiTextfieldLabelOutside]="true"
-                                                   class="tui-input-row" tuiTextfieldSize="m">
+                                        [tuiDropdownMaxHeight]="150" [tuiTextfieldLabelOutside]="true"
+                                        class="tui-input-row" tuiTextfieldSize="m">
                                         <tui-data-list-wrapper *tuiDataList
-                                                               [itemContent]="stringifyReason | tuiStringifyContent"
-                                                               [items]="downtimeReasonGroups | tuiFilterByInput"/>
+                                            [itemContent]="stringifyReason | tuiStringifyContent"
+                                            [items]="downtimeReasonGroups | tuiFilterByInput" />
                                     </tui-combo-box>
                                 </div>
 
                                 <div *ngIf="i === 8 && isCompletedForm"
-                                     [ngStyle]="{'justify-content': getJustifyContent(columnAlignments, i)}"
-                                     class="type-row-cell type-row-input">
+                                    [ngStyle]="{'justify-content': getJustifyContent(columnAlignments, i)}"
+                                    class="type-row-cell type-row-input">
                                     <input (change)="setRowCellValue(row, i, $any($event.target).value)"
-                                           [class.has-value]="hasInputValue(row, i)" [disabled]="isCompletedForm"
-                                           [value]="getRowCellValue(row.values, i)" class="cell-input"/>
+                                        [class.has-value]="hasInputValue(row, i)" [disabled]="isCompletedForm"
+                                        [value]="getRowCellValue(row.values, i)" class="cell-input" />
                                 </div>
 
                                 <!-- Input ячейка (колонка 10 - Причины отклонения) -->
                                 <div *ngIf="i === 9"
-                                     [ngStyle]="{'justify-content': getJustifyContent(columnAlignments, i)}"
-                                     class="type-row-cell type-row-input">
+                                    [ngStyle]="{'justify-content': getJustifyContent(columnAlignments, i)}"
+                                    class="type-row-cell type-row-input">
                                     <input (change)="setRowCellValue(row, i, $any($event.target).value)"
-                                           [class.has-value]="hasInputValue(row, i)" [disabled]="isCompletedForm"
-                                           [title]="getRowCellValue(row.values, i)"
-                                           [value]="getRowCellValue(row.values, i)" class="cell-input reason"/>
+                                        [class.has-value]="hasInputValue(row, i)" [disabled]="isCompletedForm"
+                                        [title]="getRowCellValue(row.values, i)"
+                                        [value]="getRowCellValue(row.values, i)" class="cell-input reason" />
                                 </div>
                             </ng-container>
                         </ng-template>
@@ -169,17 +169,15 @@
 
         <div *ngIf="formInfo && formInfo.status !== 1 && !isCompletedForm" [hidden]="isLoading" class="final-btn">
             <button (click)="toggleModal('complete',true)" [disabled]="!isThirdColumnValid" appearance="primary"
-                    size="m" tuiButton type="button">
+                size="m" tuiButton type="button">
                 Завершить
             </button>
         </div>
     </div>
 
-    <app-completed-form-pop-up
-        (close)="toggleModal('complete',false)"
-        (complete)="completeForm()"
+    <app-completed-form-pop-up (close)="toggleModal('complete',false)" (complete)="completeForm()"
         [isVisible]="modalStates.complete">
     </app-completed-form-pop-up>
 </div>
 
-<app-footer/>
+<app-footer />

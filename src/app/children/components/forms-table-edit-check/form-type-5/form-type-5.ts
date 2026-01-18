@@ -52,13 +52,36 @@ export class FormType5 extends BaseFormTypeTables implements OnInit {
     ];
     private readonly _localDestroyRef: DestroyRef = inject(DestroyRef);
 
+    protected override get isThirdColumnValid(): boolean {
+        if (!this.formRows || this.formRows.length === 0 || !this.formInfo) {
+            return false;
+        }
+
+        const col2Key: string | null = this.getFieldKeyByIndex(2); // Время начала Факт
+        const col4Key: string | null = this.getFieldKeyByIndex(4); // Время окончания Факт
+
+        if (!col2Key || !col4Key) return false;
+
+        return this.formRows
+            .filter((row: FormRowDto): boolean => !row.isAuxiliaryOperation)
+            .every((row: FormRowDto): boolean => {
+                const val2: any = row.values?.[col2Key]?.value;
+                const val4: any = row.values?.[col4Key]?.value;
+
+                const valid2: boolean = val2 !== undefined && val2 !== null && val2 !== '';
+                const valid4: boolean = val4 !== undefined && val4 !== null && val4 !== '';
+
+                return valid2 && valid4;
+            });
+    }
+
     public override ngOnInit(): void {
         super.ngOnInit();
     }
 
     protected override getEmployeeControl(row: FormRowDto): FormControl<EmployeeDto | null> {
         const rowOrder: number = row.order;
-        const existingControl = this.employeeControls.get(rowOrder);
+        const existingControl: FormControl<EmployeeDto | null> | undefined = this.employeeControls.get(rowOrder);
 
         if (existingControl && (existingControl as any).__formType4Initialized) {
             return existingControl;
@@ -86,7 +109,7 @@ export class FormType5 extends BaseFormTypeTables implements OnInit {
 
     protected override getReasonControl(row: FormRowDto): FormControl<DowntimeReasonGroupDto | null> {
         const rowOrder: number = row.order;
-        const existingControl = this.downtimeReasonGroupControls.get(rowOrder);
+        const existingControl: FormControl<DowntimeReasonGroupDto | null> | undefined = this.downtimeReasonGroupControls.get(rowOrder);
 
         if (existingControl && (existingControl as any).__formType4Initialized) {
             return existingControl;
@@ -148,6 +171,19 @@ export class FormType5 extends BaseFormTypeTables implements OnInit {
         }
 
         return value;
+    }
+
+    protected getBreakRowText(value: string | undefined | null): string {
+        if (!value) {
+            return '';
+        }
+        // Ожидаемый формат: "HH:mm-HH:mm Текст"
+        // Находим первый пробел и возвращаем все после него
+        const firstSpaceIndex: number = value.indexOf(' ');
+        if (firstSpaceIndex === -1) {
+            return value;
+        }
+        return value.substring(firstSpaceIndex + 1);
     }
 
     private formatFullNameLocal(fullName: string | null): string {
