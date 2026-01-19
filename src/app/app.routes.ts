@@ -34,6 +34,9 @@ import {
 } from './children/admin/employees-admin/children/update-employee-admin/update-employee-admin';
 import {DictionariesAdmin} from './children/admin/dictionaries-admin/dictionaries-admin';
 import {
+    DictDepartmentsAdmin
+} from './children/admin/dictionaries-admin/children/dict-departments-admin/dict-departments-admin';
+import {
     CreateDowntimeReasonGroupAdmin
 } from './children/admin/dictionaries-admin/children/dict-downtime-reason-groups-admin/children/create-downtime-reason-group-admin/create-downtime-reason-group-admin';
 import {
@@ -42,6 +45,12 @@ import {
 import {
     UpdateDowntimeReasonGroupAdmin
 } from './children/admin/dictionaries-admin/children/dict-downtime-reason-groups-admin/children/update-downtime-reason-group-admin/update-downtime-reason-group-admin';
+import {
+    CreateDepartmentAdmin
+} from './children/admin/dictionaries-admin/children/dict-departments-admin/children/create-department-admin/create-department-admin';
+import {
+    UpdateDepartmentAdmin
+} from './children/admin/dictionaries-admin/children/dict-departments-admin/children/update-department-admin/update-department-admin';
 
 export const routes: Routes = [
     {
@@ -209,6 +218,18 @@ export const routes: Routes = [
         component: DictionariesAdmin,
         canActivate: [adminGuard],
         children: [
+            {
+                path: 'departments',
+                component: DictDepartmentsAdmin
+            },
+            {
+                path: 'departments/create',
+                component: CreateDepartmentAdmin
+            },
+            {
+                path: 'departments/edit/:id',
+                component: UpdateDepartmentAdmin
+            },
             {
                 path: 'downtime-reason-groups',
                 component: DictDowntimeReasonGroupsAdmin

@@ -1,0 +1,12 @@
+<app-back-header (backClicked)="goBack()" title="Редактирование цеха"/>
+
+<div class="dashboard-admin">
+    <app-loader [isLoading]="isLoading"/>
+
+    <p class="tui-text_h4">
+        Редактирование подразделения
+    </p>
+
+    <app-department-form (cancel)="onCancel()" (save)="onSave($event)" *ngIf="!isLoading && department"
+                         [initialData]="department" submitLabel="Сохранить"/>
+</div>
