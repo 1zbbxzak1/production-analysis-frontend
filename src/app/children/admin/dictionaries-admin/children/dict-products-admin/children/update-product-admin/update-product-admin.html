@@ -1,0 +1,12 @@
+<app-back-header (backClicked)="goBack()" title="Редактирование продукта"/>
+
+<div class="dashboard-admin">
+    <app-loader [isLoading]="isLoading"/>
+
+    <p class="tui-text_h4">
+        Редактирование продукта
+    </p>
+
+    <app-product-form (cancel)="onCancel()" (save)="onSave($event)" *ngIf="!isLoading && product"
+                      [initialData]="product" submitLabel="Сохранить"/>
+</div>
