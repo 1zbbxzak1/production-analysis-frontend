@@ -1,0 +1,70 @@
+<app-back-header (backClicked)="goBack()" title="Группы причин"/>
+
+<div class="dashboard-admin">
+    <div class="progress-container">
+        <div class="first-container">
+            <p class="tui-text_h4">
+                Группы причин
+            </p>
+
+            <button (click)="goCreate()" iconStart="@tui.plus" size="m" tuiButton type="button">
+                Добавить
+            </button>
+        </div>
+
+        <div *ngIf="!isLoading" class="table-header-is-head">
+            <div class="table-cell header-cell tui-text_body-s name-col">Название</div>
+            <div class="table-cell header-cell tui-text_body-s desc-col">Описание</div>
+            <div class="table-cell header-cell tui-text_body-s action-col"></div>
+        </div>
+
+        <div *ngIf="safeItems.length > 0 && !isLoading" class="progress-table">
+            <div>
+                <div>
+                    <div (mouseenter)="onRowMouseEnter(item.id)" (mouseleave)="onRowMouseLeave()"
+                         *ngFor="let item of safeItems" [class.hovered]="isItemHovered(item.id) && !isButtonHovered"
+                         class="table-row-is-head">
+                        <div class="table-cell tui-text_body-m name-col">
+                            {{ item.name || '-' }}
+                        </div>
+                        <div class="table-cell tui-text_body-m desc-col">
+                            {{ item.description || '-' }}
+                        </div>
+                        <div class="table-cell tui-text_body-m action-col">
+                            <button (click)="$event.stopPropagation()"
+                                    (mouseenter)="onButtonMouseEnter(item.id, $event)"
+                                    (mouseleave)="onButtonMouseLeave($event)" [tuiDropdown]="content"
+                                    class="button-more-btn" tuiDropdownAlign="right" tuiDropdownLimitWidth="auto"
+                                    tuiDropdownOpen type="button">
+                                <img
+                                    [src]="shouldShowHoverImage(item.id) ? 'assets/more-btn-hover.svg' : 'assets/more-btn.svg'"
+                                    alt="More" height="24" width="24"/>
+                            </button>
+
+                            <ng-template #content>
+                                <tui-data-list (click)="$event.stopPropagation()" size="s">
+                                    <button (click)="goEdit(item.id)" iconEnd="@tui.edit" tuiOption type="button">
+                                        Редактировать
+                                    </button>
+                                    <button (click)="deleteItem(item.id)" iconEnd="@tui.trash" tuiOption type="button">
+                                        Удалить
+                                    </button>
+                                </tui-data-list>
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="safeItems.length === 0 && !isLoading" class="not-found-container">
+                <img alt="Not found" class="image" height="64" src="assets/not-found-forms.svg" width="64"/>
+                <p class="not-title tui-text_body-m">{{ emptyMessage }}</p>
+                <p class="not-desc">{{ emptyDescription }}</p>
+            </div>
+
+            <div *ngIf="shouldShowPagination && !isLoading" class="pagination-container">
+                <tui-pagination (indexChange)="onPageChange($event)" [index]="currentPage" [length]="totalPages"/>
+            </div>
+        </div>
+    </div>
+</div>

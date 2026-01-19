@@ -33,6 +33,9 @@ import {
     UpdateEmployeeAdmin
 } from './children/admin/employees-admin/children/update-employee-admin/update-employee-admin';
 import {DictionariesAdmin} from './children/admin/dictionaries-admin/dictionaries-admin';
+import {
+    DictDowntimeReasonGroupsAdmin
+} from './children/admin/dictionaries-admin/children/dict-downtime-reason-groups-admin/dict-downtime-reason-groups-admin';
 
 export const routes: Routes = [
     {
@@ -199,5 +202,11 @@ export const routes: Routes = [
         path: 'admin/dictionaries',
         component: DictionariesAdmin,
         canActivate: [adminGuard],
+        children: [
+            {
+                path: 'downtime-reason-groups',
+                component: DictDowntimeReasonGroupsAdmin
+            },
+        ]
     },
 ];
