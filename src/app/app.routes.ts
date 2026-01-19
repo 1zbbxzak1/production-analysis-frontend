@@ -34,6 +34,9 @@ import {
 } from './children/admin/employees-admin/children/update-employee-admin/update-employee-admin';
 import {DictionariesAdmin} from './children/admin/dictionaries-admin/dictionaries-admin';
 import {
+    DictEnterprisesAdmin
+} from './children/admin/dictionaries-admin/children/dict-enterprises-admin/dict-enterprises-admin';
+import {
     DictDepartmentsAdmin
 } from './children/admin/dictionaries-admin/children/dict-departments-admin/dict-departments-admin';
 import {
@@ -45,6 +48,12 @@ import {
 import {
     UpdateDowntimeReasonGroupAdmin
 } from './children/admin/dictionaries-admin/children/dict-downtime-reason-groups-admin/children/update-downtime-reason-group-admin/update-downtime-reason-group-admin';
+import {
+    CreateEnterpriseAdmin
+} from './children/admin/dictionaries-admin/children/dict-enterprises-admin/children/create-enterprise-admin/create-enterprise-admin';
+import {
+    UpdateEnterpriseAdmin
+} from './children/admin/dictionaries-admin/children/dict-enterprises-admin/children/update-enterprise-admin/update-enterprise-admin';
 import {
     CreateDepartmentAdmin
 } from './children/admin/dictionaries-admin/children/dict-departments-admin/children/create-department-admin/create-department-admin';
@@ -218,6 +227,18 @@ export const routes: Routes = [
         component: DictionariesAdmin,
         canActivate: [adminGuard],
         children: [
+            {
+                path: 'enterprises',
+                component: DictEnterprisesAdmin
+            },
+            {
+                path: 'enterprises/create',
+                component: CreateEnterpriseAdmin
+            },
+            {
+                path: 'enterprises/edit/:id',
+                component: UpdateEnterpriseAdmin
+            },
             {
                 path: 'departments',
                 component: DictDepartmentsAdmin

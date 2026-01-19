@@ -1,0 +1,9 @@
+<app-back-header (backClicked)="goBack()" title="Новое предприятие"/>
+
+<div class="dashboard-admin">
+    <p class="tui-text_h4">
+        Новое предприятие
+    </p>
+
+    <app-enterprise-form (cancel)="onCancel()" (save)="onSave($event)" submitLabel="Добавить"/>
+</div>
