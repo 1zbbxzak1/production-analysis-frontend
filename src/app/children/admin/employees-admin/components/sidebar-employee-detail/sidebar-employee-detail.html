@@ -1,0 +1,49 @@
+<tui-drawer (click)="onOpenChange(false)" *ngIf="open" [overlay]="true" class="sidebar" direction="right">
+    <button (click)="onOpenChange(false)" appearance="icon" class="close-button" iconStart="assets/tuiIconRemoveLarge.svg" size="s"
+            tuiIconButton type="button"></button>
+    <div (click)="$event.stopPropagation()" *ngIf="employee" class="content">
+        <p class="tui-text_h6 title">Общая информация</p>
+        <div class="info-container">
+
+            <div class="field-value">
+                <span class="tui-text_body-s label">Фамилия</span>
+                <span class="tui-text_body-m value">{{ surname }}</span>
+            </div>
+
+            <div class="field-value">
+                <span class="tui-text_body-s label">Имя</span>
+                <span class="tui-text_body-m value">{{ name }}</span>
+            </div>
+
+            <div class="field-value">
+                <span class="tui-text_body-s label">Отчество</span>
+                <span class="tui-text_body-m value">{{ patronymic }}</span>
+            </div>
+
+            <div class="field-value">
+                <span class="tui-text_body-s label">Электронная почта</span>
+                <span class="tui-text_body-m value">{{ email }}</span>
+            </div>
+
+            <div class="field-value">
+                <span class="tui-text_body-s label">Должность</span>
+                <span class="tui-text_body-m value">{{ position }}</span>
+            </div>
+
+            <div class="field-value">
+                <span class="tui-text_body-s label">Подразделение</span>
+                <span class="tui-text_body-m value">{{ department }}</span>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button (click)="onEdit()" appearance="primary" size="m" tuiButton type="button">
+                Редактировать
+            </button>
+
+            <button (click)="onDelete()" appearance="outline" class="outline-b" size="m" tuiButton type="button">
+                Удалить
+            </button>
+        </div>
+    </div>
+</tui-drawer>

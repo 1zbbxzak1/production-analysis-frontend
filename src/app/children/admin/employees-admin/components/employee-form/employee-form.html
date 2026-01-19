@@ -1,0 +1,87 @@
+<div class="type-1-grid">
+    <div class="first-container">
+        <div class="last-name">
+            <p class="tui-text_body-s">
+                Фамилия
+            </p>
+
+            <tui-textfield tuiTextfieldSize="m">
+                <input [formControl]="controlLastName" placeholder="" tuiTextfield type="text"/>
+            </tui-textfield>
+        </div>
+
+        <div class="first-name-middle-name">
+            <div class="first-name-input-wrapper">
+                <p class="tui-text_body-s first-name">
+                    Имя
+                </p>
+
+                <tui-textfield tuiTextfieldSize="m">
+                    <input [formControl]="controlFirstName" placeholder="" tuiTextfield type="text"/>
+                </tui-textfield>
+            </div>
+
+            <div class="middle-name-input-wrapper">
+                <p class="tui-text_body-s middle-name">
+                    Отчество
+                </p>
+
+                <tui-textfield tuiTextfieldSize="m">
+                    <input [formControl]="controlMiddleName" placeholder="" tuiTextfield type="text"/>
+                </tui-textfield>
+            </div>
+        </div>
+    </div>
+
+    <div class="second-container">
+        <div class="email">
+            <p class="tui-text_body-s">
+                Электронная почта
+            </p>
+
+            <tui-textfield tuiTextfieldSize="m">
+                <input [formControl]="controlEmail" placeholder="" tuiTextfield type="email"/>
+            </tui-textfield>
+        </div>
+
+        <div class="first-name-middle-name">
+            <div class="first-name-input-wrapper">
+                <p class="tui-text_body-s first-name">
+                    Должность
+                </p>
+
+                <tui-combo-box [formControl]="controlPosition" [stringify]="stringifyPosition"
+                               [tuiDropdownMaxHeight]="150" [tuiTextfieldLabelOutside]="true" tuiTextfieldSize="m">
+                    Выберите
+
+                    <tui-data-list-wrapper *tuiDataList [itemContent]="stringifyPosition | tuiStringifyContent"
+                                           [items]="positions | tuiFilterByInput"/>
+                </tui-combo-box>
+            </div>
+
+            <div class="middle-name-input-wrapper">
+                <p class="tui-text_body-s middle-name">
+                    Подразделение
+                </p>
+
+                <tui-combo-box [formControl]="controlDepartment" [stringify]="stringifyDepartment"
+                               [tuiDropdownMaxHeight]="150" [tuiTextfieldLabelOutside]="true" tuiTextfieldSize="m">
+                    Выберите
+
+                    <tui-data-list-wrapper *tuiDataList [itemContent]="stringifyDepartment | tuiStringifyContent"
+                                           [items]="departments | tuiFilterByInput"/>
+                </tui-combo-box>
+            </div>
+        </div>
+    </div>
+
+    <div class="button-final">
+        <button (click)="onSubmit()" [disabled]="isFormInvalid()" appearance="primary" size="m" tuiButton type="button">
+            {{ submitLabel }}
+        </button>
+
+        <button (click)="onCancel()" appearance="outline" class="outline-b" size="m" tuiButton type="button">
+            Отменить
+        </button>
+    </div>
+</div>

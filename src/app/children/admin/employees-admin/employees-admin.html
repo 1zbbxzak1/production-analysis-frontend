@@ -1,0 +1,74 @@
+<app-header-admin/>
+
+<div class="main-container">
+    <app-loader [isLoading]="isLoading"/>
+
+    <div *ngIf="!isChildRouteActive" class="dashboard-admin">
+        <div class="progress-container">
+            <div class="first-container">
+                <p class="tui-text_h4">
+                    Сотрудники
+                </p>
+
+                <button (click)="goCreateEmployee()" iconStart="@tui.plus" size="m" tuiButton type="button">
+                    Добавить
+                </button>
+            </div>
+
+            <div class="search-container">
+                <tui-textfield iconStart="@tui.search" tuiTextfieldSize="m">
+                    <input (ngModelChange)="onSearchChange($event)" [(ngModel)]="searchValue" placeholder="Поиск"
+                           tuiTextfield/>
+
+                </tui-textfield>
+            </div>
+
+            <div *ngIf="!isLoading" class="table-header-is-head">
+                <div class="table-cell header-cell tui-text_body-s">ФИО</div>
+                <div class="table-cell header-cell tui-text_body-s">Электронная почта</div>
+                <div class="table-cell header-cell tui-text_body-s">Должность</div>
+                <div class="table-cell header-cell tui-text_body-s">Подразделение</div>
+
+            </div>
+
+            <div *ngIf="safeEmployeeItems.length > 0 && !isLoading" class="progress-table">
+                <div>
+                    <div (click)="onRowClick(employee)" *ngFor="let employee of safeEmployeeItems"
+                         class="table-row-is-head cursor-pointer">
+                        <div class="table-cell tui-text_body-m">
+                            {{ formatFullName(employee.fullName) }}
+                        </div>
+                        <div class="table-cell tui-text_body-m">
+                            {{ employee.email || '-' }}
+                        </div>
+                        <div class="table-cell tui-text_body-m">
+                            {{ employee.position || '-' }}
+                        </div>
+                        <div class="table-cell tui-text_body-m">
+                            {{ getDepartmentName(employee.departmentId) }}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="safeEmployeeItems.length === 0 && !isLoading" class="not-found-container">
+                <img alt="Not found" class="image" height="64" src="assets/not-found-forms.svg" width="64"/>
+                <p class="not-title tui-text_body-m">{{ emptyMessage }}</p>
+                <p class="not-desc">{{ emptyDescription }}</p>
+            </div>
+
+            <div *ngIf="shouldShowPagination && !isLoading" class="pagination-container">
+                <tui-pagination (indexChange)="onPageChange($event)" [index]="currentPage" [length]="totalPages"/>
+            </div>
+        </div>
+    </div>
+
+    <router-outlet/>
+</div>
+
+<app-sidebar-employee-detail (delete)="onDeleteFromSidebar($event)" (edit)="onEditFromSidebar($event)" (openChange)="showSidebar = $event; onCloseSidebar()"
+                             [(open)]="showSidebar" [departments]="departments"
+                             [employee]="selectedEmployee"></app-sidebar-employee-detail>
+
+<app-footer/>

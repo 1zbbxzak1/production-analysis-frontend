@@ -1,0 +1,22 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    margin-top: 32px;
+}
+
+.main-employee-container {
+    margin-top: 32px;
+
+    border: 1px solid var(--day-base-base-02);
+    border-radius: 16px;
+    padding: 32px;
+
+    background: var(--day-text-icons-text-01-inverse);
+
+    margin-bottom: 48px;
+}
+
+.tui-text_h4 {
+    margin-top: 0;
+    margin-bottom: 32px;
+}

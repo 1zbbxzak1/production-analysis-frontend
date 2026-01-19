@@ -1,0 +1,9 @@
+<app-back-header (backClicked)="goBack()"/>
+
+<div class="main-employee-container">
+    <p class="tui-text_h4">
+        Новый сотрудник
+    </p>
+
+    <app-employee-form (cancel)="onCancel()" (save)="onSave($event)" submitLabel="Добавить"/>
+</div>

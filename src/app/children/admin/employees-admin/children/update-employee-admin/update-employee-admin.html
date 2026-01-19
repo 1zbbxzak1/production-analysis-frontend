@@ -1,0 +1,12 @@
+<app-back-header (backClicked)="goBack()"/>
+
+<div class="main-employee-container">
+    <app-loader [isLoading]="isLoading"/>
+
+    <p class="tui-text_h4">
+        Данные сотрудника
+    </p>
+
+    <app-employee-form (cancel)="onCancel()" (save)="onSave($event)" *ngIf="!isLoading && employee"
+                       [initialData]="employee" submitLabel="Сохранить"/>
+</div>

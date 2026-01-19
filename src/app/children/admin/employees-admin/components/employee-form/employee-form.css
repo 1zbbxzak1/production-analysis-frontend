@@ -1,0 +1,56 @@
+:host {
+    display: block;
+    width: 100%;
+}
+
+.type-1-grid {
+    max-width: 584px;
+}
+
+.first-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    width: 100%;
+}
+
+.last-name,
+.email {
+    width: 100%;
+}
+
+.tui-text_body-s {
+    margin-top: 0;
+    margin-bottom: 4px;
+}
+
+.first-name-middle-name {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+
+    width: 100%;
+}
+
+.first-name,
+.middle-name {
+    margin-top: 16px;
+}
+
+.second-container {
+    margin-top: 16px;
+    margin-bottom: 40px;
+}
+
+.button-final {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 16px;
+}
+
+.outline-b {
+    border: 1px solid rgba(108, 134, 226, 0.32) !important;
+}

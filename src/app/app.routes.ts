@@ -24,6 +24,14 @@ import {ProgressFormsHead} from './children/head/dashboard-head/children/progres
 import {CompletedFormsHead} from './children/head/dashboard-head/children/completed-forms-head/completed-forms-head';
 import {FormType3} from './children/components/forms-table-edit-check/form-type-3/form-type-3';
 import {FormType5} from './children/components/forms-table-edit-check/form-type-5/form-type-5';
+import {EmployeesAdmin} from './children/admin/employees-admin/employees-admin';
+import {adminGuard} from './data/guard/admin-guard';
+import {
+    CreateEmployeeAdmin
+} from './children/admin/employees-admin/children/create-employee-admin/create-employee-admin';
+import {
+    UpdateEmployeeAdmin
+} from './children/admin/employees-admin/children/update-employee-admin/update-employee-admin';
 
 export const routes: Routes = [
     {
@@ -170,5 +178,20 @@ export const routes: Routes = [
         path: 'department-head/reports',
         component: SummaryReportHead,
         canActivate: [departmentHeadGuard],
+    },
+    {
+        path: 'admin/employees',
+        component: EmployeesAdmin,
+        canActivate: [adminGuard],
+        children: [
+            {
+                path: 'create-employee',
+                component: CreateEmployeeAdmin,
+            },
+            {
+                path: 'edit-employee/:id',
+                component: UpdateEmployeeAdmin,
+            }
+        ]
     },
 ];
