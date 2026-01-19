@@ -1,0 +1,30 @@
+.form-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 600px;
+}
+
+.tui-text_body-s {
+    margin: 0;
+    color: var(--day-text-icons-text-02);
+}
+
+.button-final {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 16px;
+    margin-top: 40px;
+}
+
+.outline-b {
+    border: 1px solid rgba(108, 134, 226, 0.32) !important;
+}

@@ -1,0 +1,9 @@
+<app-back-header (backClicked)="goBack()" title="Новая смена"/>
+
+<div class="dashboard-admin">
+    <p class="tui-text_h4">
+        Новая смена
+    </p>
+
+    <app-shift-form (cancel)="onCancel()" (save)="onSave($event)" submitLabel="Добавить"/>
+</div>

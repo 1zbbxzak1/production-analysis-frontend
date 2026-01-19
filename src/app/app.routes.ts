@@ -40,6 +40,7 @@ import {
 import {
     DictDepartmentsAdmin
 } from './children/admin/dictionaries-admin/children/dict-departments-admin/dict-departments-admin';
+import {DictShiftsAdmin} from './children/admin/dictionaries-admin/children/dict-shifts-admin/dict-shifts-admin';
 import {
     CreateDowntimeReasonGroupAdmin
 } from './children/admin/dictionaries-admin/children/dict-downtime-reason-groups-admin/children/create-downtime-reason-group-admin/create-downtime-reason-group-admin';
@@ -67,6 +68,12 @@ import {
 import {
     UpdateDepartmentAdmin
 } from './children/admin/dictionaries-admin/children/dict-departments-admin/children/update-department-admin/update-department-admin';
+import {
+    CreateShiftAdmin
+} from './children/admin/dictionaries-admin/children/dict-shifts-admin/children/create-shift-admin/create-shift-admin';
+import {
+    UpdateShiftAdmin
+} from './children/admin/dictionaries-admin/children/dict-shifts-admin/children/update-shift-admin/update-shift-admin';
 
 export const routes: Routes = [
     {
@@ -269,6 +276,18 @@ export const routes: Routes = [
             {
                 path: 'departments/edit/:id',
                 component: UpdateDepartmentAdmin
+            },
+            {
+                path: 'shifts',
+                component: DictShiftsAdmin
+            },
+            {
+                path: 'shifts/create',
+                component: CreateShiftAdmin
+            },
+            {
+                path: 'shifts/edit/:id',
+                component: UpdateShiftAdmin
             },
             {
                 path: 'downtime-reason-groups',
