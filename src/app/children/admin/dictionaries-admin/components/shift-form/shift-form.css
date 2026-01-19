@@ -9,7 +9,20 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
+    width: 100%;
+    max-width: 600px;
+}
+
+.time-row {
+    display: flex;
+    gap: 16px;
     width: 600px;
+    /* Assuming we want to match the max-width of single inputs or fill available space */
+}
+
+.time-row .input-container {
+    width: 100%;
+    max-width: none;
 }
 
 .tui-text_body-s {

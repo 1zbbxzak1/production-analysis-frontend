@@ -32,6 +32,7 @@ export class ShiftFormComponent implements OnInit {
 
     public readonly controlName: FormControl<string | null> = new FormControl<string | null>(null, Validators.required);
     public readonly controlStartTime: FormControl<TuiTime | null> = new FormControl<TuiTime | null>(null, Validators.required);
+    public readonly controlEndTime: FormControl<TuiTime | null> = new FormControl<TuiTime | null>(null, Validators.required);
 
     public ngOnInit(): void {
         if (this.initialData) {
@@ -40,7 +41,7 @@ export class ShiftFormComponent implements OnInit {
     }
 
     protected isFormInvalid(): boolean {
-        return this.controlName.invalid || this.controlStartTime.invalid;
+        return this.controlName.invalid || this.controlStartTime.invalid || this.controlEndTime.invalid;
     }
 
     protected onSubmit(): void {
@@ -68,7 +69,12 @@ export class ShiftFormComponent implements OnInit {
         if (data.startTime) {
             const parts: string[] = data.startTime.split(':');
             if (parts.length >= 2) {
-                this.controlStartTime.setValue(new TuiTime(Number(parts[0]), Number(parts[1])));
+                const hour = Number(parts[0]);
+                const minute = Number(parts[1]);
+                this.controlStartTime.setValue(new TuiTime(hour, minute));
+
+                const endHour = (hour + 8) % 24;
+                this.controlEndTime.setValue(new TuiTime(endHour, minute));
             }
         }
     }

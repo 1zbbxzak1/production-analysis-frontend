@@ -15,6 +15,7 @@
         <div *ngIf="!isLoading" class="table-header-is-head">
             <div class="table-cell header-cell tui-text_body-s name-col">Название</div>
             <div class="table-cell header-cell tui-text_body-s time-col">Время начала</div>
+            <div class="table-cell header-cell tui-text_body-s time-col">Время окончания</div>
             <div class="table-cell header-cell tui-text_body-s action-col"></div>
         </div>
 
@@ -27,6 +28,9 @@
                         </div>
                         <div class="table-cell tui-text_body-m time-col">
                             {{ formatTime(item.startTime) }}
+                        </div>
+                        <div class="table-cell tui-text_body-m time-col">
+                            {{ calculateEndTime(item.startTime) }}
                         </div>
                         <div class="table-cell tui-text_body-m action-col">
                             <button (click)="$event.stopPropagation()"

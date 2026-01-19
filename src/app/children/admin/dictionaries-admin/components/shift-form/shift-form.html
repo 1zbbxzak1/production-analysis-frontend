@@ -9,14 +9,26 @@
         </tui-textfield>
     </div>
 
-    <div class="input-container">
-        <p class="tui-text_body-s">
-            Время начала
-        </p>
+    <div class="time-row">
+        <div class="input-container">
+            <p class="tui-text_body-s">
+                Время начала
+            </p>
 
-        <tui-textfield tuiTextfieldSize="m">
-            <input [formControl]="controlStartTime" tuiInputTime />
-        </tui-textfield>
+            <tui-textfield tuiTextfieldSize="m">
+                <input [formControl]="controlStartTime" tuiInputTime />
+            </tui-textfield>
+        </div>
+
+        <div class="input-container">
+            <p class="tui-text_body-s">
+                Время окончания
+            </p>
+
+            <tui-textfield tuiTextfieldSize="m">
+                <input [formControl]="controlEndTime" tuiInputTime />
+            </tui-textfield>
+        </div>
     </div>
 </div>
 

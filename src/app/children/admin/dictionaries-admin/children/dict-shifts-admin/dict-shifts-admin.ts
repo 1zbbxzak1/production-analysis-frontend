@@ -133,6 +133,24 @@ export class DictShiftsAdmin implements OnInit {
         return time;
     }
 
+    protected calculateEndTime(startTime: string | undefined): string {
+        if (!startTime) {
+            return '-';
+        }
+        const parts = startTime.split(':');
+        if (parts.length < 2) {
+            return '-';
+        }
+
+        let hours = Number(parts[0]);
+        const minutes = parts[1];
+
+        hours = (hours + 8) % 24;
+
+        const formattedHours = hours.toString().padStart(2, '0');
+        return `${formattedHours}:${minutes}`;
+    }
+
     private loadData(): void {
         this.isLoading = true;
         this._dictManager.getShifts().pipe(
