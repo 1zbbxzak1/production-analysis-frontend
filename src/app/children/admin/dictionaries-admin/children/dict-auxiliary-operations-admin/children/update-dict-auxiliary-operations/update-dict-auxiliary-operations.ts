@@ -55,7 +55,7 @@ export class UpdateDictAuxiliaryOperations implements OnInit {
                 this.isLoading = false;
 
                 if (!this.operation) {
-                    this.alerts.open('Операция не найдена', {appearance: 'negative'}).subscribe();
+                    this.alerts.open('Время работы не найдено', {appearance: 'negative'}).subscribe();
                     this.goBack();
                 }
             },
@@ -86,7 +86,7 @@ export class UpdateDictAuxiliaryOperations implements OnInit {
         ).subscribe({
             next: (): void => {
                 this.alerts
-                    .open('<strong>Обновлена вспомогательная операция</strong>', {
+                    .open('<strong>Обновлено время работы</strong>', {
                         appearance: 'positive',
                     })
                     .subscribe();

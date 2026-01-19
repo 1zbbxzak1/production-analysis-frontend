@@ -1,4 +1,4 @@
-<app-back-header (backClicked)="goBack()" title="Смены"/>
+<app-back-header (backClicked)="goBack()" title="Смены" />
 
 <div class="dashboard-admin">
     <div class="progress-container">
@@ -26,17 +26,16 @@
                             {{ item.name || '-' }}
                         </div>
                         <div class="table-cell tui-text_body-m time-col">
-                            {{ item.startTime }}
+                            {{ formatTime(item.startTime) }}
                         </div>
                         <div class="table-cell tui-text_body-m action-col">
                             <button (click)="$event.stopPropagation()"
-                                    (mouseenter)="onButtonMouseEnter(item.id, $event)"
-                                    (mouseleave)="onButtonMouseLeave($event)" [tuiDropdown]="content"
-                                    class="button-more-btn" tuiDropdownAlign="right" tuiDropdownLimitWidth="auto"
-                                    tuiDropdownOpen type="button">
-                                <img
-                                    [src]="shouldShowHoverImage(item.id) ? 'assets/more-btn-hover.svg' : 'assets/more-btn.svg'"
-                                    alt="More" height="24" width="24"/>
+                                (mouseenter)="onButtonMouseEnter(item.id, $event)"
+                                (mouseleave)="onButtonMouseLeave($event)" [tuiDropdown]="content"
+                                class="button-more-btn" tuiDropdownAlign="right" tuiDropdownLimitWidth="auto"
+                                tuiDropdownOpen type="button">
+                                <img [src]="shouldShowHoverImage(item.id) ? 'assets/more-btn-hover.svg' : 'assets/more-btn.svg'"
+                                    alt="More" height="24" width="24" />
                             </button>
 
                             <ng-template #content>
@@ -55,13 +54,13 @@
             </div>
 
             <div *ngIf="safeItems.length === 0 && !isLoading" class="not-found-container">
-                <img alt="Not found" class="image" height="64" src="assets/not-found-forms.svg" width="64"/>
+                <img alt="Not found" class="image" height="64" src="assets/not-found-forms.svg" width="64" />
                 <p class="not-title tui-text_body-m">{{ emptyMessage }}</p>
                 <p class="not-desc">{{ emptyDescription }}</p>
             </div>
 
             <div *ngIf="shouldShowPagination && !isLoading" class="pagination-container">
-                <tui-pagination (indexChange)="onPageChange($event)" [index]="currentPage" [length]="totalPages"/>
+                <tui-pagination (indexChange)="onPageChange($event)" [index]="currentPage" [length]="totalPages" />
             </div>
         </div>
     </div>

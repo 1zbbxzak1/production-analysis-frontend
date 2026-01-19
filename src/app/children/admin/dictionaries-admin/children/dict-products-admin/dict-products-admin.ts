@@ -97,7 +97,7 @@ export class DictProductsAdmin implements OnInit {
             takeUntilDestroyed(this._destroyRef)
         ).subscribe((): void => {
             this.items = this.items.filter((item: ProductDto): boolean => item.id !== id);
-            this.alerts.open('<strong>Продукт удален</strong>', {appearance: 'positive'}).subscribe();
+            this.alerts.open('<strong>Продукция удалена</strong>', {appearance: 'positive'}).subscribe();
             this.totalItems = this.items.length;
             this.updateFilteredItems();
             this._cdr.detectChanges();

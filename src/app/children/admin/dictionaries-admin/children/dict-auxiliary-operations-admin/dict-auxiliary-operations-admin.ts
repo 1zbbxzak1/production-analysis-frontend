@@ -96,7 +96,7 @@ export class DictAuxiliaryOperationsAdmin implements OnInit {
             takeUntilDestroyed(this._destroyRef)
         ).subscribe((): void => {
             this.items = this.items.filter((item: AuxiliaryOperationDto): boolean => item.id !== id);
-            this.alerts.open('<strong>Операция удалена</strong>', {appearance: 'positive'}).subscribe();
+            this.alerts.open('<strong>Время работы удалено</strong>', {appearance: 'positive'}).subscribe();
             this.totalItems = this.items.length;
             this.updateFilteredItems();
             this._cdr.detectChanges();
@@ -121,6 +121,35 @@ export class DictAuxiliaryOperationsAdmin implements OnInit {
 
     protected shouldShowHoverImage(itemId: number): boolean {
         return this.isItemHovered(itemId) && this.isButtonHovered;
+    }
+
+    protected formatDuration(time: string | null): string {
+        if (!time) {
+            return '-';
+        }
+
+        const parts: number[] = time.split(':').map(Number);
+        if (parts.length !== 3) {
+            return time;
+        }
+
+        const hours: number = parts[0];
+        const minutes: number = parts[1];
+        const seconds: number = parts[2];
+
+        const result: string[] = [];
+
+        if (hours > 0) {
+            result.push(`${hours} ч`);
+        }
+        if (minutes > 0) {
+            result.push(`${minutes} мин`);
+        }
+        if (seconds > 0) {
+            result.push(`${seconds} сек`);
+        }
+
+        return result.length > 0 ? result.join(' ') : '0 сек';
     }
 
     private loadData(): void {

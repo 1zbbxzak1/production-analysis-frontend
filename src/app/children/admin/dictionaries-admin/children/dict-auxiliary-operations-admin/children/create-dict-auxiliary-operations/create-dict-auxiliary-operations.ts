@@ -36,7 +36,7 @@ export class CreateDictAuxiliaryOperations {
         ).subscribe({
             next: (): void => {
                 this.alerts
-                    .open('<strong>Добавлена вспомогательная операция</strong>', {
+                    .open('<strong>Добавлено время работы</strong>', {
                         appearance: 'positive',
                     })
                     .subscribe();

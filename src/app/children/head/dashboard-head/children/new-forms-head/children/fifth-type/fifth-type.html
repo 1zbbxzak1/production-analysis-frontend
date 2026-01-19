@@ -1,4 +1,4 @@
-<app-back-header (backClicked)="goBack()"/>
+<app-back-header (backClicked)="goBack()" />
 
 <div class="type-1-container">
     <p class="tui-text_h4">
@@ -16,19 +16,12 @@
                     Исполнитель
                 </p>
 
-                <tui-combo-box
-                    [formControl]="controlOperators"
-                    [stringify]="stringify"
-                    [tuiTextfieldLabelOutside]="true"
-                    tuiTextfieldSize="m"
-                >
+                <tui-combo-box [formControl]="controlOperators" [stringify]="stringify"
+                    [tuiTextfieldLabelOutside]="true" tuiTextfieldSize="m">
                     Выберите
 
-                    <tui-data-list-wrapper
-                        *tuiDataList
-                        [itemContent]="stringify | tuiStringifyContent"
-                        [items]="operators | tuiFilterByInput"
-                    />
+                    <tui-data-list-wrapper *tuiDataList [itemContent]="stringify | tuiStringifyContent"
+                        [items]="operators | tuiFilterByInput" />
                 </tui-combo-box>
             </div>
 
@@ -38,26 +31,12 @@
                         Дата
                     </p>
 
-                    <tui-textfield [content]="controlDate.value?.daySame(today) ? this.today : ''"
-                                   tuiTextfieldSize="m">
-                        <input
-                            [formControl]="controlDate"
-                            placeholder="ДД.ММ.ГГГГ"
-                            tuiInputDate
-                        />
-                        <ng-template
-                            let-close
-                            tuiTextfieldDropdown
-                        >
-                            <tui-calendar/>
-                            <button
-                                (click)="controlDate.setValue(today); close()"
-                                appearance="action"
-                                class="button"
-                                size="m"
-                                tuiButton
-                                type="button"
-                            >
+                    <tui-textfield [content]="controlDate.value?.daySame(today) ? this.today : ''" tuiTextfieldSize="m">
+                        <input [formControl]="controlDate" placeholder="ДД.ММ.ГГГГ" tuiInputDate />
+                        <ng-template let-close tuiTextfieldDropdown>
+                            <tui-calendar />
+                            <button (click)="controlDate.setValue(today); close()" appearance="action" class="button"
+                                size="m" tuiButton type="button">
                                 Сегодня
                             </button>
                         </ng-template>
@@ -69,19 +48,12 @@
                         Смена
                     </p>
 
-                    <tui-combo-box
-                        [formControl]="controlShifts"
-                        [stringify]="stringifyShift"
-                        [tuiTextfieldLabelOutside]="true"
-                        tuiTextfieldSize="m"
-                    >
+                    <tui-combo-box [formControl]="controlShifts" [stringify]="stringifyShift"
+                        [tuiTextfieldLabelOutside]="true" tuiTextfieldSize="m">
                         Выберите
 
-                        <tui-data-list-wrapper
-                            *tuiDataList
-                            [itemContent]="stringifyShift | tuiStringifyContent"
-                            [items]="shifts | tuiFilterByInput"
-                        />
+                        <tui-data-list-wrapper *tuiDataList [itemContent]="stringifyShift | tuiStringifyContent"
+                            [items]="shifts | tuiFilterByInput" />
                     </tui-combo-box>
                 </div>
             </div>
@@ -94,46 +66,27 @@
 
             <div class="operators">
                 <p class="tui-text_body-s">
-                    Наименование продукции
+                    Наименование продукции/операции
                 </p>
 
-                <tui-combo-box
-                    [formControl]="controlProducts"
-                    [stringify]="stringifyProduct"
-                    [tuiTextfieldLabelOutside]="true"
-                    tuiTextfieldSize="m"
-                >
+                <tui-combo-box [formControl]="controlProductOrOperation" [stringify]="stringifyProductOrOperation"
+                    [tuiTextfieldLabelOutside]="true" tuiTextfieldSize="m">
                     Выберите
 
-                    <tui-data-list-wrapper
-                        *tuiDataList
-                        [itemContent]="stringifyProduct | tuiStringifyContent"
-                        [items]="products | tuiFilterByInput"
-                    />
+                    <tui-data-list-wrapper *tuiDataList
+                        [itemContent]="stringifyProductOrOperation | tuiStringifyContent"
+                        [items]="productsAndOperations | tuiFilterByInput" />
                 </tui-combo-box>
             </div>
         </div>
 
         <div class="button-final">
-            <button
-                (click)="createForm()"
-                [disabled]="isCompletedCreateForm()"
-                appearance="primary"
-                size="m"
-                tuiButton
-                type="button"
-            >
+            <button (click)="createForm()" [disabled]="isCompletedCreateForm()" appearance="primary" size="m" tuiButton
+                type="button">
                 Создать
             </button>
 
-            <button
-                (click)="goBack()"
-                appearance="outline"
-                class="outline-b"
-                size="m"
-                tuiButton
-                type="button"
-            >
+            <button (click)="goBack()" appearance="outline" class="outline-b" size="m" tuiButton type="button">
                 Отменить
             </button>
         </div>

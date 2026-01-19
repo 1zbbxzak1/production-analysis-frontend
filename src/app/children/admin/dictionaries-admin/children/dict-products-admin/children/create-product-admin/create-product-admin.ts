@@ -32,7 +32,7 @@ export class CreateProductAdmin {
         ).subscribe({
             next: (): void => {
                 this.alerts
-                    .open('<strong>Продукт добавлен</strong>', {
+                    .open('<strong>Продукция добавлена</strong>', {
                         appearance: 'positive',
                     })
                     .subscribe();

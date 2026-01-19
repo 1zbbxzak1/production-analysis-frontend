@@ -49,7 +49,7 @@ export class UpdateProductAdmin implements OnInit {
                 this.isLoading = false;
 
                 if (!this.product) {
-                    this.alerts.open('Продукт не найден', {appearance: 'negative'}).subscribe();
+                    this.alerts.open('Продукция не найдена', {appearance: 'negative'}).subscribe();
                     this.goBack();
                 }
             },
@@ -81,7 +81,7 @@ export class UpdateProductAdmin implements OnInit {
         ).subscribe({
             next: (): void => {
                 this.alerts
-                    .open('<strong>Продукт обновлен</strong>', {
+                    .open('<strong>Продукция обновлена</strong>', {
                         appearance: 'positive',
                     })
                     .subscribe();

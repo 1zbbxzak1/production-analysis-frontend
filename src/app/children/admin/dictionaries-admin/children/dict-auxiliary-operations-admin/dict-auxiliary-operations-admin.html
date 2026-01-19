@@ -4,7 +4,7 @@
     <div class="progress-container">
         <div class="first-container">
             <p class="tui-text_h4">
-                Вспомогательные операции
+                Время работы
             </p>
 
             <button (click)="goCreate()" iconStart="@tui.plus" size="m" tuiButton type="button">
@@ -30,7 +30,7 @@
                             {{ item.name || '-' }}
                         </div>
                         <div class="table-cell tui-text_body-m duration-col">
-                            {{ item.duration || '-' }}
+                            {{ formatDuration(item.duration) }}
                         </div>
                         <div class="table-cell tui-text_body-m action-col">
                             <button (click)="$event.stopPropagation()"

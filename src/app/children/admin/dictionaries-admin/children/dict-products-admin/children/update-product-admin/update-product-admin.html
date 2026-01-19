@@ -4,7 +4,7 @@
     <app-loader [isLoading]="isLoading"/>
 
     <p class="tui-text_h4">
-        Редактирование продукта
+        Редактирование продукции
     </p>
 
     <app-product-form (cancel)="onCancel()" (save)="onSave($event)" *ngIf="!isLoading && product"

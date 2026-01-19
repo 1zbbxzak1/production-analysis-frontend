@@ -1,8 +1,8 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, OnInit} from '@angular/core';
-import {NgForOf, NgIf} from '@angular/common';
-import {Router} from '@angular/router';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import {finalize} from 'rxjs';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { NgForOf, NgIf } from '@angular/common';
+import { Router } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { finalize } from 'rxjs';
 import {
     TuiAlertService,
     TuiButton,
@@ -12,11 +12,11 @@ import {
     TuiDropdownOptionsDirective,
     TuiOption
 } from '@taiga-ui/core';
-import {TuiPagination} from '@taiga-ui/kit';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {DictManagerService} from '../../../../../data/service/dictionaries/dict.manager.service';
-import {ShiftDto} from '../../../../../data/models/dictionaries/responses/ShiftDto';
-import {BackHeader} from '../../../../components/back-header/back-header';
+import { TuiPagination } from '@taiga-ui/kit';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DictManagerService } from '../../../../../data/service/dictionaries/dict.manager.service';
+import { ShiftDto } from '../../../../../data/models/dictionaries/responses/ShiftDto';
+import { BackHeader } from '../../../../components/back-header/back-header';
 
 @Component({
     selector: 'app-dict-shifts-admin',
@@ -96,7 +96,7 @@ export class DictShiftsAdmin implements OnInit {
             takeUntilDestroyed(this._destroyRef)
         ).subscribe((): void => {
             this.items = this.items.filter((item: ShiftDto): boolean => item.id !== id);
-            this.alerts.open('<strong>Смена удалена</strong>', {appearance: 'positive'}).subscribe();
+            this.alerts.open('<strong>Смена удалена</strong>', { appearance: 'positive' }).subscribe();
             this.totalItems = this.items.length;
             this.updateFilteredItems();
             this._cdr.detectChanges();
@@ -120,6 +120,17 @@ export class DictShiftsAdmin implements OnInit {
 
     protected shouldShowHoverImage(itemId: number): boolean {
         return this.isItemHovered(itemId) && this.isButtonHovered;
+    }
+
+    protected formatTime(time: string | undefined): string {
+        if (!time) {
+            return '-';
+        }
+        const parts = time.split(':');
+        if (parts.length >= 2) {
+            return `${parts[0]}:${parts[1]}`;
+        }
+        return time;
     }
 
     private loadData(): void {
