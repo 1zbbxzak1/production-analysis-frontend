@@ -1,0 +1,30 @@
+<div class="form-grid">
+    <div class="input-container">
+        <p class="tui-text_body-s">
+            Название
+        </p>
+ 
+        <tui-textfield tuiTextfieldSize="m">
+            <input [formControl]="readonlycontrolName" tuiTextfield type="text"/>
+        </tui-textfield>
+    </div>
+
+    <div class="input-container description-container">
+        <p class="tui-text_body-s">
+            Описание
+        </p>
+
+        <tui-textarea [formControl]="controlDescription" [tuiTextfieldLabelOutside]="true" tuiTextfieldSize="m">
+        </tui-textarea>
+    </div>
+</div>
+
+<div class="button-final">
+    <button (click)="onSubmit()" [disabled]="isFormInvalid()" appearance="primary" size="m" tuiButton type="button">
+        {{ submitLabel }}
+    </button>
+
+    <button (click)="onCancel()" appearance="outline" class="outline-b" size="m" tuiButton type="button">
+        Отменить
+    </button>
+</div>
