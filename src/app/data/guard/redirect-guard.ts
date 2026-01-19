@@ -13,7 +13,7 @@ export const redirectGuard: CanActivateFn = (): Observable<boolean> => {
     if (isAuthorized) {
         let redirectPath = '/';
         if (roles?.includes('Admin')) {
-            redirectPath = '/admin';
+            redirectPath = '/admin/dictionaries';
         } else if (roles?.includes('DepartmentHead')) {
             redirectPath = '/department-head/all-list';
         } else if (roles?.includes('Operator')) {

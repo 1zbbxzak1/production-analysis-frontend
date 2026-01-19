@@ -66,7 +66,7 @@ export class Auth implements OnInit {
                     const roles: string[] = this._authManagerService.getUserRoles() || [];
 
                     if (roles.includes('Admin')) {
-                        this._router.navigate(['admin']);
+                        this._router.navigate(['admin/dictionaries']);
                     } else if (roles.includes('DepartmentHead')) {
                         this._router.navigate(['department-head/all-list']);
                     } else if (roles.includes('Operator')) {

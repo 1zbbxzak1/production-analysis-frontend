@@ -32,6 +32,7 @@ import {
 import {
     UpdateEmployeeAdmin
 } from './children/admin/employees-admin/children/update-employee-admin/update-employee-admin';
+import {DictionariesAdmin} from './children/admin/dictionaries-admin/dictionaries-admin';
 
 export const routes: Routes = [
     {
@@ -193,5 +194,10 @@ export const routes: Routes = [
                 component: UpdateEmployeeAdmin,
             }
         ]
+    },
+    {
+        path: 'admin/dictionaries',
+        component: DictionariesAdmin,
+        canActivate: [adminGuard],
     },
 ];
