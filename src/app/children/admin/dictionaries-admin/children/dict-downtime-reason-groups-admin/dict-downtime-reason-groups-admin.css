@@ -78,17 +78,15 @@ app-back-header {
 }
 
 .name-col {
-    width: 284px;
-    max-width: 284px;
+    flex: 1;
     min-width: 200px;
     flex-shrink: 0;
     margin-right: 16px;
 }
 
 .desc-col {
-    width: 852px;
-    max-width: 852px;
-    min-width: 200px;
+    flex: 3;
+    min-width: 300px;
     flex-shrink: 0;
     margin-right: 16px;
 }
@@ -160,4 +158,3 @@ app-back-header {
     flex-shrink: 0;
     margin-top: auto;
 }
-
