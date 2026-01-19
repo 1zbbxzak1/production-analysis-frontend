@@ -1,10 +1,10 @@
-<app-back-header (backClicked)="goBack()" title="Продукты"/>
+<app-back-header (backClicked)="goBack()" title="Вспомогательные операции"/>
 
 <div class="dashboard-admin">
     <div class="progress-container">
         <div class="first-container">
             <p class="tui-text_h4">
-                Продукты
+                Вспомогательные операции
             </p>
 
             <button (click)="goCreate()" iconStart="@tui.plus" size="m" tuiButton type="button">
@@ -13,9 +13,12 @@
         </div>
 
         <div *ngIf="!isLoading" class="table-header-is-head">
-            <div class="table-cell header-cell tui-text_body-s name-col">Название</div>
-            <div class="table-cell header-cell tui-text_body-s tact-time-col">Время такта</div>
-            <div class="table-cell header-cell tui-text_body-s enterprise-col">Предприятие</div>
+            <div class="table-cell header-cell tui-text_body-s name-col">
+                Название
+            </div>
+            <div class="table-cell header-cell tui-text_body-s duration-col">
+                Длительность
+            </div>
             <div class="table-cell header-cell tui-text_body-s action-col"></div>
         </div>
 
@@ -26,11 +29,8 @@
                         <div class="table-cell tui-text_body-m name-col">
                             {{ item.name || '-' }}
                         </div>
-                        <div class="table-cell tui-text_body-m tact-time-col">
-                            {{ formatTactTime(item.tactTime) }}
-                        </div>
-                        <div class="table-cell tui-text_body-m enterprise-col">
-                            {{ getEnterpriseName(item.enterpriseId) }}
+                        <div class="table-cell tui-text_body-m duration-col">
+                            {{ item.duration || '-' }}
                         </div>
                         <div class="table-cell tui-text_body-m action-col">
                             <button (click)="$event.stopPropagation()"
@@ -57,16 +57,14 @@
                     </div>
                 </div>
             </div>
-
-            <div *ngIf="safeItems.length === 0 && !isLoading" class="not-found-container">
-                <img alt="Not found" class="image" height="64" src="assets/not-found-forms.svg" width="64"/>
-                <p class="not-title tui-text_body-m">{{ emptyMessage }}</p>
-                <p class="not-desc">{{ emptyDescription }}</p>
-            </div>
-
             <div *ngIf="shouldShowPagination && !isLoading" class="pagination-container">
                 <tui-pagination (indexChange)="onPageChange($event)" [index]="currentPage" [length]="totalPages"/>
             </div>
+        </div>
+        <div *ngIf="safeItems.length === 0 && !isLoading" class="not-found-container">
+            <img alt="Not found" class="image" height="64" src="assets/not-found-forms.svg" width="64"/>
+            <p class="not-title tui-text_body-m">{{ emptyMessage }}</p>
+            <p class="not-desc">{{ emptyDescription }}</p>
         </div>
     </div>
 </div>

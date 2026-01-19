@@ -74,6 +74,15 @@ import {
 import {
     UpdateShiftAdmin
 } from './children/admin/dictionaries-admin/children/dict-shifts-admin/children/update-shift-admin/update-shift-admin';
+import {
+    DictAuxiliaryOperationsAdmin
+} from './children/admin/dictionaries-admin/children/dict-auxiliary-operations-admin/dict-auxiliary-operations-admin';
+import {
+    CreateDictAuxiliaryOperations
+} from './children/admin/dictionaries-admin/children/dict-auxiliary-operations-admin/children/create-dict-auxiliary-operations/create-dict-auxiliary-operations';
+import {
+    UpdateDictAuxiliaryOperations
+} from './children/admin/dictionaries-admin/children/dict-auxiliary-operations-admin/children/update-dict-auxiliary-operations/update-dict-auxiliary-operations';
 
 export const routes: Routes = [
     {
@@ -300,6 +309,18 @@ export const routes: Routes = [
             {
                 path: 'downtime-reason-groups/edit/:id',
                 component: UpdateDowntimeReasonGroupAdmin
+            },
+            {
+                path: 'auxiliary-operations',
+                component: DictAuxiliaryOperationsAdmin
+            },
+            {
+                path: 'auxiliary-operations/create',
+                component: CreateDictAuxiliaryOperations
+            },
+            {
+                path: 'auxiliary-operations/edit/:id',
+                component: UpdateDictAuxiliaryOperations
             },
         ]
     },

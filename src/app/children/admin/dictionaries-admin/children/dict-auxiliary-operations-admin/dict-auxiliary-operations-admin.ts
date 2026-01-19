@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, injec
 import {NgForOf, NgIf} from '@angular/common';
 import {Router} from '@angular/router';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import {finalize, forkJoin} from 'rxjs';
+import {finalize} from 'rxjs';
 import {
     TuiAlertService,
     TuiButton,
@@ -15,11 +15,11 @@ import {
 import {TuiPagination} from '@taiga-ui/kit';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {DictManagerService} from '../../../../../data/service/dictionaries/dict.manager.service';
-import {ProductDto} from '../../../../../data/models/dictionaries/responses/ProductDto';
+import {AuxiliaryOperationDto} from '../../../../../data/models/dictionaries/responses/AuxiliaryOperationDto';
 import {BackHeader} from '../../../../components/back-header/back-header';
 
 @Component({
-    selector: 'app-dict-products-admin',
+    selector: 'app-dict-auxiliary-operations-admin',
     imports: [
         NgIf,
         NgForOf,
@@ -34,19 +34,18 @@ import {BackHeader} from '../../../../components/back-header/back-header';
         FormsModule,
         ReactiveFormsModule,
     ],
-    templateUrl: './dict-products-admin.html',
-    styleUrl: './dict-products-admin.css',
+    templateUrl: './dict-auxiliary-operations-admin.html',
+    styleUrl: './dict-auxiliary-operations-admin.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DictProductsAdmin implements OnInit {
+export class DictAuxiliaryOperationsAdmin implements OnInit {
     public isLoading: boolean = false;
-    public items: ProductDto[] = [];
-    public enterprises: Map<number, string> = new Map();
+    public items: AuxiliaryOperationDto[] = [];
     public totalItems: number = 0;
     public currentPage: number = 0;
     public searchValue: string = '';
-    public emptyMessage: string = 'Продуктов пока нет';
-    public emptyDescription: string = 'Вы пока не создали продукты.';
+    public emptyMessage: string = 'Вспомогательных операций пока нет';
+    public emptyDescription: string = 'Вы пока не создали вспомогательные операции.';
 
     protected hoveredItemId: number | null = null;
     protected isButtonHovered: boolean = false;
@@ -57,9 +56,9 @@ export class DictProductsAdmin implements OnInit {
     private readonly _destroyRef: DestroyRef = inject(DestroyRef);
     private readonly _cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
     private readonly alerts: TuiAlertService = inject(TuiAlertService);
-    private filteredItems: ProductDto[] = [];
+    private filteredItems: AuxiliaryOperationDto[] = [];
 
-    protected get safeItems(): ProductDto[] {
+    protected get safeItems(): AuxiliaryOperationDto[] {
         const startIndex: number = this.currentPage * this.itemsPerPage;
         return this.filteredItems.slice(startIndex, startIndex + this.itemsPerPage);
     }
@@ -85,19 +84,19 @@ export class DictProductsAdmin implements OnInit {
     }
 
     protected goCreate(): void {
-        this._router.navigate(['admin/dictionaries/products/create']);
+        this._router.navigate(['admin/dictionaries/auxiliary-operations/create']);
     }
 
     protected goEdit(id: number): void {
-        this._router.navigate([`admin/dictionaries/products/edit/${id}`]);
+        this._router.navigate([`admin/dictionaries/auxiliary-operations/edit/${id}`]);
     }
 
     protected deleteItem(id: number): void {
-        this._dictManager.deleteProduct(id).pipe(
+        this._dictManager.deleteAuxiliaryOperation(id).pipe(
             takeUntilDestroyed(this._destroyRef)
         ).subscribe((): void => {
-            this.items = this.items.filter((item: ProductDto): boolean => item.id !== id);
-            this.alerts.open('<strong>Продукт удален</strong>', {appearance: 'positive'}).subscribe();
+            this.items = this.items.filter((item: AuxiliaryOperationDto): boolean => item.id !== id);
+            this.alerts.open('<strong>Операция удалена</strong>', {appearance: 'positive'}).subscribe();
             this.totalItems = this.items.length;
             this.updateFilteredItems();
             this._cdr.detectChanges();
@@ -115,6 +114,7 @@ export class DictProductsAdmin implements OnInit {
         this.isButtonHovered = false;
     }
 
+
     protected isItemHovered(itemId: number): boolean {
         return this.hoveredItemId === itemId;
     }
@@ -123,54 +123,17 @@ export class DictProductsAdmin implements OnInit {
         return this.isItemHovered(itemId) && this.isButtonHovered;
     }
 
-    protected getEnterpriseName(id: number): string {
-        return this.enterprises.get(id) || '-';
-    }
-
-    protected formatTactTime(time: string | null): string {
-        if (!time) {
-            return '-';
-        }
-
-        const parts: number[] = time.split(':').map(Number);
-        if (parts.length !== 3) {
-            return time;
-        }
-
-        const hours: number = parts[0];
-        const minutes: number = parts[1];
-        const seconds: number = parts[2];
-
-        const result: string[] = [];
-
-        if (hours > 0) {
-            result.push(`${hours} ч`);
-        }
-        if (minutes > 0) {
-            result.push(`${minutes} мин`);
-        }
-        if (seconds > 0) {
-            result.push(`${seconds} сек`);
-        }
-
-        return result.length > 0 ? result.join(' ') : '0 сек';
-    }
-
     private loadData(): void {
         this.isLoading = true;
-        forkJoin([
-            this._dictManager.getProducts(),
-            this._dictManager.getEnterprises()
-        ]).pipe(
+        this._dictManager.getAuxiliaryOperations().pipe(
             takeUntilDestroyed(this._destroyRef),
             finalize((): void => {
                 this.isLoading = false;
                 this._cdr.detectChanges();
             })
-        ).subscribe(([products, enterprises]) => {
-            this.items = products;
-            this.enterprises = new Map(enterprises.map(e => [e.id, e.name || '']));
-            this.totalItems = products.length;
+        ).subscribe((items: AuxiliaryOperationDto[]): void => {
+            this.items = items;
+            this.totalItems = items.length;
             this.updateFilteredItems();
         });
     }
@@ -180,8 +143,9 @@ export class DictProductsAdmin implements OnInit {
             this.filteredItems = this.items;
         } else {
             const lowerSearch: string = this.searchValue.toLowerCase().trim();
-            this.filteredItems = this.items.filter((item: ProductDto): boolean | undefined =>
-                (item.name?.toLowerCase().includes(lowerSearch))
+            this.filteredItems = this.items.filter((item: AuxiliaryOperationDto): boolean | undefined =>
+                (item.name?.toLowerCase().includes(lowerSearch)) ||
+                (item.duration?.toLowerCase().includes(lowerSearch))
             );
         }
         this.totalItems = this.filteredItems.length;

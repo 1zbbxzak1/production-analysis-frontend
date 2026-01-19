@@ -35,6 +35,7 @@ export class DictionariesAdmin implements OnInit {
         {name: 'Подразделения', link: 'departments'},
         {name: 'Смены', link: 'shifts'},
         {name: 'Группы причин', link: 'downtime-reason-groups'},
+        {name: 'Вспомогательные операции', link: 'auxiliary-operations'},
     ];
 
     private readonly _router: Router = inject(Router);

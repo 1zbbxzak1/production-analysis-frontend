@@ -74,7 +74,7 @@ app-back-header {
 }
 
 .name-col {
-    width: 250px;
+    flex: 1;
     min-width: 200px;
     flex-shrink: 0;
     margin-right: 16px;

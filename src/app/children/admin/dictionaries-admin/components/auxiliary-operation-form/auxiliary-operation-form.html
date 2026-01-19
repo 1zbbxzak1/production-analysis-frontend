@@ -1,0 +1,31 @@
+<div class="form-grid">
+    <div class="input-container">
+        <p class="tui-text_body-s">
+            Название
+        </p>
+
+        <tui-textfield tuiTextfieldSize="m">
+            <input [formControl]="controlName" placeholder="Введите название" tuiTextfield type="text"/>
+        </tui-textfield>
+    </div>
+
+    <div class="input-container">
+        <p class="tui-text_body-s">
+            Длительность (сек)
+        </p>
+
+        <tui-textfield tuiTextfieldSize="m">
+            <input [formControl]="controlDuration" placeholder="Введите время в секундах" tuiTextfield type="number"/>
+        </tui-textfield>
+    </div>
+</div>
+
+<div class="button-final">
+    <button (click)="onSubmit()" [disabled]="isFormInvalid()" appearance="primary" size="m" tuiButton type="button">
+        {{ submitLabel }}
+    </button>
+
+    <button (click)="onCancel()" appearance="outline" class="outline-b" size="m" tuiButton type="button">
+        Отменить
+    </button>
+</div>

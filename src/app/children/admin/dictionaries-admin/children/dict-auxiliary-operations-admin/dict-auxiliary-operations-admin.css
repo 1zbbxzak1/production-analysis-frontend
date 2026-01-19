@@ -65,7 +65,7 @@ app-back-header {
     color: var(--day-text-icons-text-02);
     margin: 0;
 }
- 
+
 .table-row-is-head {
     display: flex;
     border-bottom: 1px solid var(--day-base-base-04);
@@ -73,23 +73,17 @@ app-back-header {
     flex-shrink: 0;
 }
 
+
 .name-col {
     flex: 1;
-    min-width: 200px;
+    width: 220px;
     flex-shrink: 0;
     margin-right: 16px;
 }
 
-.tact-time-col {
+.duration-col {
+    min-width: 220px;
     flex: 1;
-    min-width: 200px;
-    flex-shrink: 0;
-    margin-right: 16px;
-}
-
-.enterprise-col {
-    flex: 1;
-    min-width: 200px;
     flex-shrink: 0;
     margin-right: 16px;
 }
