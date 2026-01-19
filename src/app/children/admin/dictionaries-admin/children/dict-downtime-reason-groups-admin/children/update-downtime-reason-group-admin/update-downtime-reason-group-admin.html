@@ -1,0 +1,13 @@
+<app-back-header (backClicked)="goBack()" title="Редактирование группы причины"/>
+
+<div class="dashboard-admin">
+    <app-loader [isLoading]="isLoading"/>
+
+    <p class="tui-text_h4">
+        Редактирование группы причины
+    </p>
+
+    <app-downtime-reason-group-form (cancel)="onCancel()" (save)="onSave($event)" *ngIf="!isLoading && group"
+                                    [initialData]="group" submitLabel="Сохранить"/>
+</div>
+

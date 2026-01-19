@@ -34,8 +34,14 @@ import {
 } from './children/admin/employees-admin/children/update-employee-admin/update-employee-admin';
 import {DictionariesAdmin} from './children/admin/dictionaries-admin/dictionaries-admin';
 import {
+    CreateDowntimeReasonGroupAdmin
+} from './children/admin/dictionaries-admin/children/dict-downtime-reason-groups-admin/children/create-downtime-reason-group-admin/create-downtime-reason-group-admin';
+import {
     DictDowntimeReasonGroupsAdmin
 } from './children/admin/dictionaries-admin/children/dict-downtime-reason-groups-admin/dict-downtime-reason-groups-admin';
+import {
+    UpdateDowntimeReasonGroupAdmin
+} from './children/admin/dictionaries-admin/children/dict-downtime-reason-groups-admin/children/update-downtime-reason-group-admin/update-downtime-reason-group-admin';
 
 export const routes: Routes = [
     {
@@ -206,6 +212,14 @@ export const routes: Routes = [
             {
                 path: 'downtime-reason-groups',
                 component: DictDowntimeReasonGroupsAdmin
+            },
+            {
+                path: 'downtime-reason-groups/create',
+                component: CreateDowntimeReasonGroupAdmin
+            },
+            {
+                path: 'downtime-reason-groups/edit/:id',
+                component: UpdateDowntimeReasonGroupAdmin
             },
         ]
     },

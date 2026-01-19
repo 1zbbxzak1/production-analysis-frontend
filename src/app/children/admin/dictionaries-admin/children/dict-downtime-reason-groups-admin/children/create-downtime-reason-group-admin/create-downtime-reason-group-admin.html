@@ -1,0 +1,9 @@
+<app-back-header (backClicked)="goBack()" title="Новая группа причины"/>
+
+<div class="dashboard-admin">
+    <p class="tui-text_h4">
+        Новая группа причины
+    </p>
+
+    <app-downtime-reason-group-form (cancel)="onCancel()" (save)="onSave($event)" submitLabel="Добавить"/>
+</div>
