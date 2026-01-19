@@ -127,6 +127,8 @@ export class FormsTable implements OnInit, OnChanges {
 
         if (form.paType === PaTypeDto.MultipleProductsWithCycleTime) {
             this._router.navigate([`${this.url}/${this.navigateRoute}/form-view-3`, formId]);
+        } else if (form.paType === PaTypeDto.LessThanOnePerHour) {
+            this._router.navigate([`${this.url}/${this.navigateRoute}/form-view-4`, formId]);
         } else if (form.paType === PaTypeDto.LessThanOnePerShift) {
             this._router.navigate([`${this.url}/${this.navigateRoute}/form-view-5`, formId]);
         } else {

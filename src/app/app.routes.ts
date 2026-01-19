@@ -24,6 +24,7 @@ import {ProgressFormsHead} from './children/head/dashboard-head/children/progres
 import {CompletedFormsHead} from './children/head/dashboard-head/children/completed-forms-head/completed-forms-head';
 import {FormType3} from './children/components/forms-table-edit-check/form-type-3/form-type-3';
 import {FormType5} from './children/components/forms-table-edit-check/form-type-5/form-type-5';
+import {FormType4} from './children/components/forms-table-edit-check/form-type-4/form-type-4';
 import {EmployeesAdmin} from './children/admin/employees-admin/employees-admin';
 import {adminGuard} from './data/guard/admin-guard';
 import {
@@ -170,6 +171,18 @@ export const routes: Routes = [
         component: FormType3
     },
     {
+        path: 'department-head/all-list/form-view-4/:id',
+        component: FormType4
+    },
+    {
+        path: 'department-head/progress-list/form-view-4/:id',
+        component: FormType4
+    },
+    {
+        path: 'department-head/completed-list/form-view-4/:id',
+        component: FormType4
+    },
+    {
         path: 'department-head/all-list/form-view-5/:id',
         component: FormType5
     },
@@ -216,6 +229,14 @@ export const routes: Routes = [
     {
         path: 'operator/completed-list/form-view-3/:id',
         component: FormType3
+    },
+    {
+        path: 'operator/progress-list/form-view-4/:id',
+        component: FormType4
+    },
+    {
+        path: 'operator/completed-list/form-view-4/:id',
+        component: FormType4
     },
     {
         path: 'operator/progress-list/form-view-5/:id',
