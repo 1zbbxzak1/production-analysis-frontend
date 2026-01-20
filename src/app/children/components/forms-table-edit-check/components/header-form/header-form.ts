@@ -1,10 +1,10 @@
-import {Component, inject, Input, OnInit} from '@angular/core';
-import {NgClass, NgIf} from "@angular/common";
-import {TuiBadge} from "@taiga-ui/kit";
-import {FormDto} from '../../../../../data/models/forms/responses/FormDto';
-import {PA_TYPE_DESCRIPTIONS} from '../../../../../data/models/forms/enums/PaTypeDescriptions';
-import {AuthManagerService} from '../../../../../data/service/auth/auth.manager.service';
-import {ProductContextDto} from '../../../../../data/models/forms/ProductContextDto';
+import { Component, inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { NgClass, NgIf } from "@angular/common";
+import { TuiBadge } from "@taiga-ui/kit";
+import { FormDto } from '../../../../../data/models/forms/responses/FormDto';
+import { PA_TYPE_DESCRIPTIONS } from '../../../../../data/models/forms/enums/PaTypeDescriptions';
+import { AuthManagerService } from '../../../../../data/service/auth/auth.manager.service';
+import { ProductContextDto } from '../../../../../data/models/forms/ProductContextDto';
 
 @Component({
     selector: 'app-header-form',
@@ -16,7 +16,7 @@ import {ProductContextDto} from '../../../../../data/models/forms/ProductContext
     templateUrl: './header-form.html',
     styleUrl: './header-form.css',
 })
-export class HeaderForm implements OnInit {
+export class HeaderForm implements OnInit, OnChanges {
     @Input()
     public isLoading: boolean = true;
 
@@ -30,7 +30,14 @@ export class HeaderForm implements OnInit {
 
     public ngOnInit(): void {
         this.depName = this._authManager.getDepartmentName();
-        this.assigneeName = this.formatFullName(this._authManager.getUserName());
+        // this.assigneeName is now handled in ngOnChanges or explicitly if formInfo is already set
+        this.updateAssigneeName();
+    }
+
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes['formInfo']) {
+            this.updateAssigneeName();
+        }
     }
 
     protected getPaTypeDescription(paType?: number): string {
@@ -136,6 +143,14 @@ export class HeaderForm implements OnInit {
             return `${day}.${month}.${year}`;
         } catch (error) {
             return dateString;
+        }
+    }
+
+    private updateAssigneeName(): void {
+        if (this.formInfo?.assignee?.fullName) {
+            this.assigneeName = this.formatFullName(this.formInfo.assignee.fullName);
+        } else {
+            this.assigneeName = null;
         }
     }
 

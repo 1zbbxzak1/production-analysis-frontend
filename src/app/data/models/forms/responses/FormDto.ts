@@ -5,6 +5,7 @@ import {FormRowDto} from './FormRowDto';
 import {FormTemplateDto} from '../FormTemplateDto';
 import {ShiftDto} from '../../dictionaries/responses/ShiftDto';
 import {DepartmentDto} from '../../dictionaries/responses/DepartmentDto';
+import {EmployeeDto} from '../../dictionaries/responses/EmployeeDto';
 
 export interface FormDto {
     id: number;
@@ -13,6 +14,8 @@ export interface FormDto {
     creationDate: string; // UTC на беке 2026-01-10T08:34:03.2005829Z
     updateDate: string; // UTC на беке 2026-01-10T08:34:03.2005829Z
     formDate: string; // на беке 0001-01-01T00:00:00
+    creator: EmployeeDto;
+    assignee: EmployeeDto;
     shift: ShiftDto;
     department: DepartmentDto;
     context: FormContextDto;
