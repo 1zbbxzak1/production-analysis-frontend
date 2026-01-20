@@ -1,20 +1,20 @@
-import {ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit} from '@angular/core';
-import {BackHeader} from "../../back-header/back-header";
-import {CompletedFormPopUp} from "../components/completed-form-pop-up/completed-form-pop-up";
-import {Footer} from "../../footer/footer";
-import {HeaderForm} from "../components/header-form/header-form";
-import {HeaderOperator} from "../../../operator/components/header-operator/header-operator";
-import {Loader} from "../../loader/loader";
-import {NgClass, NgForOf, NgIf, NgStyle} from "@angular/common";
-import {TuiButton, TuiTextfieldOptionsDirective} from "@taiga-ui/core";
-import {TuiComboBoxModule, TuiInputModule, TuiTextfieldControllerModule} from "@taiga-ui/legacy";
-import {TuiDataListWrapper, TuiFilterByInputPipe, TuiStringifyContentPipe} from "@taiga-ui/kit";
-import {BaseFormTypeTables} from '../directives/base-form-type-tables';
-import {FormControl, ReactiveFormsModule} from '@angular/forms';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import {EmployeeDto} from '../../../../data/models/dictionaries/responses/EmployeeDto';
-import {DowntimeReasonGroupDto} from '../../../../data/models/dictionaries/responses/DowntimeReasonGroupDto';
-import {FormRowDto} from '../../../../data/models/forms/responses/FormRowDto';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { BackHeader } from "../../back-header/back-header";
+import { CompletedFormPopUp } from "../components/completed-form-pop-up/completed-form-pop-up";
+import { Footer } from "../../footer/footer";
+import { HeaderForm } from "../components/header-form/header-form";
+import { HeaderOperator } from "../../../operator/components/header-operator/header-operator";
+import { Loader } from "../../loader/loader";
+import { NgClass, NgForOf, NgIf, NgStyle } from "@angular/common";
+import { TuiButton, TuiTextfieldOptionsDirective } from "@taiga-ui/core";
+import { TuiComboBoxModule, TuiInputModule, TuiTextfieldControllerModule } from "@taiga-ui/legacy";
+import { TuiDataListWrapper, TuiFilterByInputPipe, TuiStringifyContentPipe } from "@taiga-ui/kit";
+import { BaseFormTypeTables } from '../directives/base-form-type-tables';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { EmployeeDto } from '../../../../data/models/dictionaries/responses/EmployeeDto';
+import { DowntimeReasonGroupDto } from '../../../../data/models/dictionaries/responses/DowntimeReasonGroupDto';
+import { FormRowDto } from '../../../../data/models/forms/responses/FormRowDto';
 
 @Component({
     selector: 'app-form-type-5',
@@ -173,18 +173,7 @@ export class FormType5 extends BaseFormTypeTables implements OnInit {
         return value;
     }
 
-    protected getBreakRowText(value: string | undefined | null): string {
-        if (!value) {
-            return '';
-        }
-        // Ожидаемый формат: "HH:mm-HH:mm Текст"
-        // Находим первый пробел и возвращаем все после него
-        const firstSpaceIndex: number = value.indexOf(' ');
-        if (firstSpaceIndex === -1) {
-            return value;
-        }
-        return value.substring(firstSpaceIndex + 1);
-    }
+
 
     private formatFullNameLocal(fullName: string | null): string {
         if (!fullName) return '';
